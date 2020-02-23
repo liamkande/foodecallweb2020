@@ -1,0 +1,36 @@
+
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+html {
+    overflow: hidden;
+    height: 100vh;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+/*  Background fallback in case of IE8 & down, or in case video doens't load, such as with slower connections  */
+  background: #E0E0E0; 
+  background-attachment: fixed;
+  background-size: cover;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+}
+
+/* The only rule that matters */
+#video-background {
+/*  making the video fullscreen  */
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  min-width: 100vw;
+  min-height: 100vh;
+  width: auto;
+  height: auto;
+  z-index: -100;
+}
