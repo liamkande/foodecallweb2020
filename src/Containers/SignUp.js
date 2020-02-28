@@ -2,18 +2,19 @@ import React, {Component} from 'react'
 
 import FormInput from '../Components/form-input/form-input.component'
 import CustomButton from '../Components/custom-button/custom-button.component'
-import { signInWithGoogle } from '../firebase/firebase.utils'
 import Header from '../Components/header/header.component'
-import { auth, createUserProfileDocument } from '../firebase/firebase.utils'
+import { auth, createUserProfileDocument, signInWithGoogle } from '../firebase/firebase.utils'
 import { NavLink } from 'react-router-dom'
+import SignUpComp from '../Components/sign-up/sign-up.component'
+import SignInComp from '../Components/sign-in/sign-in.component'
 
 class SignUp extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      email: '',
-      password: '',
+      renderSignIn: false,
+      renderSignUp: false,
       currentUser: null
     };
   }
@@ -47,55 +48,30 @@ class SignUp extends Component {
   }
 
 
-  handleSubmit = event => {
-    event.preventDefault();
-
-    this.setState({ email: '', password: '' });
-  };
-
-  handleChange = event => {
-    const { value, name } = event.target;
-
-    this.setState({ [name]: value });
-  };
-
+  
 
     render() {
+      const { currentUser, renderSignIn, renderSignUp } = this.state
       return (
-        <div>
-          <Header currentUser={this.state.currentUser} />
-
-          {!this.state.currentUser &&
-          <div className='sign-in'>
-            <h2>I already have an account</h2>
-            <span>Sign in with your email and password</span>
-  
-            <form onSubmit={this.handleSubmit}>
-              <FormInput
-                name='email'
-                type='email'
-                handleChange={this.handleChange}
-                value={this.state.email}
-                label='email'
-                required
-              />
-              <FormInput
-                name='password'
-                type='password'
-                value={this.state.password}
-                handleChange={this.handleChange}
-                label='password'
-                required
-              />
+        <div className='container'>
+          <Header currentUser={currentUser} />
+          {!currentUser &&
+          <div style={{alignSelf:'center',}}>
               <div className='buttons'>
-                <CustomButton type='submit'> Sign in </CustomButton>
-                <CustomButton onClick={signInWithGoogle} isGoogleSignIn>
-                  Sign in with Google
-                </CustomButton>
+                <CustomButton onClick={() => this.setState({ renderSignIn: !renderSignIn, renderSignUp:false })}>Sign in</CustomButton>
+                <span style={{margin:10}} />
+                <CustomButton onClick={() => this.setState({ renderSignUp: !renderSignUp, renderSignIn:false })}>Sign Up</CustomButton>
               </div>
-            </form>
+              {renderSignIn &&
+                <SignInComp/>
+              }
+               {renderSignUp && 
+                <SignUpComp/>
+              }
           </div>
           }
+         
+        
 
           { this.state.currentUser &&
           <div>
