@@ -5,6 +5,7 @@ import NYEPage from './Containers/NYEPage'
 import SignUpPage from './Containers/SignUpPage'
 import AboutUsPage from './Containers/AboutUsPage'
 import SignUp from './Containers/SignUp'
+import AdminPage from './Containers/AdimPage'
 
 
 

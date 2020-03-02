@@ -9,6 +9,7 @@ import { withStyles } from '@material-ui/core/styles'
 import MenuIcon from '@material-ui/icons/Menu'
 import MenuList from '@material-ui/core/MenuList'
 import { NavLink } from 'react-router-dom'
+import { auth } from '../firebase/firebase.utils'
 import logo from '../logo.svg'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 
@@ -91,7 +92,7 @@ class Nav extends React.Component {
 
   render() {
     const { anchorEl, mobileMoreAnchorEl } = this.state;
-    const { classes } = this.props;
+    const { classes, adminNav } = this.props;
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -134,20 +135,31 @@ class Nav extends React.Component {
       <div className={classes.root}>
         <AppBar  position="static" style={{backgroundColor:'transparent',   boxShadow: 'none',}}>
           <Toolbar className='nav' style={{paddingTop:'3%', paddingLeft:'2%', paddingRight:'5%'}}>
-          <NavLink exact to="/" className='nav__logo'>
-            <img src={logo} alt='logo' className='logoImg' style={{marginTop:'35px'}} />
-           </NavLink>
-            <div className='nav__tabs' style={{marginTop:'-4%'}}/>
+          { !adminNav && 
+            <NavLink exact to="/" className='nav__logo'>
+              <img src={logo} alt='logo' className='logoImg' style={{marginTop:'35px'}} />
+            </NavLink>          
+          }
+            <div className='nav__tabs' style={adminNav ? {marginTop:'0px'} : {marginTop:'-4%'} }/>
             <div className={classes.sectionDesktop}>
-              <div className='main-nav'>
-                <NavLink to="/about">About Us</NavLink>
+              { !adminNav &&
+                <div className='main-nav'>
+                   <NavLink to="/about">About Us</NavLink>
+                </div>
+              }
+
+              { !adminNav &&
+                <div className='main-nav'>
+                  <NavLink to="/sign-up">Sign Up</NavLink>
+                </div>
+              }
+
+              { adminNav &&
+              <div className='main-nav' onClick={() => this.props.currentUser ? auth.signOut() : null }>
+                <NavLink to="/admin">{this.props.adminNav}</NavLink>
               </div>
-              <div className='main-nav'>
-                <NavLink to="/sign-up">Sign Up</NavLink>
-              </div>
-              <div className='main-nav'>
-                <NavLink to="/admin">Admin</NavLink>
-              </div>
+              }
+ 
 
             </div>
             <div className={classes.sectionMobile}>
