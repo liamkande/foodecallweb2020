@@ -5,7 +5,11 @@ import NYEPage from './Containers/NYEPage'
 import SignUpPage from './Containers/SignUpPage'
 import AboutUsPage from './Containers/AboutUsPage'
 import SignUp from './Containers/SignUp'
+import SignUpComp from './Components/sign-up/sign-up.component'
 import AdminPage from './Containers/AdimPage'
+import AdminAccess from './Components/AdminAccess'
+import { auth, createUserProfileDocument} from './firebase/firebase.utils'
+
 
 
 
@@ -18,15 +22,42 @@ export default class App extends Component {
   state= {
   video: '',
   bgVideo: '',
-  bgImg: ''
+  bgImg: '',
+  allow:true,
+  currentUser: null,
+  adminUser:null,
+ 
 }
 
 componentDidMount () {
   this.setState({video: video, bgVideo: bgVideo, bgImg: bgImg})
+  this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+    if (userAuth) {
+      const userRef = await createUserProfileDocument(userAuth);
+
+      userRef.onSnapshot(snapShot => {
+        this.setState({
+          currentUser: {
+            id: snapShot.id,
+            ...snapShot.data()
+          },
+         
+        });
+        this.setState({ adminUser: this.state.currentUser.admin ? true : null })
+        console.log(this.state.currentUser);
+      });
+      
+    }
+    
+    this.setState({ currentUser: userAuth })
+  });
+}
+componentWillUnmount() {
+  this.unsubscribeFromAuth();
 }
 
   render() {
-    const {video, bgVideo, bgImg} = this.state
+    const {video, bgVideo, bgImg, currentUser, adminUser } = this.state
     return (
       <BrowserRouter>
         <div className='container'>
@@ -34,7 +65,33 @@ componentDidMount () {
           <Route exact path="/" render={() => <NYEPage video={video} bgVideo={bgVideo}/>}/>
           <Route exact path="/about" render={() => <AboutUsPage bgImg={bgImg}/>}/>
           <Route exact path="/sign-up" render={() => <SignUpPage dialogBgImg={bgImg}/>}/>
-          <Route exact path="/admin" render={() => <SignUp />}/>
+
+          { !currentUser &&
+           <Switch>
+            <Route exact path="/admin" render={() => <AdminAccess signIn={true} adminCode='1111/84-4150894' />}/>
+            <Route exact path="/admin/signup" render={() => <AdminAccess signUp={true} adminCode='0000/84-4150894' />}/>
+            </Switch>
+          }
+          { currentUser &&
+           <Switch>
+            <Route exact path="/admin/signup" render={() => <div>You Already have an account with us!</div> }/>
+            { adminUser &&
+              <Switch>
+                <Route exact path="/admin" render={() => <AdminPage />}/>
+                <Route exact path="/admin/restaurantForm" render={() => <AboutUsPage bgImg={bgImg}/>}/>
+                </Switch>
+              }
+              { !adminUser &&
+               <Switch>
+                <Route exact path="/admin" render={() => <div>Sorry You do Not have Access! Please ask management!</div>}/>
+                <Route exact path="/admin/restaurantForm" render={() => <div>Sorry You do Not have Access! Please ask management!</div>}/>
+
+                </Switch>
+              }
+            </Switch>
+          }
+
+
           </Switch>
         </div>
       </BrowserRouter>

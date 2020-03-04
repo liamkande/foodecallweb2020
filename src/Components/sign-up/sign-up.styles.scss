@@ -1,11 +1,7 @@
-.sign-up {
+.formSignUp {
   display: flex;
   flex-direction: column;
-  width: 380px;
-  overflow-y: scroll;
-  height: 600px;
-
-  .title {
-    margin: 10px 0;
-  }
+  justify-content: center;
+  width: 25vw;
+  
 }
