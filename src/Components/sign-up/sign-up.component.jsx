@@ -123,7 +123,14 @@ class SignUp extends React.Component {
                   />
               
           </MuiPickersUtilsProvider>
-
+          <FormInput
+              type='password'
+              name='oAuthCode'
+              value={oAuthCode.trim()}
+              onChange={this.handleChange}
+              label='Permission Code'
+              required
+          />  
           <FormInput
             type='text'
             name='firstName'
@@ -142,7 +149,7 @@ class SignUp extends React.Component {
             required
           />  
           <FormInput
-            type='number'
+            type='password'
             name='ssn'
             value={ssn.trim()}
             onChange={this.handleChange}
@@ -150,7 +157,7 @@ class SignUp extends React.Component {
             required
            />            
          <FormInput
-            type='number'
+            type='password'
             name='confirmSSN'
             value={confirmSSN.trim()}
             onChange={this.handleChange}
@@ -181,17 +188,8 @@ class SignUp extends React.Component {
             label='Confirm Password'
             required
           />
-           <FormInput
-              type='password'
-              name='oAuthCode'
-              value={oAuthCode.trim()}
-              onChange={this.handleChange}
-              label='Permission Code'
-              required
-          />           
+            
           
-
-
           </div>
         </div>      
         </div>

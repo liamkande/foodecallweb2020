@@ -67,7 +67,7 @@ class AdminAccess extends Component {
                         <h2>Please Enter Access Code to Continue:</h2>
                         <form className='sign-up-form' onSubmit={this.handleSubmit}>
                             <FormInput
-                            type='text'
+                            type='password'
                             name='accessCode'
                             value={accessCode}
                             onChange={this.handleChange}
