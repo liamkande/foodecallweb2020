@@ -96,7 +96,7 @@ class SignUp extends React.Component {
         <h2 style={{alignSelf:'center'}}>Sign Up for Admin Access</h2>
         <div className='content' style={{overflowY:'scroll'}}>
 
-        <div className='formSignUp'>
+        <div className='formSignUp' style={{width:'25vw'}}>
         <div>
 
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -182,7 +182,7 @@ class SignUp extends React.Component {
         </div>   
 
 
-        <div className='formSignUp'>
+        <div className='formSignUp' style={{width:'25vw'}}>
         <div>
 
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -270,7 +270,7 @@ class SignUp extends React.Component {
 
 
 
-        <div className='formSignUp'>
+        <div className='formSignUp' style={{width:'25vw'}}>
         <div>
 
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
