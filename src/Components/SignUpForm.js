@@ -111,6 +111,8 @@ class SignUpForm extends Component {
 
           <Field name="choice" label="Select" component={renderSelectTextField} validate={required} />
 
+ 
+
           <Button  type="submit" variant="contained" color='primary'  size='large'  style={{height:'50px'}}>
                  SIGN UP
                </Button>

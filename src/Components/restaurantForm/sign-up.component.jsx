@@ -179,7 +179,183 @@ class SignUp extends React.Component {
 
 
           </div>
-        </div>      
+        </div>   
+
+
+        <div className='formSignUp'>
+        <div>
+
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <KeyboardDatePicker
+                    disableToolbar
+                    openTo='date'
+                    variant="inline"
+                    format="MM/dd/yyyy"
+                    margin="normal"
+                    id="date-picker-inline"
+                    label="DOB"
+                    value={dob}
+                    onChange={date => this.handleDateChange(date)}
+                    KeyboardButtonProps={{
+                      'aria-label': 'change date',
+                    }}
+                  />
+              
+          </MuiPickersUtilsProvider>
+
+          <FormInput
+            type='text'
+            name='firstName'
+            value={firstName.trim()}
+            onChange={this.handleChange}
+            label='First Name'
+            required
+          />  
+ 
+           <FormInput
+            type='text'
+            name='lastName'
+            value={lastName.trim()}
+            onChange={this.handleChange}
+            label='Last Name'
+            required
+          />  
+          <FormInput
+            type='number'
+            name='ssn'
+            value={ssn.trim()}
+            onChange={this.handleChange}
+            label='SSN'
+            required
+           />            
+
+          <FormInput
+            type='email'
+            name='email'
+            value={email.trim()}
+            onChange={this.handleChange}
+            label='Email'
+            required
+          />
+          <FormInput
+            type='password'
+            name='password'
+            value={password.trim()}
+            onChange={this.handleChange}
+            label='Password'
+            required
+          />
+          <FormInput
+            type='password'
+            name='confirmPassword'
+            value={confirmPassword.trim()}
+            onChange={this.handleChange}
+            label='Confirm Password'
+            required
+          />
+           <FormInput
+              type='password'
+              name='oAuthCode'
+              value={oAuthCode.trim()}
+              onChange={this.handleChange}
+              label='Permission Code'
+              required
+          />           
+          
+
+
+          </div>
+        </div> 
+
+
+
+
+        <div className='formSignUp'>
+        <div>
+
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <KeyboardDatePicker
+                    disableToolbar
+                    openTo='date'
+                    variant="inline"
+                    format="MM/dd/yyyy"
+                    margin="normal"
+                    id="date-picker-inline"
+                    label="DOB"
+                    value={dob}
+                    onChange={date => this.handleDateChange(date)}
+                    KeyboardButtonProps={{
+                      'aria-label': 'change date',
+                    }}
+                  />
+              
+          </MuiPickersUtilsProvider>
+
+          <FormInput
+            type='text'
+            name='firstName'
+            value={firstName.trim()}
+            onChange={this.handleChange}
+            label='First Name'
+            required
+          />  
+ 
+           <FormInput
+            type='text'
+            name='lastName'
+            value={lastName.trim()}
+            onChange={this.handleChange}
+            label='Last Name'
+            required
+          />  
+          <FormInput
+            type='number'
+            name='ssn'
+            value={ssn.trim()}
+            onChange={this.handleChange}
+            label='SSN'
+            required
+           />            
+
+          <FormInput
+            type='email'
+            name='email'
+            value={email.trim()}
+            onChange={this.handleChange}
+            label='Email'
+            required
+          />
+          <FormInput
+            type='password'
+            name='password'
+            value={password.trim()}
+            onChange={this.handleChange}
+            label='Password'
+            required
+          />
+          <FormInput
+            type='password'
+            name='confirmPassword'
+            value={confirmPassword.trim()}
+            onChange={this.handleChange}
+            label='Confirm Password'
+            required
+          />
+           <FormInput
+              type='password'
+              name='oAuthCode'
+              value={oAuthCode.trim()}
+              onChange={this.handleChange}
+              label='Permission Code'
+              required
+          />           
+          
+
+
+          </div>
+        </div> 
+
+
         </div>
 
         <div style={{alignSelf:'center'}}>

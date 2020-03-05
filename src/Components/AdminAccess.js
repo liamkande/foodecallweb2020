@@ -3,6 +3,7 @@ import FormInput from './form-input/form-input.component'
 import CustomButton from './custom-button/custom-button.component'
 import SignInComp from './sign-in/sign-in.component'
 import SignUpComp from './sign-up/sign-up.component'
+import { auth, createUserProfileDocument} from '../firebase/firebase.utils'
 
 const currentCode = '1111/84-4150894'
 
@@ -11,6 +12,37 @@ class AdminAccess extends Component {
         accessCode:'',
         accessGranted: false,
     }
+
+
+
+    componentDidMount () {
+    
+        this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+          if (userAuth) {
+            const userRef = await createUserProfileDocument(userAuth);
+      
+            userRef.onSnapshot(snapShot => {
+              this.setState({
+                currentUser: {
+                  id: snapShot.id,
+                  ...snapShot.data()
+                },
+               
+              });
+              this.setState({ adminUser: this.state.currentUser.admin ? true : null })
+              console.log(this.state.currentUser);
+            });
+            
+          }
+          
+          this.setState({ currentUser: userAuth })
+        });
+      }
+      componentWillUnmount() {
+        this.unsubscribeFromAuth();
+      }
+
+
 
     handleChange = event => {
             const { name, value } = event.target;

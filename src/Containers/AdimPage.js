@@ -6,7 +6,7 @@ import FormInput from '../Components/form-input/form-input.component'
 import CustomButton from '../Components/custom-button/custom-button.component'
 import { auth, createUserProfileDocument, signInWithGoogle } from '../firebase/firebase.utils'
 import { NavLink } from 'react-router-dom'
-import SignUpComp from '../Components/sign-up/sign-up.component'
+import SignUpComp from '../Components/restaurantForm/sign-up.component'
 import SignInComp from '../Components/sign-in/sign-in.component'
 
 const currentCode = '1111/84-4150894'

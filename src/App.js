@@ -74,18 +74,17 @@ componentWillUnmount() {
           }
           { currentUser &&
            <Switch>
-            <Route exact path="/admin/signup" render={() => <div>You Already have an account with us!</div> }/>
+            <Route exact path="/admin/signup" render={() => <div>You Already have an account with us! Please sign Outif you'd like to Create a New account!</div> }/>
             { adminUser &&
               <Switch>
                 <Route exact path="/admin" render={() => <AdminPage />}/>
-                <Route exact path="/admin/restaurantForm" render={() => <AboutUsPage bgImg={bgImg}/>}/>
+                <Route exact path="/admin/restaurantForm" render={() => <AdminPage /> }/>
                 </Switch>
               }
               { !adminUser &&
                <Switch>
                 <Route exact path="/admin" render={() => <div>Sorry You do Not have Access! Please ask management!</div>}/>
                 <Route exact path="/admin/restaurantForm" render={() => <div>Sorry You do Not have Access! Please ask management!</div>}/>
-
                 </Switch>
               }
             </Switch>
