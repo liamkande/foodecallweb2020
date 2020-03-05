@@ -28,23 +28,30 @@ class SignUp extends React.Component {
       confirmPassword: '',
       dob: new Date().toDateString(),
       ssn:'',
-      admin:true
+      confirmSSN:'',
+      admin:true,
     };
  
 
   handleSubmit = async event => {
     event.preventDefault()
 
-    const {firstName, lastName, oAuthCode, email, password, confirmPassword, dob, ssn, admin } = this.state;
+    const {firstName, lastName, oAuthCode, email, password, confirmPassword, dob, ssn, confirmSSN, admin } = this.state;
 
     if (password !== confirmPassword) {
       alert("passwords don't match")
       return
     }
+
     if (ssn.length !== 9) {
       alert("Unvalide Social Security Number")
       return
     }
+    if (ssn !== confirmSSN) {
+      alert("Social Security Number don't match")
+      return
+    }
+
     if (oAuthCode !== 'liamkande8057' ) {
       alert("Unvalide Permission Code")
       return
@@ -89,7 +96,7 @@ class SignUp extends React.Component {
   };
   
   render() {
-    const {firstName, lastName, oAuthCode, email, password, confirmPassword, dob, ssn } = this.state;
+    const {firstName, lastName, oAuthCode, email, password, confirmPassword, dob, ssn, confirmSSN } = this.state;
     return (
       <form onSubmit={this.handleSubmit}>
       <div className='container' >
@@ -142,7 +149,14 @@ class SignUp extends React.Component {
             label='SSN'
             required
            />            
-
+         <FormInput
+            type='number'
+            name='confirmSSN'
+            value={confirmSSN.trim()}
+            onChange={this.handleChange}
+            label='Confirm SSN'
+            required
+           />  
           <FormInput
             type='email'
             name='email'

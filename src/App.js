@@ -69,22 +69,22 @@ componentWillUnmount() {
           { !currentUser &&
            <Switch>
             <Route exact path="/admin" render={() => <AdminAccess signIn={true} adminCode='1111/84-4150894' />}/>
-            <Route exact path="/admin/signup" render={() => <AdminAccess signUp={true} adminCode='0000/84-4150894' />}/>
+            <Route exact path="/admin-signup" render={() => <AdminAccess signUp={true} adminCode='0000/84-4150894' />}/>
             </Switch>
           }
           { currentUser &&
            <Switch>
-            <Route exact path="/admin/signup" render={() => <div>You Already have an account with us! Please sign Outif you'd like to Create a New account!</div> }/>
+            <Route exact path="/admin-signup" render={() => <div>You Already have an account with us! Please sign Out if you'd like to Create a New account!</div> }/>
             { adminUser &&
               <Switch>
                 <Route exact path="/admin" render={() => <AdminPage />}/>
-                <Route exact path="/admin/restaurantForm" render={() => <AdminPage /> }/>
+                <Route exact path="/admin-restaurantForm" render={() => <AdminPage /> }/>
                 </Switch>
               }
               { !adminUser &&
                <Switch>
                 <Route exact path="/admin" render={() => <div>Sorry You do Not have Access! Please ask management!</div>}/>
-                <Route exact path="/admin/restaurantForm" render={() => <div>Sorry You do Not have Access! Please ask management!</div>}/>
+                <Route exact path="/admin-restaurantForm" render={() => <div>Sorry You do Not have Access! Please ask management!</div>}/>
                 </Switch>
               }
             </Switch>
