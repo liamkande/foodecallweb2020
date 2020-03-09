@@ -2,7 +2,7 @@ import React from 'react';
 
 import FormInput from '../form-input/form-input.component';
 import CustomButton from '../custom-button/custom-button.component';
-import TextField from '@material-ui/core/TextField'
+
 
 import { auth, createUserProfileDocument } from '../../firebase/firebase.utils';
 import 'date-fns';
@@ -15,10 +15,11 @@ import {
 
 import './sign-up.styles.scss';
 
+
+
+
 class SignUp extends React.Component {
   
-
-
    state = {
       firstName: '',
       lastName: '',
@@ -31,7 +32,7 @@ class SignUp extends React.Component {
       confirmSSN:'',
       admin:true,
     };
- 
+
 
   handleSubmit = async event => {
     event.preventDefault()
@@ -80,6 +81,10 @@ class SignUp extends React.Component {
     } catch (error) {
       console.error(error);
     }
+    alert("You've successfully Created an account: Please go to (.../admin) to Logogin")
+    window.history.back()
+    
+ 
    
   }
 
@@ -94,6 +99,8 @@ class SignUp extends React.Component {
     console.log(this.state.dob);
     
   };
+
+
   
   render() {
     const {firstName, lastName, oAuthCode, email, password, confirmPassword, dob, ssn, confirmSSN } = this.state;

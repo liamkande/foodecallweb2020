@@ -8,7 +8,9 @@ import SignUp from './Containers/SignUp'
 import SignUpComp from './Components/sign-up/sign-up.component'
 import AdminPage from './Containers/AdimPage'
 import AdminAccess from './Components/AdminAccess'
+import PrivateRoute from './Components/PrivateRoute'
 import { auth, createUserProfileDocument} from './firebase/firebase.utils'
+import Demo from './demo'
 
 
 
@@ -30,6 +32,7 @@ export default class App extends Component {
 }
 
 componentDidMount () {
+  
   this.setState({video: video, bgVideo: bgVideo, bgImg: bgImg})
   this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
     if (userAuth) {
@@ -53,46 +56,44 @@ componentDidMount () {
   });
 }
 componentWillUnmount() {
-  this.unsubscribeFromAuth();
+  this.unsubscribeFromAuth()
+ 
+ 
+ 
 }
 
   render() {
     const {video, bgVideo, bgImg, currentUser, adminUser } = this.state
     return (
       <BrowserRouter>
-        <div className='container'>
           <Switch>
           <Route exact path="/" render={() => <NYEPage video={video} bgVideo={bgVideo}/>}/>
           <Route exact path="/about" render={() => <AboutUsPage bgImg={bgImg}/>}/>
           <Route exact path="/sign-up" render={() => <SignUpPage dialogBgImg={bgImg}/>}/>
+          
 
-          { !currentUser &&
-           <Switch>
-            <Route exact path="/admin" render={() => <AdminAccess signIn={true} adminCode='1111/84-4150894' />}/>
-            <Route exact path="/admin-signup" render={() => <AdminAccess signUp={true} adminCode='0000/84-4150894' />}/>
-            </Switch>
-          }
-          { currentUser &&
-           <Switch>
-            <Route exact path="/admin-signup" render={() => <div>You Already have an account with us! Please sign Out if you'd like to Create a New account!</div> }/>
-            { adminUser &&
-              <Switch>
-                <Route exact path="/admin" render={() => <AdminPage />}/>
-                <Route exact path="/admin-restaurantForm" render={() => <AdminPage /> }/>
-                </Switch>
-              }
-              { !adminUser &&
-               <Switch>
-                <Route exact path="/admin" render={() => <div>Sorry You do Not have Access! Please ask management!</div>}/>
-                <Route exact path="/admin-restaurantForm" render={() => <div>Sorry You do Not have Access! Please ask management!</div>}/>
-                </Switch>
-              }
-            </Switch>
-          }
+          <PrivateRoute exact path="/admin" admin={adminUser} signIn={!adminUser} adminCode='1111/84-4150894'>
+            <AdminPage />
+          </PrivateRoute>
+
+          <PrivateRoute exact path="/admin-signup" signUp={!adminUser} adminCode='0000/84-4150894'>
+            <AdminPage />
+          </PrivateRoute> 
 
 
+          <PrivateRoute exact path="/admin-restaurant-form" admin={adminUser} adminCode='1111/84-4150894'>
+            <AdminPage />
+          </PrivateRoute> 
+           
+        
+
+  
+         
+          
+       
+          
           </Switch>
-        </div>
+    
       </BrowserRouter>
     )
   }
