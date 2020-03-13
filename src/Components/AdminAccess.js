@@ -6,12 +6,43 @@ import SignUpComp from './sign-up/sign-up.component'
 import { auth, createUserProfileDocument} from '../firebase/firebase.utils'
 import SignUp from './sign-up/sign-up.component'
 
+
 const currentCode = '1111/84-4150894'
 
 class AdminAccess extends Component {
     state = {
         accessCode:'',
         accessGranted: false,
+        currentUser: null
+    }
+
+
+    unsubscribeFromAuth = null
+
+    componentDidMount () {
+      this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+        if (userAuth) {
+          const userRef = await createUserProfileDocument(userAuth);
+    
+          userRef.onSnapshot(snapShot => {
+            this.setState({
+              currentUser: {
+                id: snapShot.id,
+                ...snapShot.data()
+              },
+             
+            });
+   
+          });
+          
+        }
+        
+        this.setState({ currentUser: userAuth })
+      });
+    }
+    componentWillUnmount() {
+      this.unsubscribeFromAuth()
+     
     }
 
 
@@ -24,11 +55,19 @@ class AdminAccess extends Component {
         handleSubmit = event => {
             event.preventDefault()
         
-            this.state.accessCode === this.props.adminCode ? 
+            this.state.accessCode === this.props.adminCode? 
             this.setState({ accessGranted: true, accessCode:''  }) :
                 alert("Wrong Code!")
         
         }
+
+
+        signOut = () => {
+            auth.signOut()
+            window.history.back()
+        }
+
+
     render() {
         const {accessCode, accessGranted} = this.state
         return (
@@ -49,11 +88,17 @@ class AdminAccess extends Component {
                         </form>             
                     </div>
                 }
-                 { accessGranted &&           
-                        this.props.children
+                 { accessGranted && 
+                 <div className="container">
+
+                     {!this.props.signIn && 
+                      <SignInComp />
+                     }
+
+                    
+                     </div>      
                  }
             
-
         </div>
         )
 

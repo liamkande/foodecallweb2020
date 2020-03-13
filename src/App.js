@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {BrowserRouter, Route, Switch} from 'react-router-dom'
+import {BrowserRouter, Route, Switch, Redirect} from 'react-router-dom'
 import './App.scss'
 import NYEPage from './Containers/NYEPage'
 import SignUpPage from './Containers/SignUpPage'
@@ -31,8 +31,9 @@ export default class App extends Component {
  
 }
 
+unsubscribeFromAuth = null
+
 componentDidMount () {
-  
   this.setState({video: video, bgVideo: bgVideo, bgImg: bgImg})
   this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
     if (userAuth) {
@@ -46,7 +47,7 @@ componentDidMount () {
           },
          
         });
-        this.setState({ adminUser: this.state.currentUser.admin ? true : null })
+        this.setState({ adminUser: this.state.currentUser.admin ? true : false})
         console.log(this.state.currentUser);
       });
       
@@ -58,8 +59,6 @@ componentDidMount () {
 componentWillUnmount() {
   this.unsubscribeFromAuth()
  
- 
- 
 }
 
   render() {
@@ -70,19 +69,14 @@ componentWillUnmount() {
           <Route exact path="/" render={() => <NYEPage video={video} bgVideo={bgVideo}/>}/>
           <Route exact path="/about" render={() => <AboutUsPage bgImg={bgImg}/>}/>
           <Route exact path="/sign-up" render={() => <SignUpPage dialogBgImg={bgImg}/>}/>
-          
-
-          <PrivateRoute exact path="/admin" admin={adminUser} signIn={!adminUser} adminCode='1111/84-4150894'>
+          <Route exact path="/admin-signup" render={() => <SignUpComp />  }/>
+          <PrivateRoute exact path="/admin" admin={adminUser} signIn={!currentUser} adminCode='1111/84-4150894'>
             <AdminPage />
           </PrivateRoute>
 
-          <PrivateRoute exact path="/admin-signup" signUp={!adminUser} adminCode='0000/84-4150894'>
-            <AdminPage />
-          </PrivateRoute> 
-
 
           <PrivateRoute exact path="/admin-restaurant-form" admin={adminUser} adminCode='1111/84-4150894'>
-            <AdminPage />
+            <div>You are Now on the Restaurant form page!</div>
           </PrivateRoute> 
            
         

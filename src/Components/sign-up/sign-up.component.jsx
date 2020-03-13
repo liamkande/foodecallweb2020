@@ -14,7 +14,7 @@ import {
 } from '@material-ui/pickers';
 
 import './sign-up.styles.scss';
-
+import {NavLink} from 'react-router-dom'
 
 
 
@@ -31,7 +31,43 @@ class SignUp extends React.Component {
       ssn:'',
       confirmSSN:'',
       admin:true,
+
+      accessCode:'',
+      accessGranted:null,
+      currentUser: null,
+      existingUser:null,
     };
+
+
+    unsubscribeFromAuth = null
+
+    componentDidMount () {
+      this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+        if (userAuth) {
+          const userRef = await createUserProfileDocument(userAuth);
+    
+          userRef.onSnapshot(snapShot => {
+            this.setState({
+              currentUser: {
+                id: snapShot.id,
+                ...snapShot.data()
+              },
+             
+            });
+            this.setState({ existingUser: this.state.currentUser })
+          });
+          
+        }
+        
+        this.setState({ currentUser: userAuth })
+      });
+    }
+    componentWillUnmount() {
+      this.unsubscribeFromAuth()
+     
+    }
+
+
 
 
   handleSubmit = async event => {
@@ -81,11 +117,8 @@ class SignUp extends React.Component {
     } catch (error) {
       console.error(error);
     }
-    alert("You've successfully Created an account: Please go to (.../admin) to Logogin")
-    window.history.back()
+    alert("You've successfully Created an account")
     
- 
-   
   }
 
   handleChange = event => {
@@ -100,117 +133,163 @@ class SignUp extends React.Component {
     
   };
 
+  handleAccessSubmit = event => {
+    event.preventDefault()
 
-  
+    this.state.accessCode === '0000/84-4150894'? 
+    this.setState({ accessGranted: true, accessCode:''  }) :
+        alert("Wrong Code!")
+
+}
+    
   render() {
-    const {firstName, lastName, oAuthCode, email, password, confirmPassword, dob, ssn, confirmSSN } = this.state;
+    const {firstName, lastName, oAuthCode, email, password, confirmPassword, dob, ssn, confirmSSN, accessGranted, accessCode, existingUser } = this.state;
     return (
-      <form onSubmit={this.handleSubmit}>
-      <div className='container' >
-        <h2 style={{alignSelf:'center'}}>Sign Up for Admin Access</h2>
-        <div className='content' style={{overflowY:'scroll'}}>
+      <div className="container">
+        {existingUser && 
+  <div className="content__center">
+    <h2>You're already Sign In! Please proceed to the admin Dashboard here:</h2>
+    <NavLink to="/admin">
+    <CustomButton>Admin</CustomButton>
+    </NavLink>
 
-        <div className='formSignUp' style={{width:'50vw'}}>
-        <div>
-
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <KeyboardDatePicker
-                    disableToolbar
-                    openTo='date'
-                    variant="inline"
-                    format="MM/dd/yyyy"
-                    margin="normal"
-                    id="date-picker-inline"
-                    label="DOB"
-                    value={dob}
-                    onChange={date => this.handleDateChange(date)}
-                    KeyboardButtonProps={{
-                      'aria-label': 'change date',
-                    }}
-                  />
-              
-          </MuiPickersUtilsProvider>
-          <FormInput
-              type='password'
-              name='oAuthCode'
-              value={oAuthCode.trim()}
+  </div>
+  }
+  {!existingUser && 
+        <div className="container">
+        { !accessGranted && 
+        <div className="content__center">
+            <h2>Please Enter Access Code to Continue:</h2>
+            <form className='sign-up-form' onSubmit={this.handleAccessSubmit }>
+                <FormInput
+                type='password'
+                name='accessCode'
+                value={accessCode}
+                onChange={this.handleChange}
+                label='Access Code'
+                required
+                />
+                <CustomButton type='submit'>Done</CustomButton>
+            </form>             
+        </div>
+    }
+          { accessGranted &&  
+        <form onSubmit={this.handleSubmit}>
+        <div className='container' >
+          <h2 style={{alignSelf:'center'}}>Sign Up for Admin Access</h2>
+          <div className='content' style={{overflowY:'scroll'}}>
+  
+          <div className='formSignUp' style={{width:'50vw'}}>
+          <div>
+  
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <KeyboardDatePicker
+                      disableToolbar
+                      openTo='date'
+                      variant="inline"
+                      format="MM/dd/yyyy"
+                      margin="normal"
+                      id="date-picker-inline"
+                      label="DOB"
+                      value={dob}
+                      onChange={date => this.handleDateChange(date)}
+                      KeyboardButtonProps={{
+                        'aria-label': 'change date',
+                      }}
+                    />
+                
+            </MuiPickersUtilsProvider>
+            <FormInput
+                type='password'
+                name='oAuthCode'
+                value={oAuthCode.trim()}
+                onChange={this.handleChange}
+                label='Permission Code'
+                required
+            />  
+            <FormInput
+              type='text'
+              name='firstName'
+              value={firstName.trim()}
               onChange={this.handleChange}
-              label='Permission Code'
+              label='First Name'
               required
-          />  
-          <FormInput
-            type='text'
-            name='firstName'
-            value={firstName.trim()}
-            onChange={this.handleChange}
-            label='First Name'
-            required
-          />  
- 
+            />  
+   
+             <FormInput
+              type='text'
+              name='lastName'
+              value={lastName.trim()}
+              onChange={this.handleChange}
+              label='Last Name'
+              required
+            />  
+            <FormInput
+              type='password'
+              name='ssn'
+              value={ssn.trim()}
+              onChange={this.handleChange}
+              label='SSN'
+              required
+             />            
            <FormInput
-            type='text'
-            name='lastName'
-            value={lastName.trim()}
-            onChange={this.handleChange}
-            label='Last Name'
-            required
-          />  
-          <FormInput
-            type='password'
-            name='ssn'
-            value={ssn.trim()}
-            onChange={this.handleChange}
-            label='SSN'
-            required
-           />            
-         <FormInput
-            type='password'
-            name='confirmSSN'
-            value={confirmSSN.trim()}
-            onChange={this.handleChange}
-            label='Confirm SSN'
-            required
-           />  
-          <FormInput
-            type='email'
-            name='email'
-            value={email.trim()}
-            onChange={this.handleChange}
-            label='Email'
-            required
-          />
-          <FormInput
-            type='password'
-            name='password'
-            value={password.trim()}
-            onChange={this.handleChange}
-            label='Password'
-            required
-          />
-          <FormInput
-            type='password'
-            name='confirmPassword'
-            value={confirmPassword.trim()}
-            onChange={this.handleChange}
-            label='Confirm Password'
-            required
-          />
+              type='password'
+              name='confirmSSN'
+              value={confirmSSN.trim()}
+              onChange={this.handleChange}
+              label='Confirm SSN'
+              required
+             />  
+            <FormInput
+              type='email'
+              name='email'
+              value={email.trim()}
+              onChange={this.handleChange}
+              label='Email'
+              required
+            />
+            <FormInput
+              type='password'
+              name='password'
+              value={password.trim()}
+              onChange={this.handleChange}
+              label='Password'
+              required
+            />
+            <FormInput
+              type='password'
+              name='confirmPassword'
+              value={confirmPassword.trim()}
+              onChange={this.handleChange}
+              label='Confirm Password'
+              required
+            />
+              
             
-          
+            </div>
+          </div>      
           </div>
-        </div>      
+  
+          <div style={{alignSelf:'center'}}>
+            <CustomButton type='submit'>DONE</CustomButton>
+          </div>
+       
+  
         </div>
+        
+        </form>
+      }
 
-        <div style={{alignSelf:'center'}}>
-          <CustomButton type='submit'>DONE</CustomButton>
-        </div>
-     
 
       </div>
-      
-      </form>
+  }
+      </div>
+
+
     );
   }
+
+
 }
 
 export default SignUp;
