@@ -1,6 +1,8 @@
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 import 'firebase/auth';
+import uuid from 'uuid'
+
 
 const config = {
   apiKey: "AIzaSyAvcRWynRCX82hpFw4BaUftV54LjQHDXSI",
@@ -41,6 +43,30 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
 };
 
 
+export const createRestaurantProfileDocument = async (additionalData) => {
+  const id = uuid.v4()
+
+  const userRef = firestore.doc(`restaurants/${id}`);
+
+  const snapShot = await userRef.get();
+
+  if (!snapShot.exists) {
+    
+    const createdAt = new Date();
+    try {
+      await userRef.set({
+    
+        createdAt,
+        ...additionalData
+      });
+    } catch (error) {
+      console.log('error creating restaurant form', error.message);
+    }
+  }
+ 
+
+  return userRef;
+};
 
 export const auth = firebase.auth();
 export const firestore = firebase.firestore();

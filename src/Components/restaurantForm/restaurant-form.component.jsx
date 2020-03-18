@@ -4,7 +4,7 @@ import FormInput from '../form-input/form-input.component';
 import CustomButton from '../custom-button/custom-button.component';
 import TextField from '@material-ui/core/TextField'
 
-import { auth, createUserProfileDocument } from '../../firebase/firebase.utils';
+import { auth, createUserProfileDocument, createRestaurantProfileDocument } from '../../firebase/firebase.utils';
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 
@@ -28,35 +28,34 @@ class SignUp extends React.Component {
       confirmPassword: '',
       dob: new Date().toDateString(),
       ssn:'',
-      admin:true
+      admin:true,
+
+      restaurantName:'',
+      restaurantLink:'',
+      restaurantAddress:'',
+      restaurantPhone:'',
+      restaurantMainPhoto:'',
+      restaurantPhotos:[],
+      restaurantMenuCategories:[],
+      restaurantFoodList:[],
+      restaurantEmail: '',
+
     };
  
 
   handleSubmit = async event => {
     event.preventDefault()
 
-    const {firstName, lastName, oAuthCode, email, password, confirmPassword, dob, ssn, admin } = this.state;
+    const {firstName, lastName, oAuthCode, email, password, confirmPassword, dob, ssn, admin, 
+      restaurantName, restaurantLink, restaurantAddress, restaurantPhone, restaurantMainPhoto, restaurantEmail} = this.state;
 
-    if (password !== confirmPassword) {
-      alert("passwords don't match")
-      return
-    }
-    if (ssn.length !== 9) {
-      alert("Unvalide Social Security Number")
-      return
-    }
-    if (oAuthCode !== 'liamkande8057' ) {
-      alert("Unvalide Permission Code")
-      return
-    }
+  
 
     try {
-      const { user } = await auth.createUserWithEmailAndPassword(
-        email,
-        password
-      )
+    
+    
 
-      await createUserProfileDocument(user, { firstName,lastName, oAuthCode, dob, ssn, admin  });
+      await createRestaurantProfileDocument({ firstName,lastName, oAuthCode, dob, ssn, admin, restaurantName, restaurantLink,restaurantAddress, restaurantPhone, restaurantMainPhoto, restaurantEmail });
 
       this.setState({
         firstName: '',
@@ -67,7 +66,16 @@ class SignUp extends React.Component {
         confirmPassword: '',
         dob:'',
         ssn:'',
-        admin:null
+        admin:null,
+
+        restaurantName:'',
+        restaurantLink:'',
+        restaurantAddress:'',
+        restaurantPhone:'',
+        restaurantMainPhoto:'',
+        restaurantEmail:'',
+
+
     
       });
     } catch (error) {
@@ -89,100 +97,75 @@ class SignUp extends React.Component {
   };
   
   render() {
-    const {firstName, lastName, oAuthCode, email, password, confirmPassword, dob, ssn } = this.state;
+    const {firstName, lastName, oAuthCode, email, password, confirmPassword, dob, ssn, restaurantName, restaurantLink, restaurantAddress, restaurantPhone, restaurantMainPhoto, restaurantEmail } = this.state;
     return (
       <form onSubmit={this.handleSubmit}>
       <div className='container' >
-        <h2 style={{alignSelf:'center'}}>Sign Up for Admin Access</h2>
+        <h2 style={{alignSelf:'center'}}>Restaurant Form</h2>
         <div className='content' style={{overflowY:'scroll'}}>
 
         <div className='formSignUp' style={{width:'25vw'}}>
         <div>
 
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <KeyboardDatePicker
-                    disableToolbar
-                    openTo='date'
-                    variant="inline"
-                    format="MM/dd/yyyy"
-                    margin="normal"
-                    id="date-picker-inline"
-                    label="DOB"
-                    value={dob}
-                    onChange={date => this.handleDateChange(date)}
-                    KeyboardButtonProps={{
-                      'aria-label': 'change date',
-                    }}
-                  />
-              
-          </MuiPickersUtilsProvider>
+       
 
           <FormInput
             type='text'
-            name='firstName'
-            value={firstName.trim()}
+            name='restaurantName'
+            value={restaurantName.trim()}
             onChange={this.handleChange}
-            label='First Name'
+            label='Restaurant Name'
             required
           />  
  
            <FormInput
             type='text'
-            name='lastName'
-            value={lastName.trim()}
+            name='restaurantLink'
+            value={restaurantLink.trim()}
             onChange={this.handleChange}
-            label='Last Name'
+            label='Restaurant Link'
             required
           />  
           <FormInput
-            type='number'
-            name='ssn'
-            value={ssn.trim()}
+            type='text'
+            name='restaurantAddress'
+            value={restaurantAddress.trim()}
             onChange={this.handleChange}
-            label='SSN'
+            label='Restaurant Address'
             required
            />            
 
           <FormInput
-            type='email'
-            name='email'
-            value={email.trim()}
+            type='text'
+            name='restaurantEmail'
+            value={restaurantEmail.trim()}
             onChange={this.handleChange}
-            label='Email'
+            label='Restaurant Email'
             required
           />
           <FormInput
-            type='password'
-            name='password'
-            value={password.trim()}
+            type='text'
+            name='restaurantPhone'
+            value={restaurantPhone.trim()}
             onChange={this.handleChange}
-            label='Password'
+            label='Restaurant Phone'
             required
           />
           <FormInput
-            type='password'
-            name='confirmPassword'
-            value={confirmPassword.trim()}
+            type='text'
+            name='restaurantMainPhoto'
+            value={restaurantMainPhoto.trim()}
             onChange={this.handleChange}
-            label='Confirm Password'
+            label='Restaurant Main Photo'
             required
           />
-           <FormInput
-              type='password'
-              name='oAuthCode'
-              value={oAuthCode.trim()}
-              onChange={this.handleChange}
-              label='Permission Code'
-              required
-          />           
-          
-
+  
 
           </div>
         </div>   
 
 
-        <div className='formSignUp' style={{width:'25vw'}}>
+        {/* <div className='formSignUp' style={{width:'25vw'}}>
         <div>
 
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -353,7 +336,7 @@ class SignUp extends React.Component {
 
 
           </div>
-        </div> 
+        </div>  */}
 
 
         </div>

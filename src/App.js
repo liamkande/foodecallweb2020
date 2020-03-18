@@ -74,18 +74,10 @@ componentWillUnmount() {
             <AdminPage />
           </PrivateRoute>
 
-
           <PrivateRoute exact path="/admin-restaurant-form" admin={adminUser} adminCode='1111/84-4150894'>
             <div>You are Now on the Restaurant form page!</div>
           </PrivateRoute> 
-           
-        
-
-  
-         
-          
-       
-          
+     
           </Switch>
     
       </BrowserRouter>
