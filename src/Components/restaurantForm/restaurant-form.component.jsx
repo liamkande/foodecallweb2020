@@ -34,11 +34,15 @@ class SignUp extends React.Component {
       restaurantLink:'',
       restaurantAddress:'',
       restaurantPhone:'',
-      restaurantMainPhoto:'',
+      restaurantMainPhotoLink:'',
       restaurantPhotos:[],
       restaurantMenuCategories:[],
       restaurantFoodList:[],
       restaurantEmail: '',
+      restaurantPriceRange: '',
+      restaurantRatings:'',
+      restaurantFavorited:'',
+      restaurantVotes:'',
 
     };
  
@@ -47,7 +51,7 @@ class SignUp extends React.Component {
     event.preventDefault()
 
     const {firstName, lastName, oAuthCode, email, password, confirmPassword, dob, ssn, admin, 
-      restaurantName, restaurantLink, restaurantAddress, restaurantPhone, restaurantMainPhoto, restaurantEmail} = this.state;
+      restaurantName, restaurantLink, restaurantAddress, restaurantPhone, restaurantMainPhotoLink, restaurantEmail, restaurantPriceRange } = this.state;
 
   
 
@@ -55,7 +59,7 @@ class SignUp extends React.Component {
     
     
 
-      await createRestaurantProfileDocument({ firstName,lastName, oAuthCode, dob, ssn, admin, restaurantName, restaurantLink,restaurantAddress, restaurantPhone, restaurantMainPhoto, restaurantEmail });
+      await createRestaurantProfileDocument({ firstName,lastName, oAuthCode, dob, ssn, admin, restaurantName, restaurantLink,restaurantAddress, restaurantPhone, restaurantMainPhotoLink, restaurantEmail, restaurantPriceRange });
 
       this.setState({
         firstName: '',
@@ -68,14 +72,19 @@ class SignUp extends React.Component {
         ssn:'',
         admin:null,
 
+
+
+        //restaurantRatings:'',
+        //restaurantFavorited:'',
+        // restaurantVotes:'',
         restaurantName:'',
         restaurantLink:'',
         restaurantAddress:'',
         restaurantPhone:'',
-        restaurantMainPhoto:'',
+        restaurantMainPhotoLink:'',
         restaurantEmail:'',
-
-
+        restaurantPriceRange:'',
+        
     
       });
     } catch (error) {
@@ -97,7 +106,7 @@ class SignUp extends React.Component {
   };
   
   render() {
-    const {firstName, lastName, oAuthCode, email, password, confirmPassword, dob, ssn, restaurantName, restaurantLink, restaurantAddress, restaurantPhone, restaurantMainPhoto, restaurantEmail } = this.state;
+    const {firstName, lastName, oAuthCode, email, password, confirmPassword, dob, ssn, restaurantName, restaurantLink, restaurantAddress, restaurantPhone, restaurantMainPhotoLink, restaurantEmail, restaurantPriceRange } = this.state;
     return (
       <form onSubmit={this.handleSubmit}>
       <div className='container' >
@@ -153,13 +162,157 @@ class SignUp extends React.Component {
           />
           <FormInput
             type='text'
-            name='restaurantMainPhoto'
-            value={restaurantMainPhoto.trim()}
+            name='restaurantMainPhotoLink'
+            value={restaurantMainPhotoLink.trim()}
             onChange={this.handleChange}
-            label='Restaurant Main Photo'
+            label='Restaurant Main Photo Link'
+            required
+          /> 
+  
+          <FormInput
+            type='text'
+            name='restaurantPriceRange'
+            value={restaurantPriceRange.trim()}
+            onChange={this.handleChange}
+            label='Restaurant Price Range'
+            required
+          />  
+
+          </div>
+        </div>   
+
+        <div className='formSignUp' style={{width:'25vw'}}>
+        <div>
+
+       
+
+          <FormInput
+            type='text'
+            name='restaurantName'
+            value={restaurantName.trim()}
+            onChange={this.handleChange}
+            label='Restaurant Name'
+            required
+          />  
+ 
+           <FormInput
+            type='text'
+            name='restaurantLink'
+            value={restaurantLink.trim()}
+            onChange={this.handleChange}
+            label='Restaurant Link'
+            required
+          />  
+          <FormInput
+            type='text'
+            name='restaurantAddress'
+            value={restaurantAddress.trim()}
+            onChange={this.handleChange}
+            label='Restaurant Address'
+            required
+           />            
+
+          <FormInput
+            type='text'
+            name='restaurantEmail'
+            value={restaurantEmail.trim()}
+            onChange={this.handleChange}
+            label='Restaurant Email'
             required
           />
+          <FormInput
+            type='text'
+            name='restaurantPhone'
+            value={restaurantPhone.trim()}
+            onChange={this.handleChange}
+            label='Restaurant Phone'
+            required
+          />
+          <FormInput
+            type='text'
+            name='restaurantMainPhotoLink'
+            value={restaurantMainPhotoLink.trim()}
+            onChange={this.handleChange}
+            label='Restaurant Main Photo Link'
+            required
+          /> 
   
+          <FormInput
+            type='text'
+            name='restaurantPriceRange'
+            value={restaurantPriceRange.trim()}
+            onChange={this.handleChange}
+            label='Restaurant Price Range'
+            required
+          />  
+
+          </div>
+        </div>   
+
+        <div className='formSignUp' style={{width:'25vw'}}>
+        <div>
+
+       
+
+          <FormInput
+            type='text'
+            name='restaurantName'
+            value={restaurantName.trim()}
+            onChange={this.handleChange}
+            label='Restaurant Name'
+            required
+          />  
+ 
+           <FormInput
+            type='text'
+            name='restaurantLink'
+            value={restaurantLink.trim()}
+            onChange={this.handleChange}
+            label='Restaurant Link'
+            required
+          />  
+          <FormInput
+            type='text'
+            name='restaurantAddress'
+            value={restaurantAddress.trim()}
+            onChange={this.handleChange}
+            label='Restaurant Address'
+            required
+           />            
+
+          <FormInput
+            type='text'
+            name='restaurantEmail'
+            value={restaurantEmail.trim()}
+            onChange={this.handleChange}
+            label='Restaurant Email'
+            required
+          />
+          <FormInput
+            type='text'
+            name='restaurantPhone'
+            value={restaurantPhone.trim()}
+            onChange={this.handleChange}
+            label='Restaurant Phone'
+            required
+          />
+          <FormInput
+            type='text'
+            name='restaurantMainPhotoLink'
+            value={restaurantMainPhotoLink.trim()}
+            onChange={this.handleChange}
+            label='Restaurant Main Photo Link'
+            required
+          /> 
+  
+          <FormInput
+            type='text'
+            name='restaurantPriceRange'
+            value={restaurantPriceRange.trim()}
+            onChange={this.handleChange}
+            label='Restaurant Price Range'
+            required
+          />  
 
           </div>
         </div>   
