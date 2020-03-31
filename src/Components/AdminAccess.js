@@ -2,12 +2,9 @@ import React, {Component}  from 'react'
 import FormInput from './form-input/form-input.component'
 import CustomButton from './custom-button/custom-button.component'
 import SignInComp from './sign-in/sign-in.component'
-import SignUpComp from './sign-up/sign-up.component'
 import { auth, createUserProfileDocument} from '../firebase/firebase.utils'
-import SignUp from './sign-up/sign-up.component'
 
 
-const currentCode = '1111/84-4150894'
 
 class AdminAccess extends Component {
     state = {
@@ -94,8 +91,6 @@ class AdminAccess extends Component {
                      {!this.props.signIn && 
                       <SignInComp />
                      }
-
-                    
                      </div>      
                  }
             

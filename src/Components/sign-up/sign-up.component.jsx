@@ -1,22 +1,21 @@
-import React from 'react';
+import React from 'react'
+import FormInput from '../form-input/form-input.component'
+import CustomButton from '../custom-button/custom-button.component'
+import { auth, createUserProfileDocument } from '../../firebase/firebase.utils'
+import 'date-fns'
+import DateFnsUtils from '@date-io/date-fns'
 
-import FormInput from '../form-input/form-input.component';
-import CustomButton from '../custom-button/custom-button.component';
-
-
-import { auth, createUserProfileDocument } from '../../firebase/firebase.utils';
-import 'date-fns';
-import DateFnsUtils from '@date-io/date-fns';
 
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
-} from '@material-ui/pickers';
+} from '@material-ui/pickers'
 
-import './sign-up.styles.scss';
+import './sign-up.styles.scss'
 import {NavLink} from 'react-router-dom'
 
 
+const validationCode = '0000/84-4150894'
 
 class SignUp extends React.Component {
   
@@ -31,6 +30,7 @@ class SignUp extends React.Component {
       ssn:'',
       confirmSSN:'',
       admin:true,
+    
 
       accessCode:'',
       accessGranted:null,
@@ -44,7 +44,7 @@ class SignUp extends React.Component {
     componentDidMount () {
       this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
         if (userAuth) {
-          const userRef = await createUserProfileDocument(userAuth);
+          const userRef = await createUserProfileDocument(userAuth)
     
           userRef.onSnapshot(snapShot => {
             this.setState({
@@ -73,7 +73,8 @@ class SignUp extends React.Component {
   handleSubmit = async event => {
     event.preventDefault()
 
-    const {firstName, lastName, oAuthCode, email, password, confirmPassword, dob, ssn, confirmSSN, admin } = this.state;
+    const {firstName, lastName, oAuthCode, email, password, confirmPassword, dob, ssn, confirmSSN, admin } = this.state
+    const displayName = `${firstName} ${lastName}`
 
     if (password !== confirmPassword) {
       alert("passwords don't match")
@@ -100,7 +101,7 @@ class SignUp extends React.Component {
         password
       )
 
-      await createUserProfileDocument(user, { firstName,lastName, oAuthCode, dob, ssn, admin  });
+      await createUserProfileDocument(user, { firstName,lastName, oAuthCode, dob, ssn, admin, displayName})
 
       this.setState({
         firstName: '',
@@ -111,7 +112,9 @@ class SignUp extends React.Component {
         confirmPassword: '',
         dob:'',
         ssn:'',
-        admin:null
+        admin:null,
+       
+  
     
       });
     } catch (error) {
@@ -124,26 +127,26 @@ class SignUp extends React.Component {
   handleChange = event => {
     const { name, value } = event.target;
 
-    this.setState({ [name]: value });
+    this.setState({ [name]: value })
   };
 
   handleDateChange = date => {
-    this.setState({ dob: date.toDateString() });
-    console.log(this.state.dob);
+    this.setState({dob: date.toDateString()})
+    console.log(this.state.dob)
     
   };
 
   handleAccessSubmit = event => {
     event.preventDefault()
 
-    this.state.accessCode === '0000/84-4150894'? 
+    this.state.accessCode === validationCode ? 
     this.setState({ accessGranted: true, accessCode:''  }) :
         alert("Wrong Code!")
 
 }
     
   render() {
-    const {firstName, lastName, oAuthCode, email, password, confirmPassword, dob, ssn, confirmSSN, accessGranted, accessCode, existingUser } = this.state;
+    const {firstName, lastName, oAuthCode, email, password, confirmPassword, dob, ssn, confirmSSN, accessGranted, accessCode, existingUser } = this.state
     return (
       <div className="container">
         {existingUser && 
@@ -292,4 +295,4 @@ class SignUp extends React.Component {
 
 }
 
-export default SignUp;
+export default SignUp

@@ -1,19 +1,13 @@
 import React, {Component} from 'react'
-import {BrowserRouter, Route, Switch, Redirect} from 'react-router-dom'
+import {BrowserRouter, Route, Switch} from 'react-router-dom'
 import './App.scss'
 import NYEPage from './Containers/NYEPage'
 import SignUpPage from './Containers/SignUpPage'
 import AboutUsPage from './Containers/AboutUsPage'
-import SignUp from './Containers/SignUp'
 import SignUpComp from './Components/sign-up/sign-up.component'
 import AdminPage from './Containers/AdimPage'
-import AdminAccess from './Components/AdminAccess'
 import PrivateRoute from './Components/PrivateRoute'
 import { auth, createUserProfileDocument} from './firebase/firebase.utils'
-import Demo from './demo'
-
-
-
 
 const video = 'https://www.youtube.com/embed/unbvLdXf-nM'
 const bgVideo = 'https://s3.us-east-2.amazonaws.com/liamkande.com/preview/Food-E-Call+_+Firework-Background.mp4'

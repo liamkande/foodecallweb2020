@@ -1,6 +1,6 @@
-import firebase from 'firebase/app';
-import 'firebase/firestore';
-import 'firebase/auth';
+import firebase from 'firebase/app'
+import 'firebase/firestore'
+import 'firebase/auth'
 import uuid from 'uuid'
 
 
@@ -14,45 +14,47 @@ const config = {
   appId: "1:920243376910:web:665c29c5f3d27e2725fd5f"
 };
 
-firebase.initializeApp(config);
+firebase.initializeApp(config)
  
 
 export const createUserProfileDocument = async (userAuth, additionalData) => {
   if (!userAuth) return;
+ 
+  const userRef = firestore.doc(`admins/${userAuth.uid}`)
 
-  const userRef = firestore.doc(`admins/${userAuth.uid}`);
-
-  const snapShot = await userRef.get();
+  const snapShot = await userRef.get()
 
   if (!snapShot.exists) {
-    const { displayName, email } = userAuth;
+    const { displayName, email} = userAuth
     const createdAt = new Date();
+    const adminId = userAuth.uid
     try {
       await userRef.set({
         displayName,
         email,
         createdAt,
+        adminId,
         ...additionalData
       });
     } catch (error) {
-      console.log('error creating admin User', error.message);
+      console.log('error creating admin User', error.message)
     }
   }
 
-  return userRef;
+  return userRef
 };
 
 
 export const createRestaurantProfileDocument = async (additionalData) => {
   const id = uuid.v4()
 
-  const userRef = firestore.doc(`restaurants/${id}`);
+  const userRef = firestore.doc(`restaurants/${id}`)
 
-  const snapShot = await userRef.get();
+  const snapShot = await userRef.get()
 
   if (!snapShot.exists) {
     
-    const createdAt = new Date();
+    const createdAt = new Date()
     try {
       await userRef.set({
     
@@ -60,19 +62,19 @@ export const createRestaurantProfileDocument = async (additionalData) => {
         ...additionalData
       });
     } catch (error) {
-      console.log('error creating restaurant form', error.message);
+      console.log('error creating restaurant form', error.message)
     }
   }
  
 
-  return userRef;
-};
+  return userRef
+}
 
-export const auth = firebase.auth();
-export const firestore = firebase.firestore();
+export const auth = firebase.auth()
+export const firestore = firebase.firestore()
 
-const provider = new firebase.auth.GoogleAuthProvider();
-provider.setCustomParameters({ prompt: 'select_account' });
-export const signInWithGoogle = () => auth.signInWithRedirect(provider);
+const provider = new firebase.auth.GoogleAuthProvider()
+provider.setCustomParameters({ prompt: 'select_account' })
+export const signInWithGoogle = () => auth.signInWithRedirect(provider)
 
-export default firebase;
+export default firebase

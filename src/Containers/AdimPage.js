@@ -1,13 +1,7 @@
 import React, {Component} from 'react'
-import Nav from '../Components/Nav'
-import Footer from '../Components/Footer'
-
-import FormInput from '../Components/form-input/form-input.component'
-import CustomButton from '../Components/custom-button/custom-button.component'
-import { auth, createUserProfileDocument, signInWithGoogle } from '../firebase/firebase.utils'
-import { NavLink } from 'react-router-dom'
+import { auth, createUserProfileDocument} from '../firebase/firebase.utils'
 import RestaurantForm from '../Components/restaurantForm/restaurant-form.component'
-import SignInComp from '../Components/sign-in/sign-in.component'
+
 
 const currentCode = '1111/84-4150894'
 
@@ -40,22 +34,22 @@ class AdminSignUp extends Component {
             }
           });
 
-          console.log(this.state);
+          console.log(this.state)
         });
       }
 
-      this.setState({ currentUser: userAuth });
+      this.setState({ currentUser: userAuth })
     });
   }
 
   componentWillUnmount() {
-    this.unsubscribeFromAuth();
+    this.unsubscribeFromAuth()
   }
 
   handleChange = event => {
-    const { name, value } = event.target;
+    const { name, value } = event.target
 
-    this.setState({ [name]: value });
+    this.setState({ [name]: value })
   };
   
   handleSubmit = event => {
@@ -68,7 +62,6 @@ class AdminSignUp extends Component {
   }
 
     render() {
-      const { currentUser, renderSignIn, renderSignUp, accessCode, accessGranted } = this.state
       return (
         <RestaurantForm />
       )

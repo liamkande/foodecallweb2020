@@ -1,17 +1,9 @@
-import React from "react";
+import React from "react"
 import {
-
   Route,
-
-  Redirect,
-
-} from "react-router-dom";
-import AdminPage from '../Containers/AdimPage'
+} from "react-router-dom"
 import AdminAccess from './AdminAccess'
-import SignInComp from "./sign-in/sign-in.component"
-import SignUpComp from "./sign-up/sign-up.component"
 import { auth, createUserProfileDocument} from '../firebase/firebase.utils'
-
 
 
 
@@ -22,7 +14,6 @@ class PrivateRoute extends React.Component {
   state= {
     currentUser: null,
     adminUser:null,
-   
   }
 
   unsubscribeFromAuth = null
@@ -30,7 +21,7 @@ class PrivateRoute extends React.Component {
   componentDidMount () {
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
       if (userAuth) {
-        const userRef = await createUserProfileDocument(userAuth);
+        const userRef = await createUserProfileDocument(userAuth)
   
         userRef.onSnapshot(snapShot => {
           this.setState({
