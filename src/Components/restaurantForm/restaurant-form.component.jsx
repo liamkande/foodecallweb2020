@@ -4,6 +4,7 @@ import CustomButton from '../custom-button/custom-button.component'
 import { createRestaurantProfileDocument } from '../../firebase/firebase.utils'
 import 'date-fns'
 import './sign-up.styles.scss'
+import ImageUpload from '../ImageUpload'
 
 class SignUp extends React.Component {
 
@@ -81,6 +82,8 @@ class SignUp extends React.Component {
 
         <div className='formSignUp' style={{width:'25vw'}}>
         <div>
+
+          <ImageUpload />
 
           <FormInput
             type='text'

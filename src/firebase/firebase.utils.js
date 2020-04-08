@@ -1,6 +1,7 @@
 import firebase from 'firebase/app'
 import 'firebase/firestore'
 import 'firebase/auth'
+import 'firebase/storage'
 import uuid from 'uuid'
 
 
@@ -12,7 +13,7 @@ const config = {
   storageBucket: "food-e-call-nativeapp.appspot.com",
   messagingSenderId: "920243376910",
   appId: "1:920243376910:web:665c29c5f3d27e2725fd5f"
-};
+}
 
 firebase.initializeApp(config)
  
@@ -77,4 +78,8 @@ const provider = new firebase.auth.GoogleAuthProvider()
 provider.setCustomParameters({ prompt: 'select_account' })
 export const signInWithGoogle = () => auth.signInWithRedirect(provider)
 
+export const storage = firebase.storage()
+
 export default firebase
+
+
