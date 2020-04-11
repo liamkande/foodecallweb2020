@@ -44,10 +44,7 @@ class SignUp extends React.Component {
       resizedIMG: null
     }
  
-    _getFiles(obj){
-      console.log(obj);
-    }
-   
+
     handleMainIMGChange = e => {
       if(e.target.files[0]) {
           const imageFile = e.target.files[0]
@@ -162,7 +159,7 @@ class SignUp extends React.Component {
           <FormInput
             type='text'
             name='restaurantName'
-            value={restaurantName.trim()}
+            value={restaurantName}
             onChange={this.handleChange}
             label='Restaurant Name'
             required
