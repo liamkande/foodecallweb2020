@@ -4,7 +4,10 @@ import CustomButton from '../custom-button/custom-button.component'
 import { createRestaurantProfileDocument } from '../../firebase/firebase.utils'
 import 'date-fns'
 import './sign-up.styles.scss'
-import ImageUpload from '../ImageUpload'
+import { storage } from '../../firebase/firebase.utils'
+import uuid from 'uuid'
+import Resizer from 'react-image-file-resizer'
+
 
 class SignUp extends React.Component {
 
@@ -34,8 +37,67 @@ class SignUp extends React.Component {
       //restaurantHours:{},
       //restaurantMenuCategories:['', '', '',],
 
+     
+      url:'',
+      uploaded: null,
+      imgChanged: null,
+      resizedIMG: null
     }
  
+    _getFiles(obj){
+      console.log(obj);
+    }
+   
+    handleMainIMGChange = e => {
+      if(e.target.files[0]) {
+          const imageFile = e.target.files[0]
+          this.setState({image:imageFile, imgChanged: true})
+          console.log(imageFile)
+
+          Resizer.imageFileResizer(
+            e.target.files[0],
+            500,
+            500,
+            'JPEG',
+            100,
+            0,
+            uri => {
+                this.setState({resizedIMG:uri})
+            },
+            'base64'
+        );
+      }
+ 
+    }
+  
+    handleMainIMGUpload = async () => {
+      const {uploaded, imgChanged, resizedIMG} = this.state  
+
+
+      try {
+  
+        const blob = await new Promise((resolve, reject) => {
+          const xhr = new XMLHttpRequest()
+          xhr.onload = () => resolve(xhr.response)
+          xhr.responseType = 'blob'
+          xhr.open('GET', resizedIMG, true)
+          xhr.send(null)
+        });
+  
+        const uploadTask = !uploaded && imgChanged ? await storage.ref(`restaurantPhotos`).child(uuid.v4()).put(blob) : null
+        const downloadURL = !uploaded ? await uploadTask.ref.getDownloadURL() : null
+        this.setState({url:downloadURL, uploaded:true})
+        console.log(downloadURL)
+  
+        alert(uploaded && imgChanged ? "You've already added an image, Please delete the existing image!" : "You've succesfully added an image")
+  
+        
+      } catch(e) {
+        console.error(e)
+      }
+    }
+
+
 
   handleSubmit = async event => {
     event.preventDefault()
@@ -61,6 +123,10 @@ class SignUp extends React.Component {
       console.error(error)
     }
    console.log('Restaurant Form was submited successfully')
+
+   this.handleMainIMGUpload()
+
+
    
   }
 
@@ -69,6 +135,8 @@ class SignUp extends React.Component {
 
     this.setState({ [name]: value })
   }
+
+
 
 
   
@@ -83,7 +151,13 @@ class SignUp extends React.Component {
         <div className='formSignUp' style={{width:'25vw'}}>
         <div>
 
-          <ImageUpload />
+        <div>
+            {this.state.url && 
+              <img src={this.state.url} style={{width:200}} alt='Main Restaurant' />           
+            }
+            <input type='file' onChange={this.handleMainIMGChange}/>
+            {/* <button onClick={this.handleUpload}>Upload</button> */}
+          </div>
 
           <FormInput
             type='text'
