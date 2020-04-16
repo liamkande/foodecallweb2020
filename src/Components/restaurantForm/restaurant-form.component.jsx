@@ -41,7 +41,8 @@ class SignUp extends React.Component {
       url:'',
       uploaded: null,
       imgChanged: null,
-      resizedIMG: null
+      resizedIMG: null,
+      ready: null
     }
  
 
@@ -53,10 +54,10 @@ class SignUp extends React.Component {
 
           Resizer.imageFileResizer(
             e.target.files[0],
-            500,
-            500,
+            600,
+            600,
             'JPEG',
-            100,
+            200,
             0,
             uri => {
                 this.setState({resizedIMG:uri})
@@ -83,7 +84,7 @@ class SignUp extends React.Component {
   
         const uploadTask = !uploaded && imgChanged ? await storage.ref(`restaurantPhotos`).child(uuid.v4()).put(blob) : null
         const downloadURL = !uploaded ? await uploadTask.ref.getDownloadURL() : null
-        this.setState({url:downloadURL, uploaded:true})
+        this.setState({url:downloadURL, uploaded:true, restaurantMainPhotoLink: downloadURL, ready:true})
         console.log(downloadURL)
   
         alert(uploaded && imgChanged ? "You've already added an image, Please delete the existing image!" : "You've succesfully added an image")
@@ -98,12 +99,13 @@ class SignUp extends React.Component {
 
   handleSubmit = async event => {
     event.preventDefault()
+   
     const {restaurantName, restaurantLink, restaurantAddress, restaurantPhone, restaurantMainPhotoLink, restaurantEmail, restaurantPriceRange } = this.state
-
+    
     try {
     
-      await createRestaurantProfileDocument({ restaurantName, restaurantLink,restaurantAddress, restaurantPhone, restaurantMainPhotoLink, restaurantEmail, restaurantPriceRange });
-
+      await createRestaurantProfileDocument({ restaurantName, restaurantLink,restaurantAddress, restaurantPhone, restaurantMainPhotoLink, restaurantEmail, restaurantPriceRange});
+      
       this.setState({
 
         restaurantName:'',
@@ -113,17 +115,11 @@ class SignUp extends React.Component {
         restaurantMainPhotoLink:'',
         restaurantEmail:'',
         restaurantPriceRange:'',
-        
     
       })
     } catch (error) {
       console.error(error)
     }
-   console.log('Restaurant Form was submited successfully')
-
-   this.handleMainIMGUpload()
-
-
    
   }
 
@@ -138,7 +134,8 @@ class SignUp extends React.Component {
 
   
   render() {
-    const { restaurantName, restaurantLink, restaurantAddress, restaurantPhone, restaurantMainPhotoLink, restaurantEmail, restaurantPriceRange } = this.state;
+    const { restaurantName, restaurantLink, restaurantAddress, restaurantPhone, restaurantMainPhotoLink, restaurantEmail, restaurantPriceRange, ready } = this.state;
+ 
     return (
       <form onSubmit={this.handleSubmit}>
       <div className='container' >
@@ -153,7 +150,7 @@ class SignUp extends React.Component {
               <img src={this.state.url} style={{width:200}} alt='Main Restaurant' />           
             }
             <input type='file' onChange={this.handleMainIMGChange}/>
-            {/* <button onClick={this.handleUpload}>Upload</button> */}
+            <button onClick={this.handleMainIMGUpload}>Upload</button>
           </div>
 
           <FormInput
@@ -190,6 +187,7 @@ class SignUp extends React.Component {
             label='Restaurant Email'
             required
           />
+
           <FormInput
             type='text'
             name='restaurantPhone'
@@ -198,15 +196,7 @@ class SignUp extends React.Component {
             label='Restaurant Phone'
             required
           />
-          <FormInput
-            type='text'
-            name='restaurantMainPhotoLink'
-            value={restaurantMainPhotoLink.trim()}
-            onChange={this.handleChange}
-            label='Restaurant Main Photo Link'
-            required
-          /> 
-  
+
           <FormInput
             type='text'
             name='restaurantPriceRange'
@@ -215,6 +205,18 @@ class SignUp extends React.Component {
             label='Restaurant Price Range'
             required
           />  
+
+          <FormInput
+            type='text'
+            name='restaurantMainPhotoLink'
+            value={restaurantMainPhotoLink}
+            onChange={this.handleChange}
+            label='Restaurant Main Photo Link'
+            disabled
+            required
+           
+          /> 
+  
 
           </div>
         </div>   
@@ -398,7 +400,10 @@ class SignUp extends React.Component {
         </div>
 
         <div style={{alignSelf:'center'}}>
-          <CustomButton type='submit'>DONE</CustomButton>
+          {ready &&
+            <CustomButton type='submit'>DONE</CustomButton>
+          }
+          
         </div>
      
 
