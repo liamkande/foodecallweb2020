@@ -16,7 +16,7 @@ class SignUp extends React.Component {
       restaurantLink:'',
       restaurantAddress:'',
       restaurantPhone:'',
-      restaurantMainPhotoLink:'',
+      photos:[],
       restaurantPhotos:[],
       //restaurantMenuCategories:[all menu categories list plus picked for you and most popular ],
       //restaurantCategories:[ restaurant genre],
@@ -42,7 +42,9 @@ class SignUp extends React.Component {
       uploaded: null,
       imgChanged: null,
       resizedIMG: null,
-      ready: null
+      ready: null,
+      testName: null,
+      deleteIMG: null,
     }
  
 
@@ -69,30 +71,43 @@ class SignUp extends React.Component {
     }
   
     handleMainIMGUpload = async () => {
-      const {uploaded, imgChanged, resizedIMG} = this.state  
+      const {uploaded, imgChanged, resizedIMG, photos} = this.state  
+      
+      if(photos.length < 3 ) {
+        try {
+  
+          const blob = await new Promise((resolve, reject) => {
+            const xhr = new XMLHttpRequest()
+            xhr.onload = () => resolve(xhr.response)
+            xhr.responseType = 'blob'
+            xhr.open('GET', resizedIMG, true)
+            xhr.send(null)
+          });
+    
+          const uploadTask = await storage.ref(`restaurantPhotos`).child(uuid.v4()).put(blob)
+          const downloadURL = await uploadTask.ref.getDownloadURL() 
+          const name = await uploadTask.ref.name
+          const photoData = {photoName:name, photoURL:downloadURL }
+          photos.push(photoData)
+          const morePhotos = photos
+          this.setState({url:downloadURL, ready:true, photos:morePhotos, testName: name})
+          console.log(downloadURL)
+    
+          alert(uploaded && imgChanged ? "You've already added an image, Please delete the existing image!" : "You've succesfully added an image")
+          
+          console.log(this.state.photos)
+          console.log(name)
 
-
-      try {
-  
-        const blob = await new Promise((resolve, reject) => {
-          const xhr = new XMLHttpRequest()
-          xhr.onload = () => resolve(xhr.response)
-          xhr.responseType = 'blob'
-          xhr.open('GET', resizedIMG, true)
-          xhr.send(null)
-        });
-  
-        const uploadTask = !uploaded && imgChanged ? await storage.ref(`restaurantPhotos`).child(uuid.v4()).put(blob) : null
-        const downloadURL = !uploaded ? await uploadTask.ref.getDownloadURL() : null
-        this.setState({url:downloadURL, uploaded:true, restaurantMainPhotoLink: downloadURL, ready:true})
-        console.log(downloadURL)
-  
-        alert(uploaded && imgChanged ? "You've already added an image, Please delete the existing image!" : "You've succesfully added an image")
-  
-        
-      } catch(e) {
-        console.error(e)
+          
+          
+        } catch(e) {
+          console.error(e)
+        }
+      } else {
+        alert("No more Max Reached")
       }
+
+
     }
 
 
@@ -100,11 +115,13 @@ class SignUp extends React.Component {
   handleSubmit = async event => {
     event.preventDefault()
    
-    const {restaurantName, restaurantLink, restaurantAddress, restaurantPhone, restaurantMainPhotoLink, restaurantEmail, restaurantPriceRange } = this.state
+    const {restaurantName, restaurantLink, restaurantAddress, restaurantPhone, restaurantEmail, restaurantPriceRange, photos } = this.state
     
+    
+
     try {
     
-      await createRestaurantProfileDocument({ restaurantName, restaurantLink,restaurantAddress, restaurantPhone, restaurantMainPhotoLink, restaurantEmail, restaurantPriceRange});
+      await createRestaurantProfileDocument(photos, { restaurantName, restaurantLink,restaurantAddress, restaurantPhone, restaurantEmail, restaurantPriceRange});
       
       this.setState({
 
@@ -112,7 +129,6 @@ class SignUp extends React.Component {
         restaurantLink:'',
         restaurantAddress:'',
         restaurantPhone:'',
-        restaurantMainPhotoLink:'',
         restaurantEmail:'',
         restaurantPriceRange:'',
     
@@ -129,12 +145,17 @@ class SignUp extends React.Component {
     this.setState({ [name]: value })
   }
 
-
+  handleDelete = (name) => {
+    name = this.state.deleteIMG
+    storage.ref(`restaurantPhotos`).child(name).delete()
+    this.state.photos.splice(this.state.photos[0], 1)
+  }
+ 
 
 
   
   render() {
-    const { restaurantName, restaurantLink, restaurantAddress, restaurantPhone, restaurantMainPhotoLink, restaurantEmail, restaurantPriceRange, ready } = this.state;
+    const { restaurantName, restaurantLink, restaurantAddress, restaurantPhone, restaurantEmail, restaurantPriceRange, ready, photos } = this.state;
  
     return (
       <form onSubmit={this.handleSubmit}>
@@ -146,12 +167,53 @@ class SignUp extends React.Component {
         <div>
 
         <div>
-            {this.state.url && 
-              <img src={this.state.url} style={{width:200}} alt='Main Restaurant' />           
-            }
+
+            <h4>Please Add Restaurant Main Photo below:</h4>
             <input type='file' onChange={this.handleMainIMGChange}/>
-            <button onClick={this.handleMainIMGUpload}>Upload</button>
+           
+             <button onClick={this.handleMainIMGUpload}>Upload</button>
+            
+         
+            {this.state.url && 
+              <img src={photos[0].photoURL} style={{width:50}} alt='Main Restaurant' />           
+            }
+            
           </div>
+          <button onClick={this.handleDelete}>Delete</button>
+          <button onClick={() => this.setState({deleteIMG: photos[0].photoName})}>Delete Main Photo</button>
+
+          {/* <div>
+          <h4>Please Add Up to 6 Additional Restaurant related Photo below:</h4>
+          <input type='file' onChange={this.handleMainIMGChange}/>
+          <button onClick={this.handleMainIMGUpload}>Upload</button>
+          {this.state.url && 
+            <img src={this.state.url} style={{width:50}} alt='Main Restaurant' />           
+          }
+
+<input type='file' onChange={this.handleMainIMGChange}/>
+          <button onClick={this.handleMainIMGUpload}>Upload</button>
+          {this.state.url && 
+            <img src={this.state.url} style={{width:50}} alt='Main Restaurant' />           
+          }
+
+<input type='file' onChange={this.handleMainIMGChange}/>
+          <button onClick={this.handleMainIMGUpload}>Upload</button>
+          {this.state.url && 
+            <img src={this.state.url} style={{width:50}} alt='Main Restaurant' />           
+          }
+
+<input type='file' onChange={this.handleMainIMGChange}/>
+          <button onClick={this.handleMainIMGUpload}>Upload</button>
+          {this.state.url && 
+            <img src={this.state.url} style={{width:50}} alt='Main Restaurant' />           
+          }
+
+<input type='file' onChange={this.handleMainIMGChange}/>
+          <button onClick={this.handleMainIMGUpload}>Upload</button>
+          {this.state.url && 
+            <img src={this.state.url} style={{width:50}} alt='Main Restaurant' />           
+          }
+          </div> */}
 
           <FormInput
             type='text'
@@ -206,16 +268,16 @@ class SignUp extends React.Component {
             required
           />  
 
-          <FormInput
+          {/* <FormInput
             type='text'
-            name='restaurantMainPhotoLink'
-            value={restaurantMainPhotoLink}
+            name='mainPhoto'
+            value={mainPhoto}
             onChange={this.handleChange}
             label='Restaurant Main Photo Link'
             disabled
             required
            
-          /> 
+          />  */}
   
 
           </div>

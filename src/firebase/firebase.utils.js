@@ -46,7 +46,7 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
 };
 
 
-export const createRestaurantProfileDocument = async (restaurantMainPhotoURL, additionalData) => {
+export const createRestaurantProfileDocument = async (photos, additionalData) => {
   const id = uuid.v4()
 
   const userRef = firestore.doc(`restaurants/${id}`)
@@ -55,12 +55,14 @@ export const createRestaurantProfileDocument = async (restaurantMainPhotoURL, ad
 
   if (!snapShot.exists) {
     
+    const mainPhoto = photos[0].photoURL
     const createdAt = new Date()
    
   
     try {
       await userRef.set({
-        ...restaurantMainPhotoURL,
+        photos,
+        mainPhoto,
         createdAt,
         ...additionalData
       });
