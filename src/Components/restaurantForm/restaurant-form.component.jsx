@@ -73,7 +73,7 @@ class SignUp extends React.Component {
     handleMainIMGUpload = async () => {
       const {uploaded, imgChanged, resizedIMG, photos} = this.state  
       
-      if(photos.length < 3 ) {
+      if(photos.length < 4 ) {
         try {
   
           const blob = await new Promise((resolve, reject) => {
@@ -90,7 +90,7 @@ class SignUp extends React.Component {
           const photoData = {photoName:name, photoURL:downloadURL }
           photos.push(photoData)
           const morePhotos = photos
-          this.setState({url:downloadURL, ready:true, photos:morePhotos, testName: name})
+          this.setState({url:downloadURL, ready: photos.length < 4 ? null : true, photos:morePhotos, testName: name})
           console.log(downloadURL)
     
           alert(uploaded && imgChanged ? "You've already added an image, Please delete the existing image!" : "You've succesfully added an image")
@@ -104,7 +104,7 @@ class SignUp extends React.Component {
           console.error(e)
         }
       } else {
-        alert("No more Max Reached")
+        alert("Sorry... You've reached the maximun photos uploads allowed")
       }
 
 
@@ -146,9 +146,18 @@ class SignUp extends React.Component {
   }
 
   handleDelete = (name) => {
-    name = this.state.deleteIMG
-    storage.ref(`restaurantPhotos`).child(name).delete()
-    this.state.photos.splice(this.state.photos[0], 1)
+    const photos = this.state.photos
+
+    if(photos.length > 0 ) {
+      name = photos.slice(-1)[0].photoName
+      storage.ref(`restaurantPhotos`).child(name).delete()
+      photos.splice(-1,1)
+      this.setState({photos: photos})
+      alert('The last uploaded image has been successfully deleted')
+      console.log(photos)
+    }
+    
+    
   }
  
 
@@ -156,7 +165,11 @@ class SignUp extends React.Component {
   
   render() {
     const { restaurantName, restaurantLink, restaurantAddress, restaurantPhone, restaurantEmail, restaurantPriceRange, ready, photos } = this.state;
- 
+    let photoMain = photos.length > 0 ?  photos[0].photoURL : null
+    let photo1 = photos.length > 1 ?  photos[1].photoURL : null
+    let photo2 = photos.length > 2 ?  photos[2].photoURL : null
+    let photo3 = photos.length > 3 ?  photos[3].photoURL : null
+
     return (
       <form onSubmit={this.handleSubmit}>
       <div className='container' >
@@ -167,53 +180,44 @@ class SignUp extends React.Component {
         <div>
 
         <div>
-
-            <h4>Please Add Restaurant Main Photo below:</h4>
+            <h4>Please Upload Restaurant Photos in order below:</h4>
             <input type='file' onChange={this.handleMainIMGChange}/>
            
              <button onClick={this.handleMainIMGUpload}>Upload</button>
             
          
-            {this.state.url && 
-              <img src={photos[0].photoURL} style={{width:50}} alt='Main Restaurant' />           
+            {photoMain && 
+            <div>
+              <img src={photos[0].photoURL ? photos[0].photoURL : null } style={{width:50}} alt='Main Restaurant' />
+              <div>Main Photo</div> 
+            </div>         
             }
-            
+
+            {photo1 && 
+            <div>
+              <img src={photo1} style={{width:50}} alt='Main Restaurant' />
+              <div>Photo 1</div> 
+            </div>         
+            } 
+
+            {photo2 && 
+            <div>
+              <img src={photo2} style={{width:50}} alt='Main Restaurant' />
+              <div>Photo 2</div> 
+            </div>         
+            }             
+
+          {photo3 && 
+            <div>
+              <img src={photo3} style={{width:50}} alt='Main Restaurant' />
+              <div>Photo 3</div> 
+            </div>         
+            } 
+        
+          <button onClick={this.handleDelete}>Delete last photo</button>
           </div>
-          <button onClick={this.handleDelete}>Delete</button>
-          <button onClick={() => this.setState({deleteIMG: photos[0].photoName})}>Delete Main Photo</button>
 
-          {/* <div>
-          <h4>Please Add Up to 6 Additional Restaurant related Photo below:</h4>
-          <input type='file' onChange={this.handleMainIMGChange}/>
-          <button onClick={this.handleMainIMGUpload}>Upload</button>
-          {this.state.url && 
-            <img src={this.state.url} style={{width:50}} alt='Main Restaurant' />           
-          }
 
-<input type='file' onChange={this.handleMainIMGChange}/>
-          <button onClick={this.handleMainIMGUpload}>Upload</button>
-          {this.state.url && 
-            <img src={this.state.url} style={{width:50}} alt='Main Restaurant' />           
-          }
-
-<input type='file' onChange={this.handleMainIMGChange}/>
-          <button onClick={this.handleMainIMGUpload}>Upload</button>
-          {this.state.url && 
-            <img src={this.state.url} style={{width:50}} alt='Main Restaurant' />           
-          }
-
-<input type='file' onChange={this.handleMainIMGChange}/>
-          <button onClick={this.handleMainIMGUpload}>Upload</button>
-          {this.state.url && 
-            <img src={this.state.url} style={{width:50}} alt='Main Restaurant' />           
-          }
-
-<input type='file' onChange={this.handleMainIMGChange}/>
-          <button onClick={this.handleMainIMGUpload}>Upload</button>
-          {this.state.url && 
-            <img src={this.state.url} style={{width:50}} alt='Main Restaurant' />           
-          }
-          </div> */}
 
           <FormInput
             type='text'
@@ -224,7 +228,7 @@ class SignUp extends React.Component {
             required
           />  
  
-           <FormInput
+           {/* <FormInput
             type='text'
             name='restaurantLink'
             value={restaurantLink.trim()}
@@ -266,7 +270,7 @@ class SignUp extends React.Component {
             onChange={this.handleChange}
             label='Restaurant Price Range'
             required
-          />  
+          />   */}
 
           {/* <FormInput
             type='text'

@@ -55,7 +55,7 @@ export const createRestaurantProfileDocument = async (photos, additionalData) =>
 
   if (!snapShot.exists) {
     
-    const mainPhoto = photos[0].photoURL
+    const mainPhoto = photos.length > 0 ? photos[0].photoURL : null
     const createdAt = new Date()
    
   
