@@ -44,7 +44,11 @@ class SignUp extends React.Component {
       resizedIMG: null,
       ready: null,
       testName: null,
-      deleteIMG: null,
+      deletingIMG: null,
+      mainPhotoURL: null,
+      deletingPhotoURL: null,
+      photosLenght:0,
+    
     }
  
 
@@ -89,17 +93,17 @@ class SignUp extends React.Component {
           const name = await uploadTask.ref.name
           const photoData = {photoName:name, photoURL:downloadURL }
           photos.push(photoData)
-          const morePhotos = photos
-          this.setState({url:downloadURL, ready: photos.length < 4 ? null : true, photos:morePhotos, testName: name})
+          this.setState({url:downloadURL, ready: photos.length < 4 ? null : true, testName: name})
           console.log(downloadURL)
     
           alert(uploaded && imgChanged ? "You've already added an image, Please delete the existing image!" : "You've succesfully added an image")
           
-          console.log(this.state.photos)
+          console.log(photos.length)
           console.log(name)
+          console.log(`mainIMG: ${this.state.mainPhotoURL}`);
+          
 
-          
-          
+                  
         } catch(e) {
           console.error(e)
         }
@@ -145,30 +149,30 @@ class SignUp extends React.Component {
     this.setState({ [name]: value })
   }
 
-  handleDelete = (name) => {
-    const photos = this.state.photos
+  handleDelete = () => {
 
-    if(photos.length > 0 ) {
-      name = photos.slice(-1)[0].photoName
-      storage.ref(`restaurantPhotos`).child(name).delete()
-      photos.splice(-1,1)
-      this.setState({photos: photos})
-      alert('The last uploaded image has been successfully deleted')
-      console.log(photos)
-    }
+        const {photos, deletingIMG} = this.state
+        photos.splice(photos.indexOf(deletingIMG), 1)
+        storage.ref(`restaurantPhotos`).child(deletingIMG.photoName).delete()
+        this.setState({deletingIMG: null })
+        alert('The last uploaded image has been successfully deleted')
+        console.log(photos)
+  }
+
+  selectMainPhoto = () => {
+    const {mainPhotoURL,deletingIMG} = this.state
+  
+      this.setState({mainPhotoURL:deletingIMG.photoURL })
+  
     
+    console.log(this.state.mainPhotoURL)
     
   }
- 
-
-
   
   render() {
-    const { restaurantName, restaurantLink, restaurantAddress, restaurantPhone, restaurantEmail, restaurantPriceRange, ready, photos } = this.state;
-    let photoMain = photos.length > 0 ?  photos[0].photoURL : null
-    let photo1 = photos.length > 1 ?  photos[1].photoURL : null
-    let photo2 = photos.length > 2 ?  photos[2].photoURL : null
-    let photo3 = photos.length > 3 ?  photos[3].photoURL : null
+    const { restaurantName, restaurantLink, restaurantAddress, restaurantPhone, restaurantEmail, restaurantPriceRange, ready, photos, mainPhotoURL, deletingIMG } = this.state;
+    const mainPhoto = mainPhotoURL
+
 
     return (
       <form onSubmit={this.handleSubmit}>
@@ -185,38 +189,45 @@ class SignUp extends React.Component {
            
              <button onClick={this.handleMainIMGUpload}>Upload</button>
             
-         
-            {photoMain && 
-            <div>
-              <img src={photos[0].photoURL ? photos[0].photoURL : null } style={{width:50}} alt='Main Restaurant' />
-              <div>Main Photo</div> 
-            </div>         
-            }
+       
 
-            {photo1 && 
-            <div>
-              <img src={photo1} style={{width:50}} alt='Main Restaurant' />
-              <div>Photo 1</div> 
-            </div>         
-            } 
 
-            {photo2 && 
-            <div>
-              <img src={photo2} style={{width:50}} alt='Main Restaurant' />
-              <div>Photo 2</div> 
-            </div>         
-            }             
+            {photos.map((photo, index) => (
+                
+               <div key={index} onClick={() => this.setState({deletingIMG: !deletingIMG ? photo : null})}>
+                <img key={index} src={photo.photoURL} style={{width:50}} alt='Main Restaurant' />
+                
+                
+                { index === photos.indexOf(deletingIMG) &&
+                <div>
+                <button onClick={this.handleDelete}>Delete</button>
+                {photo.photoURL != mainPhotoURL &&
+                <button onClick={this.selectMainPhoto}>Make main photo</button>
+                }
+                
+              
+                
+                
+          
+                </div>
+                }
 
-          {photo3 && 
-            <div>
-              <img src={photo3} style={{width:50}} alt='Main Restaurant' />
-              <div>Photo 3</div> 
-            </div>         
-            } 
-        
-          <button onClick={this.handleDelete}>Delete last photo</button>
+               </div>
+              
+              
+          
+            ))
+
+            
+          }
+
+
+          
+
+          
+
+
           </div>
-
 
 
           <FormInput
