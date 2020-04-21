@@ -44,7 +44,7 @@ class SignUp extends React.Component {
       resizedIMG: null,
       ready: null,
       testName: null,
-      deletingIMG: null,
+      selectedIMG: null,
       mainPhotoURL: null,
       deletingPhotoURL: null,
       photosLenght:0,
@@ -74,7 +74,7 @@ class SignUp extends React.Component {
  
     }
   
-    handleMainIMGUpload = async () => {
+    handlePhotoUpload = async () => {
       const {uploaded, imgChanged, resizedIMG, photos} = this.state  
       
       if(photos.length < 4 ) {
@@ -100,7 +100,7 @@ class SignUp extends React.Component {
           
           console.log(photos.length)
           console.log(name)
-          console.log(`mainIMG: ${this.state.mainPhotoURL}`);
+          console.log('Successfully uploaded photo!')
           
 
                   
@@ -108,7 +108,7 @@ class SignUp extends React.Component {
           console.error(e)
         }
       } else {
-        alert("Sorry... You've reached the maximun photos uploads allowed")
+        alert("Sorry... You've reached the maximun photos uploads allowed!")
       }
 
 
@@ -151,26 +151,31 @@ class SignUp extends React.Component {
 
   handleDelete = () => {
 
-        const {photos, deletingIMG} = this.state
-        photos.splice(photos.indexOf(deletingIMG), 1)
-        storage.ref(`restaurantPhotos`).child(deletingIMG.photoName).delete()
-        this.setState({deletingIMG: null })
-        alert('The last uploaded image has been successfully deleted')
+        const {photos, selectedIMG, mainPhotoURL } = this.state
+        if(selectedIMG.photoURL === mainPhotoURL) {
+          this.setState({mainPhotoURL:null})
+          console.log('mainPhotoURL has been reset!')
+          
+        } 
+        photos.splice(photos.indexOf(selectedIMG), 1)
+        storage.ref(`restaurantPhotos`).child(selectedIMG.photoName).delete()
+        this.setState({selectedIMG: null })
+        alert('Successfully deleted photo!')
         console.log(photos)
   }
 
   selectMainPhoto = () => {
-    const {mainPhotoURL,deletingIMG} = this.state
+    const {selectedIMG} = this.state
   
-      this.setState({mainPhotoURL:deletingIMG.photoURL })
+      this.setState({mainPhotoURL:selectedIMG.photoURL })
   
     
-    console.log(this.state.mainPhotoURL)
+    console.log('mainPhotoURL has been successfully updated!')
     
   }
   
   render() {
-    const { restaurantName, restaurantLink, restaurantAddress, restaurantPhone, restaurantEmail, restaurantPriceRange, ready, photos, mainPhotoURL, deletingIMG } = this.state;
+    const { restaurantName, restaurantLink, restaurantAddress, restaurantPhone, restaurantEmail, restaurantPriceRange, ready, photos, mainPhotoURL, selectedIMG } = this.state;
     const mainPhoto = mainPhotoURL
 
 
@@ -187,46 +192,30 @@ class SignUp extends React.Component {
             <h4>Please Upload Restaurant Photos in order below:</h4>
             <input type='file' onChange={this.handleMainIMGChange}/>
            
-             <button onClick={this.handleMainIMGUpload}>Upload</button>
+             <button onClick={this.handlePhotoUpload}>Upload</button>
             
-       
-
-
             {photos.map((photo, index) => (
                 
-               <div key={index} onClick={() => this.setState({deletingIMG: !deletingIMG ? photo : null})}>
+               <div key={index} onClick={() => this.setState({selectedIMG: !selectedIMG ? photo : null})}>
                 <img key={index} src={photo.photoURL} style={{width:50}} alt='Main Restaurant' />
                 
                 
-                { index === photos.indexOf(deletingIMG) &&
+                { index === photos.indexOf(selectedIMG) &&
                 <div>
                 <button onClick={this.handleDelete}>Delete</button>
                 {photo.photoURL != mainPhotoURL &&
                 <button onClick={this.selectMainPhoto}>Make main photo</button>
                 }
-                
-              
-                
-                
-          
+                          
                 </div>
                 }
 
                </div>
-              
-              
+                           
           
             ))
-
-            
+     
           }
-
-
-          
-
-          
-
-
           </div>
 
 
