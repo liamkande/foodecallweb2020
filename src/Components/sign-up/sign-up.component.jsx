@@ -36,7 +36,7 @@ class SignUp extends React.Component {
       accessGranted:null,
       currentUser: null,
       existingUser:null,
-    };
+    }
 
 
     unsubscribeFromAuth = null
@@ -53,20 +53,19 @@ class SignUp extends React.Component {
                 ...snapShot.data()
               },
              
-            });
+            })
             this.setState({ existingUser: this.state.currentUser })
-          });
+          })
           
         }
         
         this.setState({ currentUser: userAuth })
-      });
+      })
     }
     componentWillUnmount() {
       this.unsubscribeFromAuth()
      
     }
-
 
 
 
@@ -133,16 +132,13 @@ class SignUp extends React.Component {
   handleDateChange = date => {
     this.setState({dob: date.toDateString()})
     console.log(this.state.dob)
-    
-  };
+  }
 
   handleAccessSubmit = event => {
     event.preventDefault()
-
     this.state.accessCode === validationCode ? 
     this.setState({ accessGranted: true, accessCode:''  }) :
         alert("Wrong Code!")
-
 }
     
   render() {
@@ -150,13 +146,13 @@ class SignUp extends React.Component {
     return (
       <div className="container">
         {existingUser && 
-  <div className="content__center">
-    <h2>You're already Sign In! Please proceed to the admin Dashboard here:</h2>
-    <NavLink to="/admin">
-    <CustomButton>Admin</CustomButton>
-    </NavLink>
+        <div className="content__center">
+          <h2>You're already Sign In! Please proceed to the admin Dashboard here:</h2>
+          <NavLink to="/admin">
+          <CustomButton>Admin</CustomButton>
+          </NavLink>
 
-  </div>
+        </div>
   }
   {!existingUser && 
         <div className="container">

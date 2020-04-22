@@ -77,7 +77,7 @@ class SignUp extends React.Component {
     handlePhotoUpload = async () => {
       const {uploaded, imgChanged, resizedIMG, photos} = this.state  
       
-      if(photos.length < 4 ) {
+      if(photos.length < 6 && imgChanged ) {
         try {
   
           const blob = await new Promise((resolve, reject) => {
@@ -93,27 +93,23 @@ class SignUp extends React.Component {
           const name = await uploadTask.ref.name
           const photoData = {photoName:name, photoURL:downloadURL }
           photos.push(photoData)
-          this.setState({url:downloadURL, ready: photos.length < 4 ? null : true, testName: name})
+          this.setState({url:downloadURL, ready: photos.length < 4 ? null : true, testName: name, uploaded: true, imgChanged: null})
           console.log(downloadURL)
     
-          alert(uploaded && imgChanged ? "You've already added an image, Please delete the existing image!" : "You've succesfully added an image")
+          alert("You've succesfully added an image")
           
           console.log(photos.length)
           console.log(name)
           console.log('Successfully uploaded photo!')
-          
-
-                  
+                            
         } catch(e) {
           console.error(e)
         }
       } else {
-        alert("Sorry... You've reached the maximun photos uploads allowed!")
+        alert(!imgChanged ? "Sorry... This image already exist!" : "Sorry... You've reached the maximum uploads allowed")
       }
 
-
     }
-
 
 
   handleSubmit = async event => {
@@ -121,8 +117,6 @@ class SignUp extends React.Component {
    
     const {restaurantName, restaurantLink, restaurantAddress, restaurantPhone, restaurantEmail, restaurantPriceRange, photos } = this.state
     
-    
-
     try {
     
       await createRestaurantProfileDocument(photos, { restaurantName, restaurantLink,restaurantAddress, restaurantPhone, restaurantEmail, restaurantPriceRange});
@@ -150,7 +144,6 @@ class SignUp extends React.Component {
   }
 
   handleDelete = () => {
-
         const {photos, selectedIMG, mainPhotoURL } = this.state
         if(selectedIMG.photoURL === mainPhotoURL) {
           this.setState({mainPhotoURL:null})
