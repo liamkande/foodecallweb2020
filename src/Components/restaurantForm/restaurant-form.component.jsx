@@ -9,6 +9,10 @@ import uuid from 'uuid'
 import Resizer from 'react-image-file-resizer'
 
 
+import GooglePlacesSearch from '../GooglePlaceSearch'
+
+
+
 class SignUp extends React.Component {
 
    state = {
@@ -167,10 +171,13 @@ class SignUp extends React.Component {
     
   }
   
+  
+
   render() {
     const { restaurantName, restaurantLink, restaurantAddress, restaurantPhone, restaurantEmail, restaurantPriceRange, ready, photos, mainPhotoURL, selectedIMG } = this.state;
     const mainPhoto = mainPhotoURL
 
+    
 
     return (
       <form onSubmit={this.handleSubmit}>
@@ -210,16 +217,18 @@ class SignUp extends React.Component {
      
           }
           </div>
+          
 
+        <GooglePlacesSearch />
 
-          <FormInput
+          {/* <FormInput
             type='text'
             name='restaurantName'
             value={restaurantName}
             onChange={this.handleChange}
             label='Restaurant Name'
             required
-          />  
+          />   */}
  
            {/* <FormInput
             type='text'
