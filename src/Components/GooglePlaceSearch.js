@@ -7,7 +7,21 @@ import PlacesAutocomplete, {
 
 export default function GooglePlaceSearch () {
     const [address, setAddress] = React.useState("")
-    const handleSelect = async value => {}
+    const [coordinates, setCoordinates] = React.useState({
+      lat: null,
+      lng: null
+    })
+
+    const handleSelect = async value => {
+      const results = await geocodeByAddress(value)
+      const latLng = await getLatLng(results[0])
+      setAddress(value)
+      setCoordinates(latLng)
+      console.log(results[0])
+      
+    }
+
+
     return (
       <div>
           <PlacesAutocomplete 
@@ -17,6 +31,9 @@ export default function GooglePlaceSearch () {
             >
               {({ getInputProps, suggestions, getSuggestionItemProps, loading}) => (
                 <div>
+                  <p>Latitude: {coordinates.lat}</p>
+                  <p>Longitude: {coordinates.lng}</p>
+
                     <input  {...getInputProps({ placeholder: "Search Restaurant"})} />
 
                     <div>
@@ -24,8 +41,10 @@ export default function GooglePlaceSearch () {
 
                         {suggestions.map(suggestion => {
                             const style = {
-                              bacgroundColor: suggestion.active ? "red" : "blue"  
+                              backgroundColor: suggestion.active ? "#41b6e6" : "#fff" 
                             }
+                            
+
                             return (
                             <div {...getSuggestionItemProps(suggestion, {style})}>
                                 {suggestion.description}
