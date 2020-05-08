@@ -10,6 +10,8 @@ import Resizer from 'react-image-file-resizer'
 
 
 import GooglePlacesSearch from '../GooglePlaceSearch'
+import SearchRestaurant from '../SearchRestaurant'
+
 
 
 
@@ -171,14 +173,12 @@ class SignUp extends React.Component {
     
   }
   
-  
 
   render() {
     const { restaurantName, restaurantLink, restaurantAddress, restaurantPhone, restaurantEmail, restaurantPriceRange, ready, photos, mainPhotoURL, selectedIMG } = this.state;
     const mainPhoto = mainPhotoURL
 
     
-
     return (
       <form onSubmit={this.handleSubmit}>
       <div className='container' >
@@ -203,7 +203,7 @@ class SignUp extends React.Component {
                 { index === photos.indexOf(selectedIMG) &&
                 <div>
                 <button onClick={this.handleDelete}>Delete</button>
-                {photo.photoURL != mainPhotoURL &&
+                {photo.photoURL !== mainPhotoURL &&
                 <button onClick={this.selectMainPhoto}>Make main photo</button>
                 }
                           
@@ -219,7 +219,9 @@ class SignUp extends React.Component {
           </div>
           
 
-        <GooglePlacesSearch />
+       <GooglePlacesSearch />
+        <SearchRestaurant />
+
 
           {/* <FormInput
             type='text'

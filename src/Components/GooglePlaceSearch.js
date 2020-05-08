@@ -18,7 +18,6 @@ export default function GooglePlaceSearch () {
       setAddress(value)
       setCoordinates(latLng)
       console.log(results[0])
-      
     }
 
 
@@ -34,7 +33,7 @@ export default function GooglePlaceSearch () {
                   <p>Latitude: {coordinates.lat}</p>
                   <p>Longitude: {coordinates.lng}</p>
 
-                    <input  {...getInputProps({ placeholder: "Search Restaurant"})} />
+                    <input  {...getInputProps({ placeholder: "Search Address"})} />
 
                     <div>
                         {loading ? <div>...loading</div> : null}
@@ -47,7 +46,7 @@ export default function GooglePlaceSearch () {
 
                             return (
                             <div {...getSuggestionItemProps(suggestion, {style})}>
-                                {suggestion.description}
+                                {suggestion.description} 
                             </div>
                             )
                         })}
