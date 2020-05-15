@@ -33,7 +33,7 @@ export default function GooglePlaceSearch () {
                   <p>Latitude: {coordinates.lat}</p>
                   <p>Longitude: {coordinates.lng}</p>
 
-                    <input  {...getInputProps({ placeholder: "Search Address"})} />
+                    <input  {...getInputProps({ placeholder: "Search Google Address"})} />
 
                     <div>
                         {loading ? <div>...loading</div> : null}

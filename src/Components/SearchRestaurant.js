@@ -12,11 +12,11 @@ export default function SearchRestaurant () {
     const [searchApi, results, errorMessage] = useResults()
 
 
-    const filterResultsByPrice = (price) => {
-        return results.filter(result => {
-          return result.price === price
-        })
-      }
+    // const filterResultsByPrice = (price) => {
+    //     return results.filter(result => {
+    //       return result.price === price
+    //     })
+    //   }
 useEffect(() => {
   console.log(results.length)
 })
@@ -36,10 +36,10 @@ useEffect(() => {
           />  
 
             {errorMessage ? <div>{errorMessage}</div> : null}
-            <ResultsList results={filterResultsByPrice('$')}/>
-            <ResultsList results={filterResultsByPrice('$$')}/>
+            <ResultsList results={results}/>
+            {/* <ResultsList results={filterResultsByPrice('$$')}/>
             <ResultsList results={filterResultsByPrice('$$$')}/>
-            <ResultsList results={filterResultsByPrice('$$$$')}/>
+            <ResultsList results={filterResultsByPrice('$$$$')}/> */}
         </div>
     )
 }

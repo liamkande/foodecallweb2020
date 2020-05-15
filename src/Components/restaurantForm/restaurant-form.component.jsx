@@ -187,7 +187,7 @@ class SignUp extends React.Component {
 
         <div className='formSignUp' style={{width:'25vw'}}>
         <div>
-
+{/* 
         <div>
             <h4>Please Upload Restaurant Photos in order below:</h4>
             <input type='file' onChange={this.handleMainIMGChange}/>
@@ -216,10 +216,10 @@ class SignUp extends React.Component {
             ))
      
           }
-          </div>
+          </div> */}
           
 
-       <GooglePlacesSearch />
+       {/* <GooglePlacesSearch /> */}
         <SearchRestaurant />
 
 
