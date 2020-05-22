@@ -183,9 +183,9 @@ class SignUp extends React.Component {
       <form onSubmit={this.handleSubmit}>
       <div className='container' >
         <h2 style={{alignSelf:'center'}}>Restaurant Form</h2>
-        <div className='content' style={{overflowY:'scroll'}}>
+       
 
-        <div className='formSignUp' style={{width:'25vw'}}>
+       
         <div>
 {/* 
         <div>
@@ -289,7 +289,7 @@ class SignUp extends React.Component {
   
 
           </div>
-        </div>   
+        
 
 
  
@@ -477,7 +477,7 @@ class SignUp extends React.Component {
         </div>
      
 
-      </div>
+ 
       
       </form>
     );

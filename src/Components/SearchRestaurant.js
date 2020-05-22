@@ -36,7 +36,10 @@ useEffect(() => {
           />  
 
             {errorMessage ? <div>{errorMessage}</div> : null}
-            <ResultsList results={results}/>
+
+              <ResultsList results={results}/>
+            
+            
             {/* <ResultsList results={filterResultsByPrice('$$')}/>
             <ResultsList results={filterResultsByPrice('$$$')}/>
             <ResultsList results={filterResultsByPrice('$$$$')}/> */}
