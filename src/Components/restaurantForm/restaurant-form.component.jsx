@@ -166,7 +166,7 @@ class SignUp extends React.Component {
   selectMainPhoto = () => {
     const {selectedIMG} = this.state
   
-      this.setState({mainPhotoURL:selectedIMG.photoURL })
+      this.setState({mainPhotoURL: selectedIMG.photoURL })
   
     
     console.log('mainPhotoURL has been successfully updated!')
@@ -175,12 +175,12 @@ class SignUp extends React.Component {
   
 
   render() {
-    const { restaurantName, restaurantLink, restaurantAddress, restaurantPhone, restaurantEmail, restaurantPriceRange, ready, photos, mainPhotoURL, selectedIMG } = this.state;
+    const { restaurantName, restaurantLink, restaurantAddress, restaurantPhone, restaurantEmail, restaurantPriceRange, ready, photos, mainPhotoURL, selectedIMG } = this.state
     const mainPhoto = mainPhotoURL
 
     
     return (
-      <form onSubmit={this.handleSubmit}>
+      <div>
       <div className='container' >
         <h2 style={{alignSelf:'center'}}>Restaurant Form</h2>
        
@@ -197,15 +197,21 @@ class SignUp extends React.Component {
             {photos.map((photo, index) => (
                 
                <div key={index} onClick={() => this.setState({selectedIMG: !selectedIMG ? photo : null})}>
-                <img key={index} src={photo.photoURL} style={{width:50}} alt='Main Restaurant' />
+
+               <div style={{display: 'flex', flexFlow: 'row nowrap'}}> 
+                 <img key={index} src={photo.photoURL} style={{width:50, margin:2}} alt='Main Restaurant'/> 
+                 {photo.photoURL == photos[0].photoURL &&
+                <p style={{color:'green', fontSize:12}}>Main photo</p>
+                
+                }
+                 </div>
                 
                 
                 { index === photos.indexOf(selectedIMG) &&
                 <div>
+                
+               
                 <button onClick={this.handleDelete}>Delete</button>
-                {photo.photoURL !== mainPhotoURL &&
-                <button onClick={this.selectMainPhoto}>Make main photo</button>
-                }
                           
                 </div>
                 }
@@ -222,17 +228,17 @@ class SignUp extends React.Component {
        {/* <GooglePlacesSearch /> */}
         <SearchRestaurant />
 
-
-          {/* <FormInput
+{/* 
+          <FormInput
             type='text'
             name='restaurantName'
             value={restaurantName}
             onChange={this.handleChange}
             label='Restaurant Name'
             required
-          />   */}
+          />  
  
-           {/* <FormInput
+           <FormInput
             type='text'
             name='restaurantLink'
             value={restaurantLink.trim()}
@@ -279,10 +285,9 @@ class SignUp extends React.Component {
           {/* <FormInput
             type='text'
             name='mainPhoto'
-            value={mainPhoto}
+            value={!mainPhoto ? '' : mainPhoto}
             onChange={this.handleChange}
             label='Restaurant Main Photo Link'
-            disabled
             required
            
           />  */}
@@ -465,21 +470,21 @@ class SignUp extends React.Component {
 
           </div>
         </div>  */}
-
+ {/* <CustomButton type='submit'>DONE</CustomButton> */}
 
         </div>
-
+{/* 
         <div style={{alignSelf:'center'}}>
           {ready &&
             <CustomButton type='submit'>DONE</CustomButton>
           }
           
         </div>
-     
+      */}
 
  
       
-      </form>
+      </div>
     );
   }
 }

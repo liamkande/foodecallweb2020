@@ -55,14 +55,14 @@ export const createRestaurantProfileDocument = async (photos, additionalData) =>
 
   if (!snapShot.exists) {
     
-    const {mainPhoto} = photos
+   
     const createdAt = new Date()
    
   
     try {
       await userRef.set({
+        id,
         photos,
-        mainPhoto,
         createdAt,
         ...additionalData
       });
