@@ -446,6 +446,25 @@ const handleSubmit = async event => {
                 )
             })}
     </div>
+    <div>
+                HOURS: {newResult.hours.map((hour, index) => {
+                return (
+                    <div key={index}>
+                        <p>Hour Type: {hour.hours_type}</p>
+                        <p>isOpenNow: {`${hour.is_open_now}`}</p>
+                        <div style={{color:'gray'}}>{hour.open.map((item, index) => {
+                            return (
+                                <div key={index}>
+                                    <p>day: {item.day} start: {item.start} end: {item.end}</p>
+                                    <p>isOvernight: {`${item.is_overnight}`}</p>
+
+                                </div>
+                            )
+                        })}</div>
+                    </div>
+                )
+            })}
+     </div>
    
     <CustomButton type='submit'>DONE</CustomButton>
         </div>
