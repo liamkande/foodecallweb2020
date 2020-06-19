@@ -2,7 +2,7 @@ import React, { useState, useEffect, Component } from 'react'
 import yelp  from '../api/yelp'
 import FormInput from './form-input/form-input.component'
 import CustomButton from './custom-button/custom-button.component'
-import { createRestaurantProfileDocument, storage } from '../firebase/firebase.utils'
+import { createRestaurantProfileDocument, storage, firestore } from '../firebase/firebase.utils'
 import Resizer from 'react-image-file-resizer'
 import uuid from 'uuid'
 import { set } from 'date-fns'
@@ -31,8 +31,19 @@ export default function ResultsDetail ({result, id, onSubmit}) {
     const [alias, setAlias] = useState('')
     const [email, setEmail] = useState('')
     const [website, setWebsite] = useState('')
+    const [hours, setHours] = useState([])
+    const [orderMinimun, setOrderMinimum] = useState('')
+    
+    const [favoridedCount, setFavoridedCount] = useState(null)
+    const [thumpsUpcount, setThumpsUpCount] = useState(null)
+    const [rating, setRating] = useState(null)
+    const [reviewCount, setReviewCount] = useState(null)
+    const [menuCategories, setMenuCategories] = useState([])
 
+    const [categories, setCategories] = useState([])
 
+    const [categoriesList, setCategoriesList] = useState([])
+    const [showCategoryList, setShowCategoryList] = useState(null)
 
     //Merge state from restaurantForm
     const [photos, setPhotos] = useState([])
@@ -45,13 +56,20 @@ export default function ResultsDetail ({result, id, onSubmit}) {
     const [mainPhotoURL,setMainPhotoURL] = useState(null)
 
 
+ 
+
+
     const getResult = async (id) => {
         const response = await yelp.get(`/${id}`)
         setResult(!response.data ? null : response.data)
         const mainData = response.data
         console.log(`Selected Restaurant ID: ${id}`)
         console.log(mainData)
+        const addCategories = await firestore.collection('categories').get()
         
+        addCategories.forEach((item)=>{
+            categoriesList.push({name:item.data().name, id:item.data().id})
+        })
 
 
         setName(mainData.name)
@@ -73,8 +91,17 @@ export default function ResultsDetail ({result, id, onSubmit}) {
         setCountry(mainData.location.country)
         setCrossStreets(mainData.location.cross_streets)
         setDisplayAddress(`${mainData.location.address1} ${mainData.location.address2} ${mainData.location.address3} ${mainData.location.city}, ${mainData.location.state} ${mainData.location.zip_code} `)
+        setHours(mainData.hours)
 
-
+        setFavoridedCount(0)
+        setThumpsUpCount(0)
+        setRating(0)
+        setReviewCount(0)
+       
+      
+       
+        
+     
        
       }
 
@@ -181,7 +208,15 @@ const handleSubmit = async event => {
              displayAddress, 
              alias, 
              email, 
-             website
+             website,
+             hours,
+             orderMinimun,
+             favoridedCount,
+             thumpsUpcount,
+             rating,
+             reviewCount,
+             menuCategories,
+             categories
 
              });
         
@@ -233,6 +268,24 @@ const handleSubmit = async event => {
       setDisplayAddress(`${address1} ${address2} ${address3} ${city}, ${state} ${zipCode} `)
 
   }
+
+  const handleCategories = (item) => {
+        categories.push(item) 
+        let newCategoryList = categoriesList.filter((list) => list != item)
+        setCategoriesList(newCategoryList)
+        console.log(categories)
+    
+  
+  }
+
+ const handleDeleteCategory = (item) => {
+     categoriesList.push(item)
+     let newCategory = categories.filter((list) => list != item)
+     setCategories(newCategory)
+ }
+
+
+
  
     return (
 
@@ -302,48 +355,48 @@ const handleSubmit = async event => {
            />   
 
            <FormInput
-            type='text'
-            name='phone'
-            value={phone}
-            onChange={(e) => setPhone(e.target.value.trim())}
-            label='Restaurant Phone'
-            required
+                type='text'
+                name='phone'
+                value={phone}
+                onChange={(e) => setPhone(e.target.value.trim())}
+                label='Restaurant Phone'
+                required
             /> 
 
             <FormInput
-            type='text'
-            name='email'
-            value={email}
-            onChange={(e) => setEmail(e.target.value.trim())}
-            label='Restaurant Email'
-            required
+                type='text'
+                name='email'
+                value={email}
+                onChange={(e) => setEmail(e.target.value.trim())}
+                label='Restaurant Email'
+                
             /> 
 
             <FormInput
-            type='text'
-            name='website'
-            value={website}
-            onChange={(e) => setWebsite(e.target.value.trim())}
-            label='Restaurant Website'
-            required
+                type='text'
+                name='website'
+                value={website}
+                onChange={(e) => setWebsite(e.target.value.trim())}
+                label='Restaurant Website'
+                required
             /> 
 
            <FormInput
-            type='text'
-            name='displayPhone'
-            value={displayPhone}
-            onChange={(e) => setDisplayPhone(e.target.value)}
-            label='Display Phone'
-            required
+                type='text'
+                name='displayPhone'
+                value={displayPhone}
+                onChange={(e) => setDisplayPhone(e.target.value)}
+                label='Display Phone'
+                required
             />
 
             <FormInput
-            type='text'
-            name='country'
-            value={country}
-            onChange={(e) => setCountry(e.target.value)}
-            label='Restaurant Country'
-            required
+                type='text'
+                name='country'
+                value={country}
+                onChange={(e) => setCountry(e.target.value)}
+                label='Restaurant Country'
+                required
             />
 
             <FormInput
@@ -422,7 +475,14 @@ const handleSubmit = async event => {
         }
 
         
-        
+        <FormInput
+            type='number'
+            name='orderMinimum'
+            value={orderMinimun}
+            onChange={(e) => setOrderMinimum(e.target.value)}
+            label='Order Minimum'
+            required
+            />
 
 
         </div>
@@ -431,40 +491,31 @@ const handleSubmit = async event => {
 
     <div className='formSignUp' style={{width:'25vw'}}>
         <div>
-            <div>
-                Transactions: {newResult.transactions.map((option, index) => {
-                return (
-                    <p key={index} style={{color:'gray'}}>{option}</p>
-                )
-            })}
-     </div>
-        <div>
-            Categories: {newResult.categories.map((category, index) => {
-                return (              
-                    <p key={index} style={{color:'gray'}}>{category.alias}</p>
-                                     
-                )
-            })}
-    </div>
-    <div>
-                HOURS: {newResult.hours.map((hour, index) => {
-                return (
-                    <div key={index}>
-                        <p>Hour Type: {hour.hours_type}</p>
-                        <p>isOpenNow: {`${hour.is_open_now}`}</p>
-                        <div style={{color:'gray'}}>{hour.open.map((item, index) => {
-                            return (
-                                <div key={index}>
-                                    <p>day: {item.day} start: {item.start} end: {item.end}</p>
-                                    <p>isOvernight: {`${item.is_overnight}`}</p>
+        <h4 style={{color:!showCategoryList ? 'blue' : 'red', cursor:'pointer'}} onClick={() => setShowCategoryList(!showCategoryList)}>{!showCategoryList ? 'Show category List' : 'Hide category List' }</h4>
 
-                                </div>
-                            )
-                        })}</div>
-                    </div>
-                )
-            })}
-     </div>
+        {showCategoryList &&
+            <div>
+                {categoriesList.map((item, index) => {
+                    return (
+                    <div  style={{cursor:'pointer'}} key={index} onClick={() => handleCategories(item)}>{item.name}</div>
+                    )
+                })}
+            </div>
+        }
+
+
+
+        {!showCategoryList && 
+            <div style={{marginBottom:10}}>
+                <h3 style={{color:'green'}}>Selected category List:</h3>
+               {categories.map((item, index) => {
+                    return (
+                        <div style={{color:'gray', cursor:'pointer'}} key={index} onClick={() => handleDeleteCategory(item)}>{item.name}</div>
+                        )
+                    })}
+            </div>
+        }
+
    
     <CustomButton type='submit'>DONE</CustomButton>
         </div>
