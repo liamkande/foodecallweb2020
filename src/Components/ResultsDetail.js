@@ -7,6 +7,12 @@ import Resizer from 'react-image-file-resizer'
 import uuid from 'uuid'
 import { set } from 'date-fns'
 
+import PlacesAutocomplete, {
+    geocodeByAddress,
+    getLatLng
+  } from 'react-places-autocomplete'
+
+
 
 
 export default function ResultsDetail ({result, id, onSubmit}) {
@@ -50,7 +56,14 @@ export default function ResultsDetail ({result, id, onSubmit}) {
     const [deliveryPhone, setDeliveryPhone] = useState('')
     const [deliveryType, setDeliveryType] = useState('')
     const [showDeliveryOptions, setShowDeliveryOptions] = useState(null)
-    
+
+
+    const [googleAddress, setGoogleAddress] = useState("")
+    const [coordinates, setCoordinates] = useState({
+        lat: null,
+        lng: null
+      })
+    const [placeId, setPlaceId] = useState('')
 
     //Merge state from restaurantForm
     const [photos, setPhotos] = useState([])
@@ -90,14 +103,14 @@ export default function ResultsDetail ({result, id, onSubmit}) {
         
 
         setAddress1(mainData.location.address1)
-        setAddress2(mainData.location.address2)
-        setAddress3(mainData.location.address3)
+        setAddress2(mainData.location.address2 ? mainData.location.address2 : '' )
+        setAddress3(mainData.location.address3 ? mainData.location.address3 : '' )
         setCity(mainData.location.city)
         setZipCode(mainData.location.zip_code) 
         setState(mainData.location.state)
         setCountry(mainData.location.country)
         setCrossStreets(mainData.location.cross_streets)
-        setDisplayAddress(`${mainData.location.address1} ${mainData.location.address2} ${mainData.location.address3} ${mainData.location.city}, ${mainData.location.state} ${mainData.location.zip_code} `)
+        setDisplayAddress(`${address1} ${address2} ${address3} ${city}, ${state} ${zipCode}`)
         setHours(mainData.hours)
 
         setFavoridedCount(0)
@@ -222,9 +235,10 @@ const handleSubmit = async event => {
              reviewCount,
              menuCategories,
              categories,
-             deliveries
-
-             });
+             deliveries,
+             coordinates,
+             placeId
+             })
         
     
       } catch (error) {
@@ -313,12 +327,21 @@ const handleSubmit = async event => {
 
 }
 
+const handleGoogleSelect = async value => {
+    const results = await geocodeByAddress(value)
+    const latLng = await getLatLng(results[0])
+    setGoogleAddress(value)
+    setCoordinates(latLng)
+    setPlaceId(results[0].place_id)
+    console.log(results[0])
+  }
 
  
     return (
 
         <div>
             
+
            
             <div onClick={() => getResult(id)}>
     
@@ -593,6 +616,45 @@ const handleSubmit = async event => {
                     })}
     </div>
 }
+
+         
+<PlacesAutocomplete 
+            value={googleAddress}
+            onChange={setGoogleAddress} 
+            onSelect={handleGoogleSelect}
+            >
+              {({ getInputProps, suggestions, getSuggestionItemProps, loading}) => (
+                <div>
+
+                    <input  {...getInputProps({ placeholder: "Search Google Address"})} />
+
+                    <div>
+                        {loading ? <div>...loading</div> : null}
+
+                        {suggestions.map(suggestion => {
+                            const style = {
+                              backgroundColor: suggestion.active ? "#41b6e6" : "#fff" 
+                            }
+                            
+
+                            return (
+                            <div {...getSuggestionItemProps(suggestion, {style})}>
+                                {suggestion.description} 
+                            </div>
+                            )
+                        })}
+
+
+                    </div>
+                    <p>Latitude: {coordinates.lat}</p>
+                  <p>Longitude: {coordinates.lng}</p>
+
+                </div>
+
+                )}
+
+
+          </PlacesAutocomplete>
 
 
 
