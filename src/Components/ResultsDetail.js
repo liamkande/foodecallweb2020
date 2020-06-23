@@ -44,6 +44,13 @@ export default function ResultsDetail ({result, id, onSubmit}) {
 
     const [categoriesList, setCategoriesList] = useState([])
     const [showCategoryList, setShowCategoryList] = useState(null)
+    
+    const [deliveries, setDeliveries] = useState([])
+    const [deliveryLink, setDeliveryLink] = useState('')
+    const [deliveryPhone, setDeliveryPhone] = useState('')
+    const [deliveryType, setDeliveryType] = useState('')
+    const [showDeliveryOptions, setShowDeliveryOptions] = useState(null)
+    
 
     //Merge state from restaurantForm
     const [photos, setPhotos] = useState([])
@@ -182,9 +189,7 @@ const handleMainIMGChange = e => {
 
 const handleSubmit = async event => {
     event.preventDefault()
-
    if(mainPhotoURL && displayAddress) {
-  
 
     try {
     
@@ -216,7 +221,8 @@ const handleSubmit = async event => {
              rating,
              reviewCount,
              menuCategories,
-             categories
+             categories,
+             deliveries
 
              });
         
@@ -284,6 +290,28 @@ const handleSubmit = async event => {
      setCategories(newCategory)
  }
 
+
+ const handleDeliveryOption = (option) => {
+     if(option === 'update') {
+        deliveries.push({option:deliveryType, link:deliveryLink, phone:deliveryPhone })
+        setDeliveryType('')
+        setDeliveryLink('')
+        setDeliveryPhone('')
+        setShowDeliveryOptions(null)
+     } else if(option === 'cancel') {
+        setDeliveryType('')
+        setDeliveryLink('')
+        setDeliveryPhone('')
+        setShowDeliveryOptions(null)
+     } 
+
+ }
+
+ const handleDeleteDelivery = (item) => {
+    let newDeliveries = deliveries.filter((list) => list != item)
+    setDeliveries(newDeliveries)
+
+}
 
 
  
@@ -469,7 +497,7 @@ const handleSubmit = async event => {
         required
         />
 
-        <div style={{color: !displayAddress ? 'red' : 'green', cursor:'pointer'}} onClick={handleDisplayAddress}>Update Display Address</div>
+        <div style={{color: !displayAddress ? 'red' : 'green', cursor:'pointer'}} onClick={handleDisplayAddress}>Updated Display Address</div>
         {displayAddress && 
         <p>Display Address: {displayAddress.trim()}</p>
         }
@@ -492,7 +520,7 @@ const handleSubmit = async event => {
     <div className='formSignUp' style={{width:'25vw'}}>
         <div>
         <h4 style={{color:!showCategoryList ? 'blue' : 'red', cursor:'pointer'}} onClick={() => setShowCategoryList(!showCategoryList)}>{!showCategoryList ? 'Show category List' : 'Hide category List' }</h4>
-
+        <h4 style={{color:!showDeliveryOptions ? 'blue' : 'red', cursor:'pointer'}} onClick={() => setShowDeliveryOptions(!showDeliveryOptions)}>{!showDeliveryOptions ? 'Show delivery options' : 'Hide delivery options' }</h4>
         {showCategoryList &&
             <div>
                 {categoriesList.map((item, index) => {
@@ -503,7 +531,44 @@ const handleSubmit = async event => {
             </div>
         }
 
+        {showDeliveryOptions &&
+            <div>
+                {!deliveryType &&
+                <div>
+                    <div onClick={() => setDeliveryType('Online')}>Online Order</div>
+                    <div onClick={() => setDeliveryType('TakeOut')}>TakeOut</div>
+                    <div onClick={() => setDeliveryType('Delivery')}>Delivery</div>
+                    <div onClick={() => setDeliveryType('Drone')}>Drone</div>
+                    <div onClick={() => setDeliveryType('Robot')}>Robot</div>
+                </div>
+        }
 
+        {deliveryType &&
+            <div>
+                <FormInput
+                type='text'
+                name='deliveryLink'
+                value={deliveryLink}
+                onChange={(e) => (setDeliveryLink(e.target.value))}
+                label={`${deliveryType} Link`}
+                />
+                <FormInput
+                type='text'
+                name='deliveryPhone'
+                value={deliveryPhone}
+                onChange={(e) => (setDeliveryPhone(e.target.value))}
+                label={`${deliveryType} Phone`}
+                />
+
+                <div style={{cursor:'pointer', display: 'inline-block', backgroundColor:'green', margin:10 }} onClick={() => handleDeliveryOption('update')}>Update delivery options</div>
+                <div style={{cursor:'pointer', display: 'inline-block', backgroundColor:'red' }} onClick={() => handleDeliveryOption('cancel')}>Cancel</div>            
+                </div>
+
+        }
+                    </div>
+
+                    
+        }
 
         {!showCategoryList && 
             <div style={{marginBottom:10}}>
@@ -513,8 +578,31 @@ const handleSubmit = async event => {
                         <div style={{color:'gray', cursor:'pointer'}} key={index} onClick={() => handleDeleteCategory(item)}>{item.name}</div>
                         )
                     })}
+
             </div>
         }
+
+{!showDeliveryOptions &&
+    <div style={{marginBottom:10}}>
+        <h3 style={{color:'green'}}>Selected delivery options:</h3>
+                        
+        {deliveries.map((item, index) => {
+                    return (
+                        <div style={{color:'gray', cursor:'pointer'}} key={index} onClick={() => handleDeleteDelivery(item)}>{item.option}</div>
+                        )
+                    })}
+    </div>
+}
+
+
+
+
+
+
+
+        
+
+
 
    
     <CustomButton type='submit'>DONE</CustomButton>
