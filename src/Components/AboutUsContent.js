@@ -5,7 +5,7 @@ import HeartIcon from '@material-ui/icons/Favorite'
 export default function AboutUsContent (props) {
     return (
       <div className='content'>
-        <div className='content__center'>
+        <div className='content__center' style={{justifyContent:'center', height:'80vh'}}>
           <div  className='content__center__aboutUs' style={{backgroundColor: "rgba(255,255,255, 0.1"}}>
           <h2 className='aboutTitle'>
               <strong>Food-E-Call</strong> is a unique food delivery service designed with you in mind<HeartIcon style={{color:'#F42683', fontSize:'15px'}} />

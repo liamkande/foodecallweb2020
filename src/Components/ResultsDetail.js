@@ -49,7 +49,7 @@ export default function ResultsDetail ({result, id, onSubmit}) {
     const [categories, setCategories] = useState([])
 
     const [categoriesList, setCategoriesList] = useState([])
-    const [showCategoryList, setShowCategoryList] = useState(null)
+    
     
     const [deliveries, setDeliveries] = useState([])
     const [deliveryLink, setDeliveryLink] = useState('')
@@ -58,7 +58,7 @@ export default function ResultsDetail ({result, id, onSubmit}) {
     const [showDeliveryOptions, setShowDeliveryOptions] = useState(null)
 
 
-    const [googleAddress, setGoogleAddress] = useState("")
+    const [googleAddress, setGoogleAddress] = useState('')
     const [coordinates, setCoordinates] = useState({
         lat: null,
         lng: null
@@ -76,7 +76,10 @@ export default function ResultsDetail ({result, id, onSubmit}) {
     const [mainPhotoURL,setMainPhotoURL] = useState(null)
 
 
- 
+    //Diplay Control
+    const [stepOne, setStepOne] = useState(null)
+    const [stepTwo, setStepTwo] = useState(null)
+    const [stepThree,setStepThree] = useState(null)
 
 
     const getResult = async (id) => {
@@ -110,29 +113,19 @@ export default function ResultsDetail ({result, id, onSubmit}) {
         setState(mainData.location.state)
         setCountry(mainData.location.country)
         setCrossStreets(mainData.location.cross_streets)
-        setDisplayAddress(`${address1} ${address2} ${address3} ${city}, ${state} ${zipCode}`)
         setHours(mainData.hours)
 
         setFavoridedCount(0)
         setThumpsUpCount(0)
         setRating(0)
         setReviewCount(0)
-       
-      
-       
-        
-     
+
+
+        setStepOne(true)
+        setStepTwo(null) 
+        setDisplayAddress(null)
        
       }
-
-    //   useEffect(() => {
-    //     getResult(id)
-    //   }, [])
-    
-   
-//    if (!newResult) {
-//    return null
-//     } 
 
 
 const handleMainIMGChange = e => {
@@ -284,10 +277,7 @@ const handleSubmit = async event => {
     
   }
 
-  const handleDisplayAddress = () => {
-      setDisplayAddress(`${address1} ${address2} ${address3} ${city}, ${state} ${zipCode} `)
 
-  }
 
   const handleCategories = (item) => {
         categories.push(item) 
@@ -336,23 +326,329 @@ const handleGoogleSelect = async value => {
     console.log(results[0])
   }
 
- 
+
+  const handleStepOne = () => {
+    setDisplayAddress(`${address1} ${address2} ${address3} ${city}, ${state} ${zipCode} `)
+    setStepOne(null)
+    setStepTwo(true)
+}
+
+const handleStepTwo = () => {
+    setStepTwo(null)
+    setStepThree(true)
+}
+
+const handleStepThree = () => {
+    setStepThree(null)
+    //setStepFour(true)
+}
+
+
+
+
+
     return (
+        <div>          
+            <div onClick={() => getResult(id)} style={{color:'blue', cursor:'pointer'}}>
+                {result.name}
+            </div>
+        {newResult &&    
+            <form onSubmit={handleSubmit}>
+                {stepOne && 
+                    <div className='content' style={{overflowY:'scroll'}}>
+                        <div className='formSignUp'>
+                            <div style={{width:'25vw', overflowY:'scroll'}}>
+                                <FormInput
+                                    type='text'
+                                    name='name'
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                    label='Restaurant Name'
+                                    required
+                                />   
+                                <FormInput
+                                    type='text'
+                                    name='phone'
+                                    value={phone}
+                                    onChange={(e) => setPhone(e.target.value.trim())}
+                                    label='Restaurant Phone'
+                                    required
+                                /> 
+                                <FormInput
+                                    type='text'
+                                    name='displayPhone'
+                                    value={displayPhone}
+                                    onChange={(e) => setDisplayPhone(e.target.value)}
+                                    label='Display Phone'
+                                    required
+                                />
+                                <FormInput
+                                    type='text'
+                                    name='email'
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value.trim())}
+                                    label='Restaurant Email'
+                                /> 
+                                <FormInput
+                                    type='text'
+                                    name='website'
+                                    value={website}
+                                    onChange={(e) => setWebsite(e.target.value.trim())}
+                                    label='Restaurant Website'
+                                /> 
+                                <FormInput
+                                    type='number'
+                                    name='orderMinimum'
+                                    value={orderMinimun}
+                                    onChange={(e) => setOrderMinimum(e.target.value)}
+                                    label='Order Minimum'
+                                    required
+                                    />
+                                <FormInput
+                                    type='text'
+                                    name='country'
+                                    value={country}
+                                    onChange={(e) => setCountry(e.target.value)}
+                                    label='Restaurant Country'
+                                    required
+                                />
+                            </div>
+                        </div>
+                        <div className='formSignUp' >
+                            <div style={{width:'25vw'}}>
+                                <FormInput
+                                    type='text'
+                                    name='state'
+                                    value={state}
+                                    onChange={(e) => setState(e.target.value)}
+                                    label='Restaurant State'
+                                    required
+                                    />
+                                <FormInput
+                                type='text'
+                                name='address1'
+                                value={address1}
+                                onChange={(e) => (setAddress1(e.target.value), setDisplayAddress(null))}
+                                label='Restaurant Address1'
+                                required
+                                />
 
-        <div>
+                                <FormInput
+                                type='text'
+                                name='address2'
+                                value={address2}
+                                onChange={(e) => (setAddress2(e.target.value), setDisplayAddress(null))}
+                                label='Restaurant Address2'
+                                />
+
+                                <FormInput
+                                type='text'
+                                name='address3'
+                                value={address3}
+                                onChange={(e) => (setAddress3(e.target.value), setDisplayAddress(null))}
+                                label='Restaurant Address3'
+                                />
+
+
+                                <FormInput
+                                type='text'
+                                name='crossStreets'
+                                value={crossStreets}
+                                onChange={(e) => setCrossStreets(e.target.value)}
+                                label='Restaurant Cross Streets'
+                                />
+
+                                <FormInput
+                                type='text'
+                                name='city'
+                                value={city}
+                                onChange={(e) => (setCity(e.target.value), setDisplayAddress(null))}
+                                label='Restaurant City'
+                                required
+                                />
+
+                                <FormInput
+                                type='text'
+                                name='zipCode'
+                                value={zipCode}
+                                onChange={(e) => (setZipCode(e.target.value.trim()), setDisplayAddress(null)) }
+                                label='Restaurant ZipCode'
+                                required
+                                />
+                            </div>
+                        </div>
+                        <div className='formSignUp'>
+                            <div style={{width:'25vw'}}>
+                                <div style={{color:'green', cursor:'pointer'}} onClick={handleStepOne}>NEXT</div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                {stepTwo && 
+                    <div className='content' style={{overflowY:'scroll'}}>
+                        <div className='formSignUp'>
+                            <div style={{width:'25vw', overflowY:'scroll', height:300, backgroundColor:'white'}}>
+                                {categoriesList.map((item, index) => {
+                                    return (
+                                        <div  style={{cursor:'pointer'}} key={index} onClick={() => handleCategories(item)}>{item.name}</div>
+                                    )
+                                })}
+                            </div>
+                        </div>
+                        <div className='formSignUp'>
+                            <div style={{width:'25vw', overflowY:'scroll', height:300}}>
+                                <h3 style={{color:'green'}}>Selected category List:</h3>
+                                {categories.map((item, index) => {
+                                        return (
+                                            <div style={{color:'gray', cursor:'pointer'}} key={index} onClick={() => handleDeleteCategory(item)}>{item.name}</div>
+                                            )
+                                        })}
+                            </div>
+                        </div>
+                        <div className='formSignUp'>
+                            <div style={{width:'25vw'}}>
+                                <div style={{color:'blue', cursor:'pointer'}} onClick={handleStepTwo}>NEXT</div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                {stepThree && 
+                    <div className='content' style={{overflowY:'scroll'}}>
+                        <div className='formSignUp'>
+                            <div style={{width:'25vw', overflowY:'scroll', height:300, backgroundColor:'white'}}>
+                            {!deliveryType &&
+                                <div>
+                                    <div style={{cursor:'pointer'}} onClick={() => setDeliveryType('Online')}>Online Order</div>
+                                    <div style={{cursor:'pointer'}} onClick={() => setDeliveryType('TakeOut')}>TakeOut</div>
+                                    <div style={{cursor:'pointer'}} onClick={() => setDeliveryType('Delivery')}>Delivery</div>
+                                    <div style={{cursor:'pointer'}} onClick={() => setDeliveryType('Drone')}>Drone</div>
+                                    <div style={{cursor:'pointer'}} onClick={() => setDeliveryType('Robot')}>Robot</div>
+                                </div>
+                            }
+
+                            {deliveryType &&
+                                <div>
+                                    <FormInput
+                                        type='text'
+                                        name='deliveryLink'
+                                        value={deliveryLink}
+                                        onChange={(e) => (setDeliveryLink(e.target.value))}
+                                        label={`${deliveryType} Link`}
+                                    />
+                                    <FormInput
+                                        type='text'
+                                        name='deliveryPhone'
+                                        value={deliveryPhone}
+                                        onChange={(e) => (setDeliveryPhone(e.target.value))}
+                                        label={`${deliveryType} Phone`}
+                                    />
+                                    <div style={{cursor:'pointer', display: 'inline-block', backgroundColor:'green', margin:10 }} onClick={() => handleDeliveryOption('update')}>Update delivery options</div>
+                                    <div style={{cursor:'pointer', display: 'inline-block', backgroundColor:'red' }} onClick={() => handleDeliveryOption('cancel')}>Cancel</div>            
+                                    </div>
+
+                            }
+                            </div>
+                        </div>
+                        <div className='formSignUp'>
+                            <div style={{width:'25vw', overflowY:'scroll', height:300}}>
+                            <h3 style={{color:'green'}}>Selected delivery options:</h3>
+                            {deliveries.map((item, index) => {
+                                        return (
+                                            <div style={{color:'gray', cursor:'pointer'}} key={index} onClick={() => handleDeleteDelivery(item)}>{item.option}</div>
+                                            )
+                                        })}
+                            </div>
+                        </div>
+                        <div className='formSignUp'>
+                            <div style={{width:'25vw'}}>
+                                <div style={{color:'blue', cursor:'pointer'}} onClick={handleStepThree}>NEXT</div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+
+
+
+
+
+
+
+</form>
+        }
+
+        </div>
+    )
+}
+
+
+{/* 
+
+{showDeliveryOptions &&
+    <div>
+        
+
+
+            </div>
+
             
+}
 
-           
-            <div onClick={() => getResult(id)}>
-    
-            <h3 style={{color:'blue', cursor:'pointer'}}>{result.name}</h3>
-          
-           
-          
+
+
+{!showDeliveryOptions &&
+<div style={{marginBottom:10}}>
+
+</div>
+}
+
+ 
+<PlacesAutocomplete 
+    value={googleAddress}
+    onChange={setGoogleAddress} 
+    onSelect={handleGoogleSelect}
+    >
+      {({ getInputProps, suggestions, getSuggestionItemProps, loading}) => (
+        <div>
+
+            <input  {...getInputProps({ placeholder: "Search Google Address"})} />
+
+            <div>
+                {loading ? <div>...loading</div> : null}
+
+                {suggestions.map(suggestion => {
+                    const style = {
+                      backgroundColor: suggestion.active ? "#41b6e6" : "#fff" 
+                    }
+                    
+
+                    return (
+                    <div {...getSuggestionItemProps(suggestion, {style})}>
+                        {suggestion.description} 
+                    </div>
+                    )
+                })}
+
+
+            </div>
+            <p>Latitude: {coordinates.lat}</p>
+          <p>Longitude: {coordinates.lng}</p>
+
         </div>
 
+        )}
 
-        <div>
+
+  </PlacesAutocomplete> */}
+
+
+
+
+
+
+          {/* <div>
             <h4>Please Upload Restaurant Photos below:</h4>
             <input type='file' onChange={handleMainIMGChange}/>
            
@@ -386,306 +682,7 @@ const handleGoogleSelect = async value => {
             ))
      
           }
-          </div>
-     
-
-        {newResult &&
-        
-        <form onSubmit={handleSubmit}>
-          
-        <div className='content' style={{overflowY:'scroll'}}>
-         <div className='formSignUp' style={{width:'25vw'}}>
-             <div>
-            <FormInput
-                type='text'
-                name='name'
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                label='Restaurant Name'
-                required
-           />   
-
-           <FormInput
-                type='text'
-                name='phone'
-                value={phone}
-                onChange={(e) => setPhone(e.target.value.trim())}
-                label='Restaurant Phone'
-                required
-            /> 
-
-            <FormInput
-                type='text'
-                name='email'
-                value={email}
-                onChange={(e) => setEmail(e.target.value.trim())}
-                label='Restaurant Email'
-                
-            /> 
-
-            <FormInput
-                type='text'
-                name='website'
-                value={website}
-                onChange={(e) => setWebsite(e.target.value.trim())}
-                label='Restaurant Website'
-                required
-            /> 
-
-           <FormInput
-                type='text'
-                name='displayPhone'
-                value={displayPhone}
-                onChange={(e) => setDisplayPhone(e.target.value)}
-                label='Display Phone'
-                required
-            />
-
-            <FormInput
-                type='text'
-                name='country'
-                value={country}
-                onChange={(e) => setCountry(e.target.value)}
-                label='Restaurant Country'
-                required
-            />
-
-            <FormInput
-            type='text'
-            name='state'
-            value={state}
-            onChange={(e) => setState(e.target.value)}
-            label='Restaurant State'
-            required
-            />
-            
+          </div> */}
 
 
-
-        </div>
-</div>
-
-
-        <div className='formSignUp' style={{width:'25vw'}}>
-        <div>
-        <FormInput
-        type='text'
-        name='address1'
-        value={address1}
-        onChange={(e) => (setAddress1(e.target.value), setDisplayAddress(null))}
-        label='Restaurant Address1'
-        required
-        />
-
-        <FormInput
-        type='text'
-        name='address2'
-        value={address2}
-        onChange={(e) => (setAddress2(e.target.value), setDisplayAddress(null))}
-        label='Restaurant Address2'
-        />
-
-        <FormInput
-        type='text'
-        name='address3'
-        value={address3}
-        onChange={(e) => (setAddress3(e.target.value), setDisplayAddress(null))}
-        label='Restaurant Address3'
-        />
-
-
-        <FormInput
-        type='text'
-        name='crossStreets'
-        value={crossStreets}
-        onChange={(e) => setCrossStreets(e.target.value)}
-        label='Restaurant Cross Streets'
-        />
-
-        <FormInput
-        type='text'
-        name='city'
-        value={city}
-        onChange={(e) => (setCity(e.target.value), setDisplayAddress(null))}
-        label='Restaurant City'
-        required
-        />
-
-        <FormInput
-        type='text'
-        name='zipCode'
-        value={zipCode}
-        onChange={(e) => (setZipCode(e.target.value.trim()), setDisplayAddress(null)) }
-        label='Restaurant ZipCode'
-        required
-        />
-
-        <div style={{color: !displayAddress ? 'red' : 'green', cursor:'pointer'}} onClick={handleDisplayAddress}>Updated Display Address</div>
-        {displayAddress && 
-        <p>Display Address: {displayAddress.trim()}</p>
-        }
-
-        
-        <FormInput
-            type='number'
-            name='orderMinimum'
-            value={orderMinimun}
-            onChange={(e) => setOrderMinimum(e.target.value)}
-            label='Order Minimum'
-            required
-            />
-
-
-        </div>
-    </div>
-
-
-    <div className='formSignUp' style={{width:'25vw'}}>
-        <div>
-        <h4 style={{color:!showCategoryList ? 'blue' : 'red', cursor:'pointer'}} onClick={() => setShowCategoryList(!showCategoryList)}>{!showCategoryList ? 'Show category List' : 'Hide category List' }</h4>
-        <h4 style={{color:!showDeliveryOptions ? 'blue' : 'red', cursor:'pointer'}} onClick={() => setShowDeliveryOptions(!showDeliveryOptions)}>{!showDeliveryOptions ? 'Show delivery options' : 'Hide delivery options' }</h4>
-        {showCategoryList &&
-            <div>
-                {categoriesList.map((item, index) => {
-                    return (
-                    <div  style={{cursor:'pointer'}} key={index} onClick={() => handleCategories(item)}>{item.name}</div>
-                    )
-                })}
-            </div>
-        }
-
-        {showDeliveryOptions &&
-            <div>
-                {!deliveryType &&
-                <div>
-                    <div onClick={() => setDeliveryType('Online')}>Online Order</div>
-                    <div onClick={() => setDeliveryType('TakeOut')}>TakeOut</div>
-                    <div onClick={() => setDeliveryType('Delivery')}>Delivery</div>
-                    <div onClick={() => setDeliveryType('Drone')}>Drone</div>
-                    <div onClick={() => setDeliveryType('Robot')}>Robot</div>
-                </div>
-        }
-
-        {deliveryType &&
-            <div>
-                <FormInput
-                type='text'
-                name='deliveryLink'
-                value={deliveryLink}
-                onChange={(e) => (setDeliveryLink(e.target.value))}
-                label={`${deliveryType} Link`}
-                />
-                <FormInput
-                type='text'
-                name='deliveryPhone'
-                value={deliveryPhone}
-                onChange={(e) => (setDeliveryPhone(e.target.value))}
-                label={`${deliveryType} Phone`}
-                />
-
-                <div style={{cursor:'pointer', display: 'inline-block', backgroundColor:'green', margin:10 }} onClick={() => handleDeliveryOption('update')}>Update delivery options</div>
-                <div style={{cursor:'pointer', display: 'inline-block', backgroundColor:'red' }} onClick={() => handleDeliveryOption('cancel')}>Cancel</div>            
-                </div>
-
-        }
-                    </div>
-
-                    
-        }
-
-        {!showCategoryList && 
-            <div style={{marginBottom:10}}>
-                <h3 style={{color:'green'}}>Selected category List:</h3>
-               {categories.map((item, index) => {
-                    return (
-                        <div style={{color:'gray', cursor:'pointer'}} key={index} onClick={() => handleDeleteCategory(item)}>{item.name}</div>
-                        )
-                    })}
-
-            </div>
-        }
-
-{!showDeliveryOptions &&
-    <div style={{marginBottom:10}}>
-        <h3 style={{color:'green'}}>Selected delivery options:</h3>
-                        
-        {deliveries.map((item, index) => {
-                    return (
-                        <div style={{color:'gray', cursor:'pointer'}} key={index} onClick={() => handleDeleteDelivery(item)}>{item.option}</div>
-                        )
-                    })}
-    </div>
-}
-
-         
-<PlacesAutocomplete 
-            value={googleAddress}
-            onChange={setGoogleAddress} 
-            onSelect={handleGoogleSelect}
-            >
-              {({ getInputProps, suggestions, getSuggestionItemProps, loading}) => (
-                <div>
-
-                    <input  {...getInputProps({ placeholder: "Search Google Address"})} />
-
-                    <div>
-                        {loading ? <div>...loading</div> : null}
-
-                        {suggestions.map(suggestion => {
-                            const style = {
-                              backgroundColor: suggestion.active ? "#41b6e6" : "#fff" 
-                            }
-                            
-
-                            return (
-                            <div {...getSuggestionItemProps(suggestion, {style})}>
-                                {suggestion.description} 
-                            </div>
-                            )
-                        })}
-
-
-                    </div>
-                    <p>Latitude: {coordinates.lat}</p>
-                  <p>Longitude: {coordinates.lng}</p>
-
-                </div>
-
-                )}
-
-
-          </PlacesAutocomplete>
-
-
-
-
-
-
-
-        
-
-
-
-   
-    <CustomButton type='submit'>DONE</CustomButton>
-        </div>
-    </div>
-
-
-</div>
-
-</form>
-        }
-          
-
-            {/* <div>
-                {result.categories.map((category, index) => {
-                    return (
-                        <div key={index} style={{color:'gray'}}>{category.alias}</div>
-                    )
-                })}
-            </div> */}
-
-        </div>
-    )
-}
+          {/* <CustomButton type='submit'>DONE</CustomButton> */}

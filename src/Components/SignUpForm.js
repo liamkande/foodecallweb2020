@@ -98,7 +98,7 @@ class SignUpForm extends Component {
       <MuiThemeProvider theme={theme}>
       <form onSubmit={handleSubmit(this.onSubmit)}>
         <main className='content' style={{color: 'black'}}>
-          <div className='content__center' style={{marginTop:'-5%'}}>
+          <div className='content__center' style={{marginTop:'-5%', justifyContent:'center', height:'80vh'}}>
           <div className='content__center__input' style={{textAlign:'center'}}>
           <h2 style={{fontWeight:'bold'}}>SIGN UP</h2>
           <p style={{margin:'0', fontSize:'20px'}}>Sign Up now! and get <span style={{color:'#E23E81'}}>25%</span> off your first delivery. </p>

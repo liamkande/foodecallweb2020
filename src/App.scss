@@ -124,10 +124,8 @@ $break-md: 600px;
 		&__center{
 			display: flex;
 			width: 100%;
-			justify-content: center;
 			flex-flow: column nowrap;
 			align-items: center;
-			height: 80vh;
 			max-height: 80vh;
 
 
@@ -139,6 +137,8 @@ $break-md: 600px;
 				justify-content: center;
 
 			}
+
+		
 
 			&__aboutUs {
 				display: flex;
@@ -165,6 +165,10 @@ $break-md: 600px;
 			flex-flow: column nowrap;
 			align-items: center;
 		}
+
+
+
+
 }
 
 
@@ -317,3 +321,7 @@ h1 {
     transform: rotate(360deg);
   }
 }
+
+
+
+
