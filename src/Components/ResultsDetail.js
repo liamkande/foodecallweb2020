@@ -505,7 +505,7 @@ const handleStepThree = () => {
                                         </div>
                                         )}
                                 </PlacesAutocomplete>
-                                <div style={{color:'green', cursor:'pointer',textAlign:'center'}} onClick={handleStepOne}>NEXT</div>
+                                <div style={{color:'green', cursor:'pointer',textAlign:'center', fontSize:30}} onClick={handleStepOne}>NEXT</div>
                             </div>
                         </div>
                     </div>
@@ -534,7 +534,7 @@ const handleStepThree = () => {
                         </div>
                         <div className='formSignUp'>
                             <div style={{width:'25vw'}}>
-                                <div style={{color:'blue', cursor:'pointer'}} onClick={handleStepTwo}>NEXT</div>
+                                <div style={{color:'green', cursor:'pointer',textAlign:'center', fontSize:30}} onClick={handleStepTwo}>NEXT</div>
                             </div>
                         </div>
                     </div>
@@ -589,7 +589,7 @@ const handleStepThree = () => {
                         </div>
                         <div className='formSignUp'>
                             <div style={{width:'25vw'}}>
-                                <div style={{color:'blue', cursor:'pointer'}} onClick={handleStepThree}>NEXT</div>
+                                <div style={{color:'green', cursor:'pointer',textAlign:'center', fontSize:30}} onClick={handleStepThree}>NEXT</div>
                             </div>
                         </div>
                     </div>
