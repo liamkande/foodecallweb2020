@@ -79,7 +79,8 @@ export default function ResultsDetail ({result, id, onSubmit}) {
     //Diplay Control
     const [stepOne, setStepOne] = useState(null)
     const [stepTwo, setStepTwo] = useState(null)
-    const [stepThree,setStepThree] = useState(null)
+    const [stepThree, setStepThree] = useState(null)
+    const [stepFour, setStepFour] = useState(null)
 
 
     const getResult = async (id) => {
@@ -340,16 +341,13 @@ const handleStepTwo = () => {
 
 const handleStepThree = () => {
     setStepThree(null)
-    //setStepFour(true)
+    setStepFour(true)
 }
-
-
-
 
 
     return (
         <div>          
-            <div onClick={() => getResult(id)} style={{color:'blue', cursor:'pointer'}}>
+            <div onClick={() => getResult(id)} style={{color:'blue', cursor:'pointer', fontSize:28, marginTop:25}}>
                 {result.name}
             </div>
         {newResult &&    
@@ -383,11 +381,12 @@ const handleStepThree = () => {
                                     required
                                 />
                                 <FormInput
-                                    type='text'
+                                    type='email'
                                     name='email'
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value.trim())}
                                     label='Restaurant Email'
+                                    
                                 /> 
                                 <FormInput
                                     type='text'
@@ -423,7 +422,7 @@ const handleStepThree = () => {
                                     onChange={(e) => setState(e.target.value)}
                                     label='Restaurant State'
                                     required
-                                    />
+                                />
                                 <FormInput
                                 type='text'
                                 name='address1'
@@ -479,7 +478,34 @@ const handleStepThree = () => {
                         </div>
                         <div className='formSignUp'>
                             <div style={{width:'25vw'}}>
-                                <div style={{color:'green', cursor:'pointer'}} onClick={handleStepOne}>NEXT</div>
+                                <PlacesAutocomplete 
+                                    value={googleAddress}
+                                    onChange={setGoogleAddress} 
+                                    onSelect={handleGoogleSelect}
+                                    >
+                                    {({ getInputProps, suggestions, getSuggestionItemProps, loading}) => (
+                                        <div>
+                                            <input style={{height:40, width:'100%'}} {...getInputProps({ placeholder: "Search Google Address"})} />
+                                            <div>
+                                                {loading ? <div>...loading</div> : null}
+
+                                                {suggestions.map(suggestion => {
+                                                    const style = {
+                                                    backgroundColor: suggestion.active ? "#41b6e6" : "#fff" 
+                                                    }
+                                                    return (
+                                                    <div {...getSuggestionItemProps(suggestion, {style})}>
+                                                        {suggestion.description} 
+                                                    </div>
+                                                    )
+                                                })}
+                                            </div>
+                                            <p>Latitude: {coordinates.lat}</p>
+                                        <p>Longitude: {coordinates.lng}</p>
+                                        </div>
+                                        )}
+                                </PlacesAutocomplete>
+                                <div style={{color:'green', cursor:'pointer',textAlign:'center'}} onClick={handleStepOne}>NEXT</div>
                             </div>
                         </div>
                     </div>
@@ -570,119 +596,44 @@ const handleStepThree = () => {
                 }
 
 
-
-
-
-
-
-
-</form>
+                {stepFour && 
+                    <div className='content' style={{overflowY:'scroll'}}>
+                        <div className='formSignUp'>
+                            <div style={{width:'25vw', height:300, backgroundColor:'white'}}>
+                                <h4>Please Upload Restaurant Photos below:</h4>
+                                    <input style={{fontSize:18, cursor:'pointer'}} type='file' onChange={handleMainIMGChange}/>
+                                    <button style={{marginTop:10, fontSize:18, cursor:'pointer'}} onClick={handlePhotoUpload}>Upload</button>
+                            </div>
+                        </div>
+                        <div className='formSignUp'>
+                            <div style={{width:'25vw', overflowY:'scroll', height:300}}>
+                            <h3 style={{color:'green'}}>Uploaded Photos</h3>
+                            {photos.map((photo, index) => (   
+                                <div key={index} onClick={() => setSelectedIMG(!selectedIMG ? photo : null)} >
+                                <div> 
+                                    <img key={index} src={photo.photoURL} style={{width:50, margin:2}} alt='Main Restaurant'/> 
+                                </div>
+                                {index === photos.indexOf(selectedIMG) &&
+                                    <div>
+                                        <button onClick={handleDelete}>Delete</button>
+                                            {photo.photoURL !== mainPhotoURL &&
+                                                <button onClick={selectMainPhoto}>Make Main Photo</button>
+                                            }
+                                    </div>
+                                }
+                            </div>
+                        ))}
+                            </div>
+                        </div>
+                        <div className='formSignUp'>
+                            <div style={{width:'25vw'}}>
+                                <CustomButton type='submit'>DONE</CustomButton> 
+                            </div>
+                        </div>
+                    </div>
+                }
+            </form>
         }
-
         </div>
     )
 }
-
-
-{/* 
-
-{showDeliveryOptions &&
-    <div>
-        
-
-
-            </div>
-
-            
-}
-
-
-
-{!showDeliveryOptions &&
-<div style={{marginBottom:10}}>
-
-</div>
-}
-
- 
-<PlacesAutocomplete 
-    value={googleAddress}
-    onChange={setGoogleAddress} 
-    onSelect={handleGoogleSelect}
-    >
-      {({ getInputProps, suggestions, getSuggestionItemProps, loading}) => (
-        <div>
-
-            <input  {...getInputProps({ placeholder: "Search Google Address"})} />
-
-            <div>
-                {loading ? <div>...loading</div> : null}
-
-                {suggestions.map(suggestion => {
-                    const style = {
-                      backgroundColor: suggestion.active ? "#41b6e6" : "#fff" 
-                    }
-                    
-
-                    return (
-                    <div {...getSuggestionItemProps(suggestion, {style})}>
-                        {suggestion.description} 
-                    </div>
-                    )
-                })}
-
-
-            </div>
-            <p>Latitude: {coordinates.lat}</p>
-          <p>Longitude: {coordinates.lng}</p>
-
-        </div>
-
-        )}
-
-
-  </PlacesAutocomplete> */}
-
-
-
-
-
-
-          {/* <div>
-            <h4>Please Upload Restaurant Photos below:</h4>
-            <input type='file' onChange={handleMainIMGChange}/>
-           
-             <button onClick={handlePhotoUpload}>Upload</button>
-            
-            {photos.map((photo, index) => (
-                
-               <div key={index} onClick={() => setSelectedIMG(!selectedIMG ? photo : null)} >
-
-               <div> 
-                 <img key={index} src={photo.photoURL} style={{width:50, margin:2}} alt='Main Restaurant'/> 
-                 </div>
-                
-                
-                { index === photos.indexOf(selectedIMG) &&
-                <div>
-                
-               
-                <button onClick={handleDelete}>Delete</button>
-                {photo.photoURL !== mainPhotoURL &&
-                    <button onClick={selectMainPhoto}>Make Main Photo</button>
-                }
-               
-                          
-                </div>
-                }
-
-               </div>
-                           
-          
-            ))
-     
-          }
-          </div> */}
-
-
-          {/* <CustomButton type='submit'>DONE</CustomButton> */}
