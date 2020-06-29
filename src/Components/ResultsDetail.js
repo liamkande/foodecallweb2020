@@ -81,6 +81,7 @@ export default function ResultsDetail ({result, id, onSubmit}) {
     const [stepTwo, setStepTwo] = useState(null)
     const [stepThree, setStepThree] = useState(null)
     const [stepFour, setStepFour] = useState(null)
+    const [stepFive, setStepFive] = useState(null)
 
 
     const getResult = async (id) => {
@@ -238,6 +239,10 @@ const handleSubmit = async event => {
       } catch (error) {
         console.error(error)
       }
+      alert('The restaurant profile has been successfully created!')
+
+      setStepFour(null)
+      setStepFive(true)
 
    } else if(!mainPhotoURL) {
     alert('Please Assigned A main Photo, and try again!')
@@ -595,7 +600,6 @@ const handleStepThree = () => {
                     </div>
                 }
 
-
                 {stepFour && 
                     <div className='content' style={{overflowY:'scroll'}}>
                         <div className='formSignUp'>
@@ -611,7 +615,7 @@ const handleStepThree = () => {
                             {photos.map((photo, index) => (   
                                 <div key={index} onClick={() => setSelectedIMG(!selectedIMG ? photo : null)} >
                                 <div> 
-                                    <img key={index} src={photo.photoURL} style={{width:50, margin:2}} alt='Main Restaurant'/> 
+                                    <img key={index} src={photo.photoURL} style={{width:100, margin:2}} alt='Main Restaurant'/> 
                                 </div>
                                 {index === photos.indexOf(selectedIMG) &&
                                     <div>
@@ -632,6 +636,13 @@ const handleStepThree = () => {
                         </div>
                     </div>
                 }
+
+            {stepFive &&
+                <div className='content' style={{color:'red', fontSize:40 }}>
+                    Please start new search...
+                </div>
+            }
+
             </form>
         }
         </div>
