@@ -287,7 +287,7 @@ const handleSubmit = async event => {
 
   const handleCategories = (item) => {
         categories.push(item) 
-        let newCategoryList = categoriesList.filter((list) => list != item)
+        let newCategoryList = categoriesList.filter((list) => list !== item)
         setCategoriesList(newCategoryList)
         console.log(categories)
     
@@ -296,7 +296,7 @@ const handleSubmit = async event => {
 
  const handleDeleteCategory = (item) => {
      categoriesList.push(item)
-     let newCategory = categories.filter((list) => list != item)
+     let newCategory = categories.filter((list) => list !== item)
      setCategories(newCategory)
  }
 
@@ -318,9 +318,8 @@ const handleSubmit = async event => {
  }
 
  const handleDeleteDelivery = (item) => {
-    let newDeliveries = deliveries.filter((list) => list != item)
+    let newDeliveries = deliveries.filter((list) => list !== item)
     setDeliveries(newDeliveries)
-
 }
 
 const handleGoogleSelect = async value => {
@@ -429,30 +428,29 @@ const handleStepThree = () => {
                                     required
                                 />
                                 <FormInput
-                                type='text'
-                                name='address1'
-                                value={address1}
-                                onChange={(e) => (setAddress1(e.target.value), setDisplayAddress(null))}
-                                label='Restaurant Address1'
-                                required
+                                    type='text'
+                                    name='address1'
+                                    value={address1}
+                                    onChange={(e) => (setAddress1(e.target.value), setDisplayAddress(null))}
+                                    label='Restaurant Address1'
+                                    required
                                 />
 
                                 <FormInput
-                                type='text'
-                                name='address2'
-                                value={address2}
-                                onChange={(e) => (setAddress2(e.target.value), setDisplayAddress(null))}
-                                label='Restaurant Address2'
+                                    type='text'
+                                    name='address2'
+                                    value={address2}
+                                    onChange={(e) => (setAddress2(e.target.value), setDisplayAddress(null))}
+                                    label='Restaurant Address2'
                                 />
 
                                 <FormInput
-                                type='text'
-                                name='address3'
-                                value={address3}
-                                onChange={(e) => (setAddress3(e.target.value), setDisplayAddress(null))}
-                                label='Restaurant Address3'
+                                    type='text'
+                                    name='address3'
+                                    value={address3}
+                                    onChange={(e) => (setAddress3(e.target.value), setDisplayAddress(null))}
+                                    label='Restaurant Address3'
                                 />
-
 
                                 <FormInput
                                 type='text'
@@ -522,7 +520,7 @@ const handleStepThree = () => {
                             <div style={{width:'25vw', overflowY:'scroll', height:300, backgroundColor:'white'}}>
                                 {categoriesList.map((item, index) => {
                                     return (
-                                        <div  style={{cursor:'pointer'}} key={index} onClick={() => handleCategories(item)}>{item.name}</div>
+                                        <div style={{cursor:'pointer', fontSize:24, marginTop:8, fontWeight:'bold'}} key={index} onClick={() => handleCategories(item)}>{item.name}</div>
                                     )
                                 })}
                             </div>
@@ -532,7 +530,7 @@ const handleStepThree = () => {
                                 <h3 style={{color:'green'}}>Selected category List:</h3>
                                 {categories.map((item, index) => {
                                         return (
-                                            <div style={{color:'gray', cursor:'pointer'}} key={index} onClick={() => handleDeleteCategory(item)}>{item.name}</div>
+                                            <div style={{color:'gray', cursor:'pointer', fontSize:24, marginTop:8,}} key={index} onClick={() => handleDeleteCategory(item)}>{item.name}</div>
                                             )
                                         })}
                             </div>
@@ -551,11 +549,11 @@ const handleStepThree = () => {
                             <div style={{width:'25vw', overflowY:'scroll', height:300, backgroundColor:'white'}}>
                             {!deliveryType &&
                                 <div>
-                                    <div style={{cursor:'pointer'}} onClick={() => setDeliveryType('Online')}>Online Order</div>
-                                    <div style={{cursor:'pointer'}} onClick={() => setDeliveryType('TakeOut')}>TakeOut</div>
-                                    <div style={{cursor:'pointer'}} onClick={() => setDeliveryType('Delivery')}>Delivery</div>
-                                    <div style={{cursor:'pointer'}} onClick={() => setDeliveryType('Drone')}>Drone</div>
-                                    <div style={{cursor:'pointer'}} onClick={() => setDeliveryType('Robot')}>Robot</div>
+                                    <div style={{cursor:'pointer', fontSize:24, marginTop:8, fontWeight:'bold'}} onClick={() => setDeliveryType('Online')}>Online Order</div>
+                                    <div style={{cursor:'pointer', fontSize:24, marginTop:8, fontWeight:'bold'}} onClick={() => setDeliveryType('TakeOut')}>TakeOut</div>
+                                    <div style={{cursor:'pointer', fontSize:24, marginTop:8, fontWeight:'bold'}} onClick={() => setDeliveryType('Delivery')}>Delivery</div>
+                                    <div style={{cursor:'pointer', fontSize:24, marginTop:8, fontWeight:'bold'}} onClick={() => setDeliveryType('Drone')}>Drone</div>
+                                    <div style={{cursor:'pointer', fontSize:24, marginTop:8, fontWeight:'bold'}} onClick={() => setDeliveryType('Robot')}>Robot</div>
                                 </div>
                             }
 
@@ -574,9 +572,9 @@ const handleStepThree = () => {
                                         value={deliveryPhone}
                                         onChange={(e) => (setDeliveryPhone(e.target.value))}
                                         label={`${deliveryType} Phone`}
-                                    />
-                                    <div style={{cursor:'pointer', display: 'inline-block', backgroundColor:'green', margin:10 }} onClick={() => handleDeliveryOption('update')}>Update delivery options</div>
-                                    <div style={{cursor:'pointer', display: 'inline-block', backgroundColor:'red' }} onClick={() => handleDeliveryOption('cancel')}>Cancel</div>            
+                                    />               
+                                    <div style={{cursor:'pointer', fontSize:24, color:'red'}} onClick={() => handleDeliveryOption('cancel')}>Cancel</div>            
+                                    <div style={{cursor:'pointer', marginTop:10, fontSize:24, color:'blue'}} onClick={() => handleDeliveryOption('update')}>Update delivery options</div>
                                     </div>
 
                             }
@@ -587,7 +585,7 @@ const handleStepThree = () => {
                             <h3 style={{color:'green'}}>Selected delivery options:</h3>
                             {deliveries.map((item, index) => {
                                         return (
-                                            <div style={{color:'gray', cursor:'pointer'}} key={index} onClick={() => handleDeleteDelivery(item)}>{item.option}</div>
+                                            <div style={{color:'gray', cursor:'pointer', fontSize:24, marginTop:8,}} key={index} onClick={() => handleDeleteDelivery(item)}>{item.option}</div>
                                             )
                                         })}
                             </div>
@@ -638,9 +636,7 @@ const handleStepThree = () => {
                 }
 
             {stepFive &&
-                <div className='content' style={{color:'red', fontSize:40 }}>
-                    Please start new search...
-                </div>
+                <div className='content' style={{color:'red', fontSize:40 }}>Please start new search...</div>
             }
 
             </form>
