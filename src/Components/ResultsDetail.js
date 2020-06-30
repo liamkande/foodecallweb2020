@@ -488,6 +488,7 @@ const handleStepThree = () => {
                                     >
                                     {({ getInputProps, suggestions, getSuggestionItemProps, loading}) => (
                                         <div>
+                                             <p style={{color:'gray'}}>Ex: restaurant Name, city, address...</p>
                                             <input style={{height:40, width:'100%'}} {...getInputProps({ placeholder: "Search Google Address"})} />
                                             <div>
                                                 {loading ? <div>...loading</div> : null}
