@@ -604,7 +604,7 @@ const handleStepThree = () => {
                             <div style={{width:'25vw', height:300, backgroundColor:'white'}}>
                                 <h4>Please Upload Restaurant Photos below:</h4>
                                     <input style={{fontSize:18, cursor:'pointer'}} type='file' onChange={handleMainIMGChange}/>
-                                    <button style={{marginTop:10, fontSize:18, cursor:'pointer'}} onClick={handlePhotoUpload}>Upload</button>
+                                    <div style={{marginTop:10, fontSize:18, cursor:'pointer', backgroundColor:'gray', width:'25%', textAlign:'center', alignSelf:'center'}} onClick={handlePhotoUpload}>Upload</div>
                             </div>
                         </div>
                         <div className='formSignUp'>
