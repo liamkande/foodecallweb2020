@@ -122,9 +122,11 @@ export default function ResultsDetail ({result, id, onSubmit}) {
         setRating(0)
         setReviewCount(0)
 
-
         setStepOne(true)
         setStepTwo(null) 
+        setStepThree(null)
+        setStepFour(null)
+        setStepFive(null)
         setDisplayAddress(null)
        
       }
@@ -290,8 +292,6 @@ const handleSubmit = async event => {
         let newCategoryList = categoriesList.filter((list) => list !== item)
         setCategoriesList(newCategoryList)
         console.log(categories)
-    
-  
   }
 
  const handleDeleteCategory = (item) => {
