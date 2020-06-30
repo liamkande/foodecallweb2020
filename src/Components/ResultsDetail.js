@@ -488,7 +488,7 @@ const handleStepThree = () => {
                                     >
                                     {({ getInputProps, suggestions, getSuggestionItemProps, loading}) => (
                                         <div>
-                                             <p style={{color:'gray'}}>Ex: restaurant Name, city, address...</p>
+                                             <p style={{color:'gray'}}>Ex: restaurant name, city, address...</p>
                                             <input style={{height:40, width:'100%'}} {...getInputProps({ placeholder: "Search Google Address"})} />
                                             <div>
                                                 {loading ? <div>...loading</div> : null}
@@ -528,7 +528,7 @@ const handleStepThree = () => {
                         </div>
                         <div className='formSignUp'>
                             <div style={{width:'25vw', overflowY:'scroll', height:300}}>
-                                <h3 style={{color:'green'}}>Selected category List:</h3>
+                                <h2 style={{color:'green'}}>Selected category List:</h2>
                                 {categories.map((item, index) => {
                                         return (
                                             <div style={{color:'gray', cursor:'pointer', fontSize:24, marginTop:8,}} key={index} onClick={() => handleDeleteCategory(item)}>{item.name}</div>
@@ -557,7 +557,6 @@ const handleStepThree = () => {
                                     <div style={{cursor:'pointer', fontSize:24, marginTop:8, fontWeight:'bold'}} onClick={() => setDeliveryType('Robot')}>Robot</div>
                                 </div>
                             }
-
                             {deliveryType &&
                                 <div>
                                     <FormInput
@@ -583,7 +582,7 @@ const handleStepThree = () => {
                         </div>
                         <div className='formSignUp'>
                             <div style={{width:'25vw', overflowY:'scroll', height:300}}>
-                            <h3 style={{color:'green'}}>Selected delivery options:</h3>
+                            <h2 style={{color:'green'}}>Selected delivery options:</h2>
                             {deliveries.map((item, index) => {
                                         return (
                                             <div style={{color:'gray', cursor:'pointer', fontSize:24, marginTop:8,}} key={index} onClick={() => handleDeleteDelivery(item)}>{item.option}</div>
@@ -610,7 +609,7 @@ const handleStepThree = () => {
                         </div>
                         <div className='formSignUp'>
                             <div style={{width:'25vw', overflowY:'scroll', height:300}}>
-                            <h3 style={{color:'green'}}>Uploaded Photos</h3>
+                            <h2 style={{color:'green'}}>Uploaded Photos:</h2>
                             {photos.map((photo, index) => (   
                                 <div key={index} onClick={() => setSelectedIMG(!selectedIMG ? photo : null)} >
                                 <div> 
