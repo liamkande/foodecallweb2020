@@ -202,7 +202,6 @@ const handleSubmit = async event => {
    if(mainPhotoURL && displayAddress) {
 
     try {
-    
         await createRestaurantProfileDocument(photos, 
             {name, 
              yelpLink, 
@@ -236,23 +235,18 @@ const handleSubmit = async event => {
              coordinates,
              placeId
              })
-        
-    
+
       } catch (error) {
         console.error(error)
       }
-      alert('The restaurant profile has been successfully created!')
-
-      setStepFour(null)
-      setStepFive(true)
-
-   } else if(!mainPhotoURL) {
-    alert('Please Assigned A main Photo, and try again!')
-   }
-   else if(!displayAddress) {
-    alert('Please Update Display Address, and try again!')
-   }
-   
+        setStepFour(null)
+        setStepFive(true)
+        alert('The restaurant profile has been successfully created!')
+    } else if(!mainPhotoURL) {
+        alert('Please Assigned A main Photo, and try again!')
+    } else if(!displayAddress) {
+        alert('Please Update Display Address, and try again!')
+    }
   }
 
 
@@ -350,10 +344,12 @@ const handleStepThree = () => {
 
 
     return (
-        <div>          
+        <div>     
+            {!stepFive &&      
             <div onClick={() => getResult(id)} style={{color:'blue', cursor:'pointer', fontSize:28, marginTop:25}}>
                 {result.name}
             </div>
+        } 
         {newResult &&    
             <form onSubmit={handleSubmit}>
                 {stepOne && 
@@ -604,7 +600,7 @@ const handleStepThree = () => {
                             <div style={{width:'25vw', height:300, backgroundColor:'white'}}>
                                 <h4>Please Upload Restaurant Photos below:</h4>
                                     <input style={{fontSize:18, cursor:'pointer'}} type='file' onChange={handleMainIMGChange}/>
-                                    <div style={{marginTop:10, fontSize:18, cursor:'pointer', backgroundColor:'gray', width:'25%', textAlign:'center', alignSelf:'center'}} onClick={handlePhotoUpload}>Upload</div>
+                                    <div style={{marginTop:10, fontSize:18, cursor:'pointer', backgroundColor:'gray', width:'25%', textAlign:'center'}} onClick={handlePhotoUpload}>Upload</div>
                             </div>
                         </div>
                         <div className='formSignUp'>
