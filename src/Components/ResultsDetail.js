@@ -14,7 +14,6 @@ import PlacesAutocomplete, {
 
 
 
-
 export default function ResultsDetail ({result, id, onSubmit}) {
     const [newResult, setResult] = useState(null)
 
@@ -308,7 +307,6 @@ const handleSubmit = async event => {
         setDeliveryPhone('')
         setShowDeliveryOptions(null)
      } 
-
  }
 
  const handleDeleteDelivery = (item) => {
@@ -325,21 +323,36 @@ const handleGoogleSelect = async value => {
     console.log(results[0])
   }
 
-
   const handleStepOne = () => {
-    setDisplayAddress(`${address1} ${address2} ${address3} ${city}, ${state} ${zipCode} `)
-    setStepOne(null)
-    setStepTwo(true)
+      if(coordinates.lat && orderMinimun) {
+        setDisplayAddress(`${address1} ${address2} ${address3} ${city}, ${state} ${zipCode} `)
+        setStepOne(null)
+        setStepTwo(true)
+      } else {
+          !coordinates.lat ?
+          alert('Please search google address to assign restaurant coordinates and try again.')
+          :
+          alert('Please assign order minimum and try again.')
+      }
 }
 
 const handleStepTwo = () => {
-    setStepTwo(null)
-    setStepThree(true)
+    if(categories.length > 0) {
+        setStepTwo(null)
+        setStepThree(true)
+    } else {
+        alert('Please select restaurant categories and try again.')
+    }
+
 }
 
 const handleStepThree = () => {
-    setStepThree(null)
-    setStepFour(true)
+    if(deliveries.length > 0) {
+        setStepThree(null)
+        setStepFour(true)
+    } else {
+        alert('Please select restaurant delivery options and try again.')
+    }
 }
 
 
@@ -634,7 +647,6 @@ const handleStepThree = () => {
             {stepFive &&
                 <div className='content' style={{color:'red', fontSize:40 }}>Please start new search...</div>
             }
-
             </form>
         }
         </div>
