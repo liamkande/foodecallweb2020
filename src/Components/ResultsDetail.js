@@ -83,6 +83,9 @@ export default function ResultsDetail ({result, id, onSubmit}) {
     const [stepFive, setStepFive] = useState(null)
 
 
+    const [categoriesListNames, setCategoriesListNames] = useState([])
+
+
     const getResult = async (id) => {
         const response = await yelp.get(`/${id}`)
         setResult(!response.data ? null : response.data)
@@ -90,12 +93,14 @@ export default function ResultsDetail ({result, id, onSubmit}) {
         console.log(`Selected Restaurant ID: ${id}`)
         console.log(mainData)
         const addCategories = await firestore.collection('categories').get()
+
+        if (categoriesList.length == 0) {
+            addCategories.forEach((item)=> {
+                categoriesListNames.push(item.data().name)     
+                categoriesList.push({name:item.data().name, id:item.data().id})      
+            })
+        }
         
-        addCategories.forEach((item)=>{
-            categoriesList.push({name:item.data().name, id:item.data().id})
-        })
-
-
         setName(mainData.name)
         setYelpLink(mainData.url)
         setPhone(mainData.phone)
@@ -104,6 +109,8 @@ export default function ResultsDetail ({result, id, onSubmit}) {
         setYelpReviewCount(mainData.review_count)
         setDisplayPhone(mainData.display_phone)
         setAlias(mainData.alias)
+
+
         
 
         setAddress1(mainData.location.address1)
@@ -127,6 +134,8 @@ export default function ResultsDetail ({result, id, onSubmit}) {
         setStepFour(null)
         setStepFive(null)
         setDisplayAddress(null)
+        
+    
        
       }
 
@@ -281,16 +290,27 @@ const handleSubmit = async event => {
 
 
   const handleCategories = (item) => {
-        categories.push(item) 
-        let newCategoryList = categoriesList.filter((list) => list !== item)
-        setCategoriesList(newCategoryList)
-        console.log(categories)
+  
+    categoriesList.map((i) => {
+        if(item == i.name) {
+            let newId = i.id
+            categories.push({name:item, id:newId}) 
+            let newCategoryList = categoriesList.filter((list) => list !== i)
+            setCategories(categories)
+            setCategoriesList(newCategoryList)
+        } 
+    })
+    
+    console.log(categories)
+    
+    
   }
 
  const handleDeleteCategory = (item) => {
      categoriesList.push(item)
      let newCategory = categories.filter((list) => list !== item)
      setCategories(newCategory)
+     console.log(newCategory)
  }
 
 
@@ -528,9 +548,9 @@ const handleStepThree = () => {
                     <div className='content' style={{overflowY:'scroll'}}>
                         <div className='formSignUp'>
                             <div style={{width:'25vw', overflowY:'scroll', height:300, backgroundColor:'white'}}>
-                                {categoriesList.map((item, index) => {
+                                {categoriesListNames.sort().map((item, index) => {
                                     return (
-                                        <div style={{cursor:'pointer', fontSize:24, marginTop:8, fontWeight:'bold'}} key={index} onClick={() => handleCategories(item)}>{item.name}</div>
+                                        <div style={{cursor:'pointer', fontSize:24, marginTop:8, fontWeight:'bold'}} key={index} onClick={() => handleCategories(item)}>{item}</div>
                                     )
                                 })}
                             </div>
