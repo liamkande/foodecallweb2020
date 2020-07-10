@@ -42,13 +42,13 @@ componentDidMount () {
          
         });
         this.setState({ adminUser: this.state.currentUser.admin ? true : false})
-        console.log(this.state.currentUser);
-      });
+        //console.log(this.state.currentUser)
+      })
       
     }
     
     this.setState({ currentUser: userAuth })
-  });
+  })
 }
 componentWillUnmount() {
   this.unsubscribeFromAuth()

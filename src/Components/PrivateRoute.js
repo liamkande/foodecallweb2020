@@ -30,10 +30,10 @@ class PrivateRoute extends React.Component {
               ...snapShot.data()
             },
            
-          });
+          })
           this.setState({ adminUser: this.state.currentUser.admin ? true : null })
-          console.log(this.state.currentUser);
-        });
+          //console.log(this.state.currentUser)
+        })
         
       }
       
@@ -69,7 +69,7 @@ class PrivateRoute extends React.Component {
 
 
 
-export default PrivateRoute;
+export default PrivateRoute
 
 
 

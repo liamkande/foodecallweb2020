@@ -1,11 +1,10 @@
-import React, { useState, useEffect, Component } from 'react'
+import React from 'react'
+import restaurantsHooks from '../hooks/restaurantsFormHooks'
 import yelp  from '../api/yelp'
 import FormInput from './form-input/form-input.component'
 import CustomButton from './custom-button/custom-button.component'
-import { createRestaurantProfileDocument, storage, firestore } from '../firebase/firebase.utils'
+import { firestore } from '../firebase/firebase.utils'
 import Resizer from 'react-image-file-resizer'
-import uuid from 'uuid'
-import { set } from 'date-fns'
 
 import PlacesAutocomplete, {
     geocodeByAddress,
@@ -14,87 +13,45 @@ import PlacesAutocomplete, {
 
 
 
-export default function ResultsDetail ({result, id, onSubmit}) {
-    const [newResult, setResult] = useState(null)
-
-    const [name, setName] = useState('')
-    const [yelpLink, setYelpLink] = useState('')
-    const [phone, setPhone] = useState('')
-    const [price, setPrice] = useState('')
-    const [yelpRating, setYelpRating] = useState(null)
-    const [yelpReviewCount, setYelpReviewCount] = useState(null)
-    const [displayPhone, setDisplayPhone] = useState('')
-    const [address1, setAddress1] = useState('')
-    const [address2, setAddress2] = useState('')
-    const [address3, setAddress3] = useState('')
-    const [city, setCity] = useState('')
-    const [zipCode, setZipCode] = useState('')
-    const [state, setState] = useState('')
-    const [country, setCountry] = useState('')
-    const [crossStreets, setCrossStreets] = useState('')
-    const [displayAddress, setDisplayAddress] = useState(null)
-    const [alias, setAlias] = useState('')
-    const [email, setEmail] = useState('')
-    const [website, setWebsite] = useState('')
-    const [hours, setHours] = useState([])
-    const [orderMinimun, setOrderMinimum] = useState('')
+export default function ResultsDetail ({result, id}) {
     
-    const [favoridedCount, setFavoridedCount] = useState(null)
-    const [thumpsUpcount, setThumpsUpCount] = useState(null)
-    const [rating, setRating] = useState(null)
-    const [reviewCount, setReviewCount] = useState(null)
-    const [menuCategories, setMenuCategories] = useState([])
+    const [ newResult, setResult, name, setName, yelpLink, setYelpLink,
+            phone, setPhone, price, setPrice, yelpRating, setYelpRating,
+            yelpReviewCount, setYelpReviewCount, displayPhone, setDisplayPhone,
+            address1, setAddress1, address2, setAddress2, address3, setAddress3,
+            city, setCity, zipCode, setZipCode, state, setState, country, setCountry,
+            crossStreets, setCrossStreets, displayAddress, setDisplayAddress,
+            alias, setAlias, email, setEmail, website, setWebsite, hours, setHours,
+            orderMinimun, setOrderMinimum, favoridedCount, setFavoridedCount,
+            thumpsUpcount, setThumpsUpCount, rating, setRating, 
+            reviewCount, setReviewCount, menuCategories, setMenuCategories,
+            categories, setCategories, categoriesList, setCategoriesList,
+            deliveries, setDeliveries, deliveryLink, setDeliveryLink,
+            deliveryPhone, setDeliveryPhone, deliveryType, setDeliveryType,
+            googleAddress, setGoogleAddress, coordinates, setCoordinates,
+            placeId, setPlaceId, photos, setPhotos, selectedIMG, setSelectedIMG,
+            image, setImage, imgChanged, setImgChanged, resizedIMG, setResizedIMG,
+            url, setUrl, mainPhotoURL,setMainPhotoURL, categoriesListNames, setCategoriesListNames,
+            stepOne, setStepOne, stepTwo, setStepTwo, stepThree, setStepThree,
+            stepFour, setStepFour, stepFive, setStepFive,   
 
-    const [categories, setCategories] = useState([])
+            handlePhotoUpload, handleSubmit, handleStepOne, handleStepTwo,
+            handleStepThree, handleDelete, handleCategories, handleDeleteCategory,
+            handleDeliveryOption, handleDeleteDelivery, selectMainPhoto
 
-    const [categoriesList, setCategoriesList] = useState([])
+          ] = restaurantsHooks()
+   
     
     
-    const [deliveries, setDeliveries] = useState([])
-    const [deliveryLink, setDeliveryLink] = useState('')
-    const [deliveryPhone, setDeliveryPhone] = useState('')
-    const [deliveryType, setDeliveryType] = useState('')
-    const [showDeliveryOptions, setShowDeliveryOptions] = useState(null)
-
-
-    const [googleAddress, setGoogleAddress] = useState('')
-    const [coordinates, setCoordinates] = useState({
-        lat: null,
-        lng: null
-      })
-    const [placeId, setPlaceId] = useState('')
-
-    //Merge state from restaurantForm
-    const [photos, setPhotos] = useState([])
-    const [selectedIMG, setSelectedIMG] = useState(null)
-    const [image, setImage] = useState(null)
-    const [imgChanged, setImgChanged] = useState(null)
-    const [resizedIMG, setResizedIMG] = useState(null)
-    const [url, setUrl] = useState('')
-
-    const [mainPhotoURL,setMainPhotoURL] = useState(null)
-
-
-    //Diplay Control
-    const [stepOne, setStepOne] = useState(null)
-    const [stepTwo, setStepTwo] = useState(null)
-    const [stepThree, setStepThree] = useState(null)
-    const [stepFour, setStepFour] = useState(null)
-    const [stepFive, setStepFive] = useState(null)
-
-
-    const [categoriesListNames, setCategoriesListNames] = useState([])
-
-
     const getResult = async (id) => {
         const response = await yelp.get(`/${id}`)
         setResult(!response.data ? null : response.data)
         const mainData = response.data
-        console.log(`Selected Restaurant ID: ${id}`)
-        console.log(mainData)
+        //console.log(`Selected Restaurant ID: ${id}`)
+        //console.log(mainData)
         const addCategories = await firestore.collection('categories').get()
 
-        if (categoriesList.length == 0) {
+        if (categoriesList.length === 0) {
             addCategories.forEach((item)=> {
                 categoriesListNames.push(item.data().name)     
                 categoriesList.push({name:item.data().name, id:item.data().id})      
@@ -109,10 +66,6 @@ export default function ResultsDetail ({result, id, onSubmit}) {
         setYelpReviewCount(mainData.review_count)
         setDisplayPhone(mainData.display_phone)
         setAlias(mainData.alias)
-
-
-        
-
         setAddress1(mainData.location.address1)
         setAddress2(mainData.location.address2 ? mainData.location.address2 : '' )
         setAddress3(mainData.location.address3 ? mainData.location.address3 : '' )
@@ -122,258 +75,50 @@ export default function ResultsDetail ({result, id, onSubmit}) {
         setCountry(mainData.location.country)
         setCrossStreets(mainData.location.cross_streets)
         setHours(mainData.hours)
-
         setFavoridedCount(0)
         setThumpsUpCount(0)
         setRating(0)
         setReviewCount(0)
-
         setStepOne(true)
         setStepTwo(null) 
         setStepThree(null)
         setStepFour(null)
         setStepFive(null)
-        setDisplayAddress(null)
-        
-    
-       
+        setDisplayAddress(null)   
       }
 
 
-const handleMainIMGChange = e => {
-    if(e.target.files[0]) {
-        const imageFile = e.target.files[0]
-       
-        setImage(imageFile)
-        setImgChanged(true)
-        console.log(imageFile)
+    const handleMainIMGChange = e => {
+        if(e.target.files[0]) {
+            const imageFile = e.target.files[0]
 
-        Resizer.imageFileResizer(
-          e.target.files[0],
-          600,
-          600,
-          'JPEG',
-          200,
-          0,
-          uri => {
-              setResizedIMG(uri)
-          },
-          'base64'
-      );
+            setImage(imageFile)
+            setImgChanged(true)
+            //console.log(imageFile)
+
+            Resizer.imageFileResizer(
+            e.target.files[0],
+            600,
+            600,
+            'JPEG',
+            200,
+            0,
+            uri => {
+                setResizedIMG(uri)
+            },
+            'base64'
+        )
+        }
     }
 
-  }
-
-
-    
- const  handlePhotoUpload = async () => {
-    
-    
-    if(photos.length < 6 && imgChanged ) {
-      try {
-
-        const blob = await new Promise((resolve, reject) => {
-          const xhr = new XMLHttpRequest()
-          xhr.onload = () => resolve(xhr.response)
-          xhr.responseType = 'blob'
-          xhr.open('GET', resizedIMG, true)
-          xhr.send(null)
-        });
-  
-        const uploadTask = await storage.ref(`restaurantPhotos`).child(uuid.v4()).put(blob)
-        const downloadURL = await uploadTask.ref.getDownloadURL() 
-        const name = await uploadTask.ref.name
-        const photoData = {photoName:name, photoURL:downloadURL }
-        photos.push(photoData)
-        
-        setUrl(downloadURL)
-        setImgChanged(null)
-        console.log(downloadURL)
-  
-        alert("You've succesfully added an image")
-        
-        console.log(photos.length)
-        console.log(name)
-        console.log('Successfully uploaded photo!')
-                          
-      } catch(e) {
-        console.error(e)
-      }
-    } else {
-      alert(!imgChanged ? "Sorry... This image already exist!" : "Sorry... You've reached the maximum uploads allowed")
+    const handleGoogleSelect = async value => {
+        const results = await geocodeByAddress(value)
+        const latLng = await getLatLng(results[0])
+        setGoogleAddress(value)
+        setCoordinates(latLng)
+        setPlaceId(results[0].place_id)
+        //console.log(results[0])
     }
-
-  }
-
-const handleSubmit = async event => {
-    event.preventDefault()
-   if(mainPhotoURL && displayAddress) {
-
-    try {
-        await createRestaurantProfileDocument(photos, 
-            {name, 
-             yelpLink, 
-             phone, 
-             mainPhotoURL, 
-             yelpRating,
-             price,
-             yelpReviewCount,
-             displayPhone,
-             address1,
-             address2,
-             address3,
-             city,
-             zipCode,
-             state, 
-             country,
-             crossStreets, 
-             displayAddress, 
-             alias, 
-             email, 
-             website,
-             hours,
-             orderMinimun,
-             favoridedCount,
-             thumpsUpcount,
-             rating,
-             reviewCount,
-             menuCategories,
-             categories,
-             deliveries,
-             coordinates,
-             placeId
-             })
-
-      } catch (error) {
-        console.error(error)
-      }
-        setStepFour(null)
-        setStepFive(true)
-        alert('The restaurant profile has been successfully created!')
-    } else if(!mainPhotoURL) {
-        alert('Please Assigned A main Photo, and try again!')
-    } else if(!displayAddress) {
-        alert('Please Update Display Address, and try again!')
-    }
-  }
-
-
-  const handleChange = event => {
-    const { name, value } = event.target
-
-    this.setState({ [name]: value })
-  }
-
- const  handleDelete = () => {
-        
-        if(selectedIMG.photoURL === mainPhotoURL) {
-          setMainPhotoURL(null)
-          console.log('mainPhotoURL has been reset!')
-          
-        } 
-        photos.splice(photos.indexOf(selectedIMG), 1)
-        storage.ref(`restaurantPhotos`).child(selectedIMG.photoName).delete()
-        setSelectedIMG(null)
-        alert('Successfully deleted photo!')
-        console.log(photos)
-  }
-
-  const selectMainPhoto = () => {
-  
-      setMainPhotoURL(selectedIMG.photoURL)
-  
-    
-    console.log('mainPhotoURL has been successfully updated!')
-    
-  }
-
-
-
-  const handleCategories = (item) => {
-  
-    categoriesList.map((i) => {
-        if(item == i.name) {
-            let newId = i.id
-            categories.push({name:item, id:newId}) 
-            let newCategoryList = categoriesList.filter((list) => list !== i)
-            setCategories(categories)
-            setCategoriesList(newCategoryList)
-        } 
-    })
-    
-    console.log(categories)
-    
-    
-  }
-
- const handleDeleteCategory = (item) => {
-     categoriesList.push(item)
-     let newCategory = categories.filter((list) => list !== item)
-     setCategories(newCategory)
-     console.log(newCategory)
- }
-
-
- const handleDeliveryOption = (option) => {
-     if(option === 'update') {
-        deliveries.push({option:deliveryType, link:deliveryLink, phone:deliveryPhone })
-        setDeliveryType('')
-        setDeliveryLink('')
-        setDeliveryPhone('')
-        setShowDeliveryOptions(null)
-     } else if(option === 'cancel') {
-        setDeliveryType('')
-        setDeliveryLink('')
-        setDeliveryPhone('')
-        setShowDeliveryOptions(null)
-     } 
- }
-
- const handleDeleteDelivery = (item) => {
-    let newDeliveries = deliveries.filter((list) => list !== item)
-    setDeliveries(newDeliveries)
-}
-
-const handleGoogleSelect = async value => {
-    const results = await geocodeByAddress(value)
-    const latLng = await getLatLng(results[0])
-    setGoogleAddress(value)
-    setCoordinates(latLng)
-    setPlaceId(results[0].place_id)
-    console.log(results[0])
-  }
-
-  const handleStepOne = () => {
-      if(coordinates.lat && orderMinimun) {
-        setDisplayAddress(`${address1} ${address2} ${address3} ${city}, ${state} ${zipCode} `)
-        setStepOne(null)
-        setStepTwo(true)
-      } else {
-          !coordinates.lat ?
-          alert('Please search google address to assign restaurant coordinates and try again.')
-          :
-          alert('Please assign order minimum and try again.')
-      }
-}
-
-const handleStepTwo = () => {
-    if(categories.length > 0) {
-        setStepTwo(null)
-        setStepThree(true)
-    } else {
-        alert('Please select restaurant categories and try again.')
-    }
-
-}
-
-const handleStepThree = () => {
-    if(deliveries.length > 0) {
-        setStepThree(null)
-        setStepFour(true)
-    } else {
-        alert('Please select restaurant delivery options and try again.')
-    }
-}
 
 
     return (
@@ -460,7 +205,7 @@ const handleStepThree = () => {
                                     type='text'
                                     name='address1'
                                     value={address1}
-                                    onChange={(e) => (setAddress1(e.target.value), setDisplayAddress(null))}
+                                    onChange={(e) => {setAddress1(e.target.value); setDisplayAddress(null)}}
                                     label='Restaurant Address1'
                                     required
                                 />
@@ -469,7 +214,7 @@ const handleStepThree = () => {
                                     type='text'
                                     name='address2'
                                     value={address2}
-                                    onChange={(e) => (setAddress2(e.target.value), setDisplayAddress(null))}
+                                    onChange={(e) => {setAddress2(e.target.value); setDisplayAddress(null)}}
                                     label='Restaurant Address2'
                                 />
 
@@ -477,7 +222,7 @@ const handleStepThree = () => {
                                     type='text'
                                     name='address3'
                                     value={address3}
-                                    onChange={(e) => (setAddress3(e.target.value), setDisplayAddress(null))}
+                                    onChange={(e) => {setAddress3(e.target.value); setDisplayAddress(null)}}
                                     label='Restaurant Address3'
                                 />
 
@@ -493,7 +238,7 @@ const handleStepThree = () => {
                                 type='text'
                                 name='city'
                                 value={city}
-                                onChange={(e) => (setCity(e.target.value), setDisplayAddress(null))}
+                                onChange={(e) => {setCity(e.target.value); setDisplayAddress(null)}}
                                 label='Restaurant City'
                                 required
                                 />
@@ -502,7 +247,7 @@ const handleStepThree = () => {
                                 type='text'
                                 name='zipCode'
                                 value={zipCode}
-                                onChange={(e) => (setZipCode(e.target.value.trim()), setDisplayAddress(null)) }
+                                onChange={(e) => {setZipCode(e.target.value.trim()); setDisplayAddress(null)}}
                                 label='Restaurant ZipCode'
                                 required
                                 />

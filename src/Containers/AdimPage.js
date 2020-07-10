@@ -34,7 +34,7 @@ class AdminSignUp extends Component {
             }
           });
 
-          console.log(this.state)
+          //console.log(this.state)
         });
       }
 

@@ -17,12 +17,11 @@ export default function RestaurantForm () {
             <input
               type='text'
               name={term}
-              onChange={(e) => { searchApi(term); setTerm(e.target.value); console.log(`new Search: ${term} returned: ${results.length}Results at ${Date.now()}`) }}
+              onChange={(e) => { searchApi(term); setTerm(e.target.value)}}
               placeholder='Search Yelp'
               label='search'
               style={{height:40, fontSize:29, marginTop:30, textAlign:'center'}}
             />
-
             {errorMessage ? <div style={{color:'red'}}>{errorMessage}</div> : null}
           </div>
 
@@ -34,12 +33,6 @@ export default function RestaurantForm () {
                     </div>
                 )
             })}
-     
-
-   
-
-
-         
       </div>
     )
 }
