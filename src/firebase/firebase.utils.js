@@ -71,7 +71,6 @@ export const createRestaurantProfileDocument = async (photos, additionalData) =>
     }
   }
  
-
   return userRef
 }
 

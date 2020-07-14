@@ -1,6 +1,8 @@
 import React, {useState} from 'react'
 import useResults from '../../hooks/useResults'
 import ResultsDetail from '../ResultsDetail'
+import {NavLink} from 'react-router-dom'
+import {auth} from '../../firebase/firebase.utils'
 
 
 
@@ -12,6 +14,10 @@ export default function RestaurantForm () {
     return (
       <div className='container'>
         <div className='content__center'>
+        <NavLink to="/" onClick={() => auth.signOut()} style={{alignSelf:'flex-end', margin:15, color:'red', fontSize:24, cursor:'pointer'}}>
+        <div>Sign Out</div>
+          </NavLink>
+
           <h2>Restaurant Form</h2>
           <div className='content__center__input'>
             <input
