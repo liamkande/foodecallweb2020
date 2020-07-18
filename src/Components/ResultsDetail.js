@@ -11,11 +11,13 @@ import PlacesAutocomplete, {
     getLatLng
   } from 'react-places-autocomplete'
 
+import { createRestaurantProfileDocument, storage} from '../firebase/firebase.utils'
+
 
 
 export default function ResultsDetail ({result, id}) {
     
-    const [ newResult, setResult, name, setName, yelpLink, setYelpLink,
+    const [ name, setName, newResult, setResult, yelpLink, setYelpLink,
             phone, setPhone, price, setPrice, yelpRating, setYelpRating,
             yelpReviewCount, setYelpReviewCount, displayPhone, setDisplayPhone,
             address1, setAddress1, address2, setAddress2, address3, setAddress3,
@@ -35,7 +37,7 @@ export default function ResultsDetail ({result, id}) {
             stepOne, setStepOne, stepTwo, setStepTwo, stepThree, setStepThree,
             stepFour, setStepFour, stepFive, setStepFive,   
 
-            handlePhotoUpload, handleSubmit, handleStepOne, handleStepTwo,
+            handlePhotoUpload, handleStepOne, handleStepTwo,
             handleStepThree, handleDelete, handleCategories, handleDeleteCategory,
             handleDeliveryOption, handleDeleteDelivery, selectMainPhoto
 
@@ -48,7 +50,7 @@ export default function ResultsDetail ({result, id}) {
         setResult(!response.data ? null : response.data)
         const mainData = response.data
         //console.log(`Selected Restaurant ID: ${id}`)
-        //console.log(mainData)
+        console.log(mainData)
         const addCategories = await firestore.collection('categories').get()
 
         if (categoriesList.length === 0) {
@@ -58,8 +60,9 @@ export default function ResultsDetail ({result, id}) {
             })
         }
         
-        setName(mainData.name)
+        
         setYelpLink(mainData.url)
+        setName(mainData.name)
         setPhone(mainData.phone)
         setPrice(mainData.price)
         setYelpRating(mainData.rating)
@@ -85,6 +88,60 @@ export default function ResultsDetail ({result, id}) {
         setStepFour(null)
         setStepFive(null)
         setDisplayAddress(null)   
+      }
+
+
+
+      const handleSubmit = async event => {
+        event.preventDefault()
+       if(mainPhotoURL && displayAddress) {
+    
+        try {
+            await createRestaurantProfileDocument(photos, 
+                {name, 
+                 yelpLink, 
+                 phone, 
+                 mainPhotoURL, 
+                 yelpRating,
+                 price,
+                 yelpReviewCount,
+                 displayPhone,
+                 address1,
+                 address2,
+                 address3,
+                 city,
+                 zipCode,
+                 state, 
+                 country,
+                 crossStreets, 
+                 displayAddress, 
+                 alias, 
+                 email, 
+                 website,
+                 hours,
+                 orderMinimun,
+                 favoridedCount,
+                 thumpsUpcount,
+                 rating,
+                 reviewCount,
+                 menuCategories,
+                 categories,
+                 deliveries,
+                 coordinates,
+                 placeId
+                 })
+    
+          } catch (error) {
+            console.error(error)
+          }
+            setStepFour(null)
+            setStepFive(true)
+            alert('The restaurant profile has been successfully created!')
+        } else if(!mainPhotoURL) {
+            alert('Please Assigned A main Photo, and try again!')
+        } else if(!displayAddress) {
+            alert('Please Update Display Address, and try again!')
+        }
       }
 
 
@@ -139,7 +196,7 @@ export default function ResultsDetail ({result, id}) {
                                     name='name'
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
-                                    label='Restaurant Name'
+                                    label='Name'
                                     required
                                 />   
                                 <FormInput
@@ -147,7 +204,7 @@ export default function ResultsDetail ({result, id}) {
                                     name='phone'
                                     value={phone}
                                     onChange={(e) => setPhone(e.target.value.trim())}
-                                    label='Restaurant Phone'
+                                    label='Phone'
                                     required
                                 /> 
                                 <FormInput
@@ -155,7 +212,7 @@ export default function ResultsDetail ({result, id}) {
                                     name='displayPhone'
                                     value={displayPhone}
                                     onChange={(e) => setDisplayPhone(e.target.value)}
-                                    label='Display Phone'
+                                    label='Phone'
                                     required
                                 />
                                 <FormInput
@@ -163,15 +220,14 @@ export default function ResultsDetail ({result, id}) {
                                     name='email'
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value.trim())}
-                                    label='Restaurant Email'
-                                    
+                                    label='Email'
                                 /> 
                                 <FormInput
                                     type='text'
                                     name='website'
                                     value={website}
                                     onChange={(e) => setWebsite(e.target.value.trim())}
-                                    label='Restaurant Website'
+                                    label='Website'
                                 /> 
                                 <FormInput
                                     type='number'
@@ -186,19 +242,19 @@ export default function ResultsDetail ({result, id}) {
                                     name='country'
                                     value={country}
                                     onChange={(e) => setCountry(e.target.value)}
-                                    label='Restaurant Country'
+                                    label='Country'
                                     required
                                 />
                             </div>
                         </div>
                         <div className='formSignUp' >
-                            <div style={{width:'25vw'}}>
+                            <div style={{width:'25vw', overflowY:'scroll'}}>
                                 <FormInput
                                     type='text'
                                     name='state'
                                     value={state}
                                     onChange={(e) => setState(e.target.value)}
-                                    label='Restaurant State'
+                                    label='State'
                                     required
                                 />
                                 <FormInput
@@ -206,49 +262,44 @@ export default function ResultsDetail ({result, id}) {
                                     name='address1'
                                     value={address1}
                                     onChange={(e) => {setAddress1(e.target.value); setDisplayAddress(null)}}
-                                    label='Restaurant Address1'
+                                    label='Address1'
                                     required
                                 />
-
                                 <FormInput
                                     type='text'
                                     name='address2'
                                     value={address2}
                                     onChange={(e) => {setAddress2(e.target.value); setDisplayAddress(null)}}
-                                    label='Restaurant Address2'
+                                    label='Address2'
                                 />
-
                                 <FormInput
                                     type='text'
                                     name='address3'
                                     value={address3}
                                     onChange={(e) => {setAddress3(e.target.value); setDisplayAddress(null)}}
-                                    label='Restaurant Address3'
+                                    label='Address3'
                                 />
-
                                 <FormInput
                                 type='text'
                                 name='crossStreets'
                                 value={crossStreets}
                                 onChange={(e) => setCrossStreets(e.target.value)}
-                                label='Restaurant Cross Streets'
+                                label='Cross Streets'
                                 />
-
                                 <FormInput
                                 type='text'
                                 name='city'
                                 value={city}
                                 onChange={(e) => {setCity(e.target.value); setDisplayAddress(null)}}
-                                label='Restaurant City'
+                                label='City'
                                 required
                                 />
-
                                 <FormInput
                                 type='text'
                                 name='zipCode'
                                 value={zipCode}
                                 onChange={(e) => {setZipCode(e.target.value.trim()); setDisplayAddress(null)}}
-                                label='Restaurant ZipCode'
+                                label='ZipCode'
                                 required
                                 />
                             </div>

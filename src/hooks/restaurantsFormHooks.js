@@ -97,57 +97,7 @@ export default () => {
 
   }
 
-const handleSubmit = async event => {
-    event.preventDefault()
-   if(mainPhotoURL && displayAddress) {
 
-    try {
-        await createRestaurantProfileDocument(photos, 
-            {name, 
-             yelpLink, 
-             phone, 
-             mainPhotoURL, 
-             yelpRating,
-             price,
-             yelpReviewCount,
-             displayPhone,
-             address1,
-             address2,
-             address3,
-             city,
-             zipCode,
-             state, 
-             country,
-             crossStreets, 
-             displayAddress, 
-             alias, 
-             email, 
-             website,
-             hours,
-             orderMinimun,
-             favoridedCount,
-             thumpsUpcount,
-             rating,
-             reviewCount,
-             menuCategories,
-             categories,
-             deliveries,
-             coordinates,
-             placeId
-             })
-
-      } catch (error) {
-        console.error(error)
-      }
-        setStepFour(null)
-        setStepFive(true)
-        alert('The restaurant profile has been successfully created!')
-    } else if(!mainPhotoURL) {
-        alert('Please Assigned A main Photo, and try again!')
-    } else if(!displayAddress) {
-        alert('Please Update Display Address, and try again!')
-    }
-  }
 
   const  handleDelete = () => {  
     if(selectedIMG.photoURL === mainPhotoURL) {
@@ -257,7 +207,7 @@ const handleStepThree = () => {
             stepOne, setStepOne, stepTwo, setStepTwo, stepThree, setStepThree,
             stepFour, setStepFour, stepFive, setStepFive,
 
-            handlePhotoUpload, handleSubmit, handleStepOne, handleStepTwo,
+            handlePhotoUpload, handleStepOne, handleStepTwo,
             handleStepThree, handleDelete, handleCategories, handleDeleteCategory,
             handleDeliveryOption, handleDeleteDelivery, selectMainPhoto
 
