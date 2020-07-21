@@ -35,11 +35,13 @@ export default function ResultsDetail ({result, id}) {
             image, setImage, imgChanged, setImgChanged, resizedIMG, setResizedIMG,
             url, setUrl, mainPhotoURL,setMainPhotoURL, categoriesListNames, setCategoriesListNames,
             stepOne, setStepOne, stepTwo, setStepTwo, stepThree, setStepThree,
-            stepFour, setStepFour, stepFive, setStepFive,   
+            stepFour, setStepFour, stepFive, setStepFive, stepSix, setStepSix,
 
             handlePhotoUpload, handleStepOne, handleStepTwo,
             handleStepThree, handleDelete, handleCategories, handleDeleteCategory,
-            handleDeliveryOption, handleDeleteDelivery, selectMainPhoto
+            handleDeliveryOption, handleDeleteDelivery, selectMainPhoto,
+            handleCategoryPhotoUpload, handleDeleteCategoryImg,
+            categoryName, setCategoryName, categoryPhotos, setCategoryPhotos
 
           ] = restaurantsHooks()
    
@@ -50,7 +52,7 @@ export default function ResultsDetail ({result, id}) {
         setResult(!response.data ? null : response.data)
         const mainData = response.data
         //console.log(`Selected Restaurant ID: ${id}`)
-        console.log(mainData)
+        //console.log(mainData)
         const addCategories = await firestore.collection('categories').get()
 
         if (categoriesList.length === 0) {
@@ -155,8 +157,8 @@ export default function ResultsDetail ({result, id}) {
 
             Resizer.imageFileResizer(
             e.target.files[0],
-            600,
-            600,
+            1200,
+            1200,
             'JPEG',
             200,
             0,
@@ -179,12 +181,59 @@ export default function ResultsDetail ({result, id}) {
 
 
     return (
-        <div>     
-            {!stepFive &&      
-            <div onClick={() => getResult(id)} style={{color:'blue', cursor:'pointer', fontSize:28, marginTop:25}}>
+        <div> 
+           
+            <div onClick={() => {setStepSix(!stepSix); setStepFive(null)}} style={{textAlign:'center', marginTop:15, color:'purple', fontSize:16, cursor:'pointer'}}>Add New Category</div>
+            {!stepFive && !stepSix &&      
+            <div onClick={() => getResult(id)} style={{color:'blue', cursor:'pointer', fontSize:34, marginTop:25}}>
                 {result.name}
             </div>
         } 
+                  {stepSix && 
+                    <div className='content' style={{overflowY:'scroll'}}>
+                        <div className='formSignUp'>
+                            <div style={{width:'25vw', height:300, backgroundColor:'white'}}>
+                            <FormInput
+                                    type='text'
+                                    name='categoryName'
+                                    value={categoryName}
+                                    onChange={(e) => setCategoryName(e.target.value)}
+                                    label='Category Name'
+                                    required
+                                />  
+                                <h4>Please Upload Category Photo below:</h4>
+                                    <input style={{fontSize:18, cursor:'pointer'}} type='file' onChange={handleMainIMGChange}/>
+                                    <div style={{marginTop:10, fontSize:18, cursor:'pointer', backgroundColor:'gray', width:'25%', textAlign:'center'}} onClick={handleCategoryPhotoUpload}>Upload</div>
+                            </div>
+                        </div>
+                        <div className='formSignUp'>
+                            <div style={{width:'25vw', overflowY:'scroll', height:300}}>
+                            <h2 style={{color:'green'}}>Uploaded Photo:</h2>
+                            {categoryPhotos.map((photo, index) => (   
+                                <div key={index} onClick={() => setSelectedIMG(!selectedIMG ? photo : null)} >
+                                <div> 
+                                    <img key={index} src={photo.photoURL} style={{width:100, margin:2}} alt='Main Restaurant'/> 
+                                </div>
+                                {index === categoryPhotos.indexOf(selectedIMG) &&
+                                    <div>
+                                        <button onClick={handleDeleteCategoryImg}>Delete</button>
+                                            {/* {photo.photoURL !== mainPhotoURL &&
+                                                <button onClick={selectMainPhoto}>Make Main Photo</button>
+                                            } */}
+                                    </div>
+                                }
+                            </div>
+                        ))}
+                            </div>
+                        </div>
+                        <div className='formSignUp'>
+                            <div style={{width:'25vw'}}>
+                            <CustomButton>ADD</CustomButton> 
+                            </div>
+                        </div>
+                    </div>
+                }
+
         {newResult &&    
             <form onSubmit={handleSubmit}>
                 {stepOne && 
@@ -463,6 +512,48 @@ export default function ResultsDetail ({result, id}) {
             {stepFive &&
                 <div className='content' style={{color:'red', fontSize:40 }}>Please start new search...</div>
             }
+
+
+
+
+
+                {stepFour && 
+                    <div className='content' style={{overflowY:'scroll'}}>
+                        <div className='formSignUp'>
+                            <div style={{width:'25vw', height:300, backgroundColor:'white'}}>
+                                <h4>Please Upload Restaurant Photos below:</h4>
+                                    <input style={{fontSize:18, cursor:'pointer'}} type='file' onChange={handleMainIMGChange}/>
+                                    <div style={{marginTop:10, fontSize:18, cursor:'pointer', backgroundColor:'gray', width:'25%', textAlign:'center'}} onClick={handleCategoryPhotoUpload}>Upload</div>
+                            </div>
+                        </div>
+                        <div className='formSignUp'>
+                            <div style={{width:'25vw', overflowY:'scroll', height:300}}>
+                            <h2 style={{color:'green'}}>Uploaded Photos:</h2>
+                            {photos.map((photo, index) => (   
+                                <div key={index} onClick={() => setSelectedIMG(!selectedIMG ? photo : null)} >
+                                <div> 
+                                    <img key={index} src={photo.photoURL} style={{width:100, margin:2}} alt='Main Restaurant'/> 
+                                </div>
+                                {index === photos.indexOf(selectedIMG) &&
+                                    <div>
+                                        <button onClick={handleDeleteCategoryImg}>Delete</button>
+                                            {photo.photoURL !== mainPhotoURL &&
+                                                <button onClick={selectMainPhoto}>Make Main Photo</button>
+                                            }
+                                    </div>
+                                }
+                            </div>
+                        ))}
+                            </div>
+                        </div>
+                        <div className='formSignUp'>
+                            <div style={{width:'25vw'}}>
+                                <CustomButton type='submit'>DONE</CustomButton> 
+                            </div>
+                        </div>
+                    </div>
+                }
+
             </form>
         }
         </div>

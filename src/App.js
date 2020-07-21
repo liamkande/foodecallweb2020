@@ -65,9 +65,14 @@ componentWillUnmount() {
           <Route exact path="/sign-up" render={() => <SignUpPage dialogBgImg={bgImg}/>}/>
           <Route exact path="/admin-signup" render={() => <SignUpComp />  }/>
           <PrivateRoute exact path="/admin" admin={adminUser} signIn={!currentUser} adminCode='1111/84-4150894'>
+            <SignUpComp /> 
+          </PrivateRoute>
+          <PrivateRoute exact path="/restaurantForm" admin={adminUser} signIn={!currentUser} adminCode='1111/84-4150894'>
             <AdminPage />
           </PrivateRoute>
-
+          <PrivateRoute exact path="/addNewCategory" admin={adminUser} signIn={!currentUser} adminCode='1111/84-4150894'>
+            <div>This is going to be the new page for New categories</div>
+          </PrivateRoute>
           <PrivateRoute exact path="/admin-restaurant-form" admin={adminUser} adminCode='1111/84-4150894'>
             <div>You are Now on the Restaurant form page!</div>
           </PrivateRoute> 

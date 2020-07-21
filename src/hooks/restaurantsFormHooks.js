@@ -52,6 +52,8 @@ export default () => {
   const [url, setUrl] = useState('')
   const [mainPhotoURL,setMainPhotoURL] = useState(null)
   const [categoriesListNames, setCategoriesListNames] = useState([])
+  const [categoryName, setCategoryName] = useState('')
+  const [categoryPhotos, setCategoryPhotos] = useState([])
  
   //Diplay Control
   const [stepOne, setStepOne] = useState(null)
@@ -59,6 +61,7 @@ export default () => {
   const [stepThree, setStepThree] = useState(null)
   const [stepFour, setStepFour] = useState(null)
   const [stepFive, setStepFive] = useState(null)
+  const [stepSix, setStepSix] = useState(null)
   
  //Functions
   const  handlePhotoUpload = async () => {
@@ -99,6 +102,45 @@ export default () => {
 
 
 
+  const handleCategoryPhotoUpload = async () => {
+    
+    if(imgChanged ) {
+      try {
+
+        const blob = await new Promise((resolve, reject) => {
+          const xhr = new XMLHttpRequest()
+          xhr.onload = () => resolve(xhr.response)
+          xhr.responseType = 'blob'
+          xhr.open('GET', resizedIMG, true)
+          xhr.send(null)
+        });
+  
+        const uploadTask = await storage.ref(`categoriesPhotos`).child(uuid.v4()).put(blob)
+        const downloadURL = await uploadTask.ref.getDownloadURL() 
+        const name = await uploadTask.ref.name
+        const photoData = {photoName:name, photoURL:downloadURL }
+        categoryPhotos.push(photoData)
+        
+        setUrl(downloadURL)
+        setImgChanged(null)
+       //console.log(downloadURL)
+        alert("You've succesfully added an image")
+        //console.log(photos.length)
+        //console.log(name)
+        //console.log('Successfully uploaded photo!')
+                          
+      } catch(e) {
+        console.error(e)
+      }
+    } else {
+      alert(!imgChanged ? "Sorry... This image already exist!" : "Sorry... You've reached the maximum uploads allowed")
+    }
+
+  }
+
+
+
+
   const  handleDelete = () => {  
     if(selectedIMG.photoURL === mainPhotoURL) {
       setMainPhotoURL(null)
@@ -109,6 +151,18 @@ export default () => {
     setSelectedIMG(null)
     alert('Successfully deleted photo!')
     //console.log(photos)
+}
+
+const handleDeleteCategoryImg = () => {  
+  if(selectedIMG.photoURL === mainPhotoURL) {
+    setMainPhotoURL(null)
+    //console.log('mainPhotoURL has been reset!')
+  } 
+  categoryPhotos.splice(categoryPhotos.indexOf(selectedIMG), 1)
+  storage.ref(`categoriesPhotos`).child(selectedIMG.photoName).delete()
+  setSelectedIMG(null)
+  alert('Successfully deleted photo!')
+  console.log(categoryPhotos)
 }
 
 const handleCategories = (item) => {
@@ -205,11 +259,13 @@ const handleStepThree = () => {
             image, setImage, imgChanged, setImgChanged, resizedIMG, setResizedIMG,
             url, setUrl, mainPhotoURL,setMainPhotoURL, categoriesListNames, setCategoriesListNames,
             stepOne, setStepOne, stepTwo, setStepTwo, stepThree, setStepThree,
-            stepFour, setStepFour, stepFive, setStepFive,
+            stepFour, setStepFour, stepFive, setStepFive, stepSix, setStepSix,
 
             handlePhotoUpload, handleStepOne, handleStepTwo,
             handleStepThree, handleDelete, handleCategories, handleDeleteCategory,
-            handleDeliveryOption, handleDeleteDelivery, selectMainPhoto
+            handleDeliveryOption, handleDeleteDelivery, selectMainPhoto,
+            handleCategoryPhotoUpload, handleDeleteCategoryImg,
+            categoryName, setCategoryName, categoryPhotos, setCategoryPhotos
 
             
          ]

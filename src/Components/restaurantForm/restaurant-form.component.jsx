@@ -5,11 +5,11 @@ import {NavLink} from 'react-router-dom'
 import {auth} from '../../firebase/firebase.utils'
 
 
-
 export default function RestaurantForm () {
 
   const [term, setTerm] = useState('')
   const [searchApi, results, errorMessage] = useResults()
+
 
     return (
       <div className='container'>
