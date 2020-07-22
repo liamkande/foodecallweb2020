@@ -5,7 +5,7 @@ import CustomButton from './custom-button/custom-button.component'
 import {createCategory, storage} from '../firebase/firebase.utils'
 import Resizer from 'react-image-file-resizer'
 import uuid from 'uuid'
-
+import AdminSignOut from './adminSignOut'
 
 
 
@@ -14,6 +14,7 @@ export default function AddNewCategory () {
     const [name, setName] = useState('')
     const [categoryPhotos, setCategoryPhotos] = useState([])
     const [imgName, setImgName] = useState(null)
+    const [show, setShow] = useState(false)
 
     const [ url, setUrl, resizedIMG, setResizedIMG,
             imgChanged, setImgChanged, image, setImage,
@@ -97,11 +98,13 @@ export default function AddNewCategory () {
 
     const handleSubmit = async event => {
         event.preventDefault()
+        
         try {
             await createCategory( 
                 {name,
                 url,
-                imgName
+                imgName,
+                show
                  })
     
           } catch (error) {
@@ -114,7 +117,11 @@ export default function AddNewCategory () {
 
 
     return (
-        <div>                
+        <div>     
+            <div style={{textAlign:"right", margin:10}} >
+            <AdminSignOut />
+            </div>
+                       
             <div className='content' style={{overflowY:'scroll'}}>
                 <div className='formSignUp'>
                     <div style={{width:'25vw'}}>
@@ -127,7 +134,6 @@ export default function AddNewCategory () {
                             style={{fontSize:30}}
                             required
                         />  
-                        
                     </div>
                 </div>
                 <div className='formSignUp'>

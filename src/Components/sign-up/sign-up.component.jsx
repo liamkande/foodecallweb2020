@@ -31,7 +31,6 @@ class SignUp extends React.Component {
       confirmSSN:'',
       admin:true,
     
-
       accessCode:'',
       accessGranted:null,
       currentUser: null,
@@ -113,18 +112,16 @@ class SignUp extends React.Component {
         ssn:'',
         admin:null,
        
-  
-    
-      });
+      })
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
     alert("You've successfully Created an account")
     
   }
 
   handleChange = event => {
-    const { name, value } = event.target;
+    const { name, value } = event.target
 
     this.setState({ [name]: value })
   };
