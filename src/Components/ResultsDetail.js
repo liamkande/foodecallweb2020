@@ -11,7 +11,7 @@ import PlacesAutocomplete, {
     getLatLng
   } from 'react-places-autocomplete'
 
-import { createRestaurantProfileDocument, storage} from '../firebase/firebase.utils'
+import { createRestaurantProfile} from '../firebase/firebase.utils'
 
 
 
@@ -35,13 +35,13 @@ export default function ResultsDetail ({result, id}) {
             image, setImage, imgChanged, setImgChanged, resizedIMG, setResizedIMG,
             url, setUrl, mainPhotoURL,setMainPhotoURL, categoriesListNames, setCategoriesListNames,
             stepOne, setStepOne, stepTwo, setStepTwo, stepThree, setStepThree,
-            stepFour, setStepFour, stepFive, setStepFive, stepSix, setStepSix,
+            stepFour, setStepFour, stepFive, setStepFive,
 
             handlePhotoUpload, handleStepOne, handleStepTwo,
             handleStepThree, handleDelete, handleCategories, handleDeleteCategory,
             handleDeliveryOption, handleDeleteDelivery, selectMainPhoto,
-            handleCategoryPhotoUpload, handleDeleteCategoryImg,
-            categoryName, setCategoryName, categoryPhotos, setCategoryPhotos
+            
+            
 
           ] = restaurantsHooks()
    
@@ -99,7 +99,7 @@ export default function ResultsDetail ({result, id}) {
        if(mainPhotoURL && displayAddress) {
     
         try {
-            await createRestaurantProfileDocument(photos, 
+            await createRestaurantProfile(photos, 
                 {name, 
                  yelpLink, 
                  phone, 
@@ -182,57 +182,11 @@ export default function ResultsDetail ({result, id}) {
 
     return (
         <div> 
-           
-            <div onClick={() => {setStepSix(!stepSix); setStepFive(null)}} style={{textAlign:'center', marginTop:15, color:'purple', fontSize:16, cursor:'pointer'}}>Add New Category</div>
-            {!stepFive && !stepSix &&      
-            <div onClick={() => getResult(id)} style={{color:'blue', cursor:'pointer', fontSize:34, marginTop:25}}>
+        {!stepFive &&     
+            <div onClick={() => getResult(id)} style={{color:'blue', cursor:'pointer', fontSize:34, marginTop:25, marginLeft:15}}>
                 {result.name}
             </div>
         } 
-                  {stepSix && 
-                    <div className='content' style={{overflowY:'scroll'}}>
-                        <div className='formSignUp'>
-                            <div style={{width:'25vw', height:300, backgroundColor:'white'}}>
-                            <FormInput
-                                    type='text'
-                                    name='categoryName'
-                                    value={categoryName}
-                                    onChange={(e) => setCategoryName(e.target.value)}
-                                    label='Category Name'
-                                    required
-                                />  
-                                <h4>Please Upload Category Photo below:</h4>
-                                    <input style={{fontSize:18, cursor:'pointer'}} type='file' onChange={handleMainIMGChange}/>
-                                    <div style={{marginTop:10, fontSize:18, cursor:'pointer', backgroundColor:'gray', width:'25%', textAlign:'center'}} onClick={handleCategoryPhotoUpload}>Upload</div>
-                            </div>
-                        </div>
-                        <div className='formSignUp'>
-                            <div style={{width:'25vw', overflowY:'scroll', height:300}}>
-                            <h2 style={{color:'green'}}>Uploaded Photo:</h2>
-                            {categoryPhotos.map((photo, index) => (   
-                                <div key={index} onClick={() => setSelectedIMG(!selectedIMG ? photo : null)} >
-                                <div> 
-                                    <img key={index} src={photo.photoURL} style={{width:100, margin:2}} alt='Main Restaurant'/> 
-                                </div>
-                                {index === categoryPhotos.indexOf(selectedIMG) &&
-                                    <div>
-                                        <button onClick={handleDeleteCategoryImg}>Delete</button>
-                                            {/* {photo.photoURL !== mainPhotoURL &&
-                                                <button onClick={selectMainPhoto}>Make Main Photo</button>
-                                            } */}
-                                    </div>
-                                }
-                            </div>
-                        ))}
-                            </div>
-                        </div>
-                        <div className='formSignUp'>
-                            <div style={{width:'25vw'}}>
-                            <CustomButton>ADD</CustomButton> 
-                            </div>
-                        </div>
-                    </div>
-                }
 
         {newResult &&    
             <form onSubmit={handleSubmit}>
@@ -395,7 +349,7 @@ export default function ResultsDetail ({result, id}) {
                             <div style={{width:'25vw', overflowY:'scroll', height:300, backgroundColor:'white'}}>
                                 {categoriesListNames.sort().map((item, index) => {
                                     return (
-                                        <div style={{cursor:'pointer', fontSize:24, marginTop:8, fontWeight:'bold'}} key={index} onClick={() => handleCategories(item)}>{item}</div>
+                                        <div style={{cursor:'pointer', fontSize:24, marginTop:8, fontWeight:'bold', textTransform:'capitalize'}} key={index} onClick={() => handleCategories(item)}>{item}</div>
                                     )
                                 })}
                             </div>
@@ -405,7 +359,7 @@ export default function ResultsDetail ({result, id}) {
                                 <h2 style={{color:'green'}}>Selected category List:</h2>
                                 {categories.map((item, index) => {
                                         return (
-                                            <div style={{color:'gray', cursor:'pointer', fontSize:24, marginTop:8,}} key={index} onClick={() => handleDeleteCategory(item)}>{item.name}</div>
+                                            <div style={{color:'gray', cursor:'pointer', fontSize:24, marginTop:8, textTransform:'capitalize'}} key={index} onClick={() => handleDeleteCategory(item)}>{item.name}</div>
                                             )
                                         })}
                             </div>
@@ -523,7 +477,7 @@ export default function ResultsDetail ({result, id}) {
                             <div style={{width:'25vw', height:300, backgroundColor:'white'}}>
                                 <h4>Please Upload Restaurant Photos below:</h4>
                                     <input style={{fontSize:18, cursor:'pointer'}} type='file' onChange={handleMainIMGChange}/>
-                                    <div style={{marginTop:10, fontSize:18, cursor:'pointer', backgroundColor:'gray', width:'25%', textAlign:'center'}} onClick={handleCategoryPhotoUpload}>Upload</div>
+                                    <div style={{marginTop:10, fontSize:18, cursor:'pointer', backgroundColor:'gray', width:'25%', textAlign:'center'}} onClick={handlePhotoUpload}>Upload</div>
                             </div>
                         </div>
                         <div className='formSignUp'>
@@ -536,7 +490,7 @@ export default function ResultsDetail ({result, id}) {
                                 </div>
                                 {index === photos.indexOf(selectedIMG) &&
                                     <div>
-                                        <button onClick={handleDeleteCategoryImg}>Delete</button>
+                                        <button onClick={handleDelete}>Delete</button>
                                             {photo.photoURL !== mainPhotoURL &&
                                                 <button onClick={selectMainPhoto}>Make Main Photo</button>
                                             }

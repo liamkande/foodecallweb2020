@@ -1,7 +1,7 @@
 import React from 'react'
 import FormInput from '../form-input/form-input.component'
 import CustomButton from '../custom-button/custom-button.component'
-import { auth, createUserProfileDocument } from '../../firebase/firebase.utils'
+import { auth, createUserProfile } from '../../firebase/firebase.utils'
 import 'date-fns'
 import DateFnsUtils from '@date-io/date-fns'
 
@@ -44,7 +44,7 @@ class SignUp extends React.Component {
     componentDidMount () {
       this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
         if (userAuth) {
-          const userRef = await createUserProfileDocument(userAuth)
+          const userRef = await createUserProfile(userAuth)
     
           userRef.onSnapshot(snapShot => {
             this.setState({
@@ -100,7 +100,7 @@ class SignUp extends React.Component {
         password
       )
 
-      await createUserProfileDocument(user, { firstName,lastName, oAuthCode, dob, ssn, admin, displayName})
+      await createUserProfile(user, { firstName,lastName, oAuthCode, dob, ssn, admin, displayName})
 
       this.setState({
         firstName: '',

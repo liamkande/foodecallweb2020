@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import { auth, createUserProfileDocument} from '../firebase/firebase.utils'
+import { auth, createUserProfile} from '../firebase/firebase.utils'
 import RestaurantForm from '../Components/restaurantForm/restaurant-form.component'
 
 
@@ -24,7 +24,7 @@ class AdminSignUp extends Component {
   componentDidMount() {
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
       if (userAuth) {
-        const userRef = await createUserProfileDocument(userAuth);
+        const userRef = await createUserProfile(userAuth);
 
         userRef.onSnapshot(snapShot => {
           this.setState({

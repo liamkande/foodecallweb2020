@@ -5,9 +5,11 @@ import NYEPage from './Containers/NYEPage'
 import SignUpPage from './Containers/SignUpPage'
 import AboutUsPage from './Containers/AboutUsPage'
 import SignUpComp from './Components/sign-up/sign-up.component'
+import AdminHome from './Components/adminHome'
+import AddNewCategory from './Components/addNewCategory'
 import AdminPage from './Containers/AdimPage'
 import PrivateRoute from './Components/PrivateRoute'
-import { auth, createUserProfileDocument} from './firebase/firebase.utils'
+import { auth, createUserProfile} from './firebase/firebase.utils'
 
 const video = 'https://www.youtube.com/embed/unbvLdXf-nM'
 const bgVideo = 'https://s3.us-east-2.amazonaws.com/liamkande.com/preview/Food-E-Call+_+Firework-Background.mp4'
@@ -31,7 +33,7 @@ componentDidMount () {
   this.setState({video: video, bgVideo: bgVideo, bgImg: bgImg})
   this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
     if (userAuth) {
-      const userRef = await createUserProfileDocument(userAuth);
+      const userRef = await createUserProfile(userAuth)
 
       userRef.onSnapshot(snapShot => {
         this.setState({
@@ -63,20 +65,16 @@ componentWillUnmount() {
           <Route exact path="/" render={() => <NYEPage video={video} bgVideo={bgVideo}/>}/>
           <Route exact path="/about" render={() => <AboutUsPage bgImg={bgImg}/>}/>
           <Route exact path="/sign-up" render={() => <SignUpPage dialogBgImg={bgImg}/>}/>
-          <Route exact path="/admin-signup" render={() => <SignUpComp />  }/>
+          <Route exact path="/adminsignup" render={() => <SignUpComp />  }/>
           <PrivateRoute exact path="/admin" admin={adminUser} signIn={!currentUser} adminCode='1111/84-4150894'>
-            <SignUpComp /> 
+            <AdminHome /> 
           </PrivateRoute>
-          <PrivateRoute exact path="/restaurantForm" admin={adminUser} signIn={!currentUser} adminCode='1111/84-4150894'>
+          <PrivateRoute exact path="/restaurantform" admin={adminUser} signIn={!currentUser} adminCode='1111/84-4150894'>
             <AdminPage />
           </PrivateRoute>
-          <PrivateRoute exact path="/addNewCategory" admin={adminUser} signIn={!currentUser} adminCode='1111/84-4150894'>
-            <div>This is going to be the new page for New categories</div>
+          <PrivateRoute exact path="/categoryform" admin={adminUser} signIn={!currentUser} adminCode='1111/84-4150894'>
+            <AddNewCategory />
           </PrivateRoute>
-          <PrivateRoute exact path="/admin-restaurant-form" admin={adminUser} adminCode='1111/84-4150894'>
-            <div>You are Now on the Restaurant form page!</div>
-          </PrivateRoute> 
-     
           </Switch>
     
       </BrowserRouter>

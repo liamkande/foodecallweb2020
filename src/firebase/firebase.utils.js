@@ -18,7 +18,7 @@ const config = {
 firebase.initializeApp(config)
  
 
-export const createUserProfileDocument = async (userAuth, additionalData) => {
+export const createUserProfile = async (userAuth, additionalData) => {
   if (!userAuth) return;
  
   const userRef = firestore.doc(`admins/${userAuth.uid}`)
@@ -46,7 +46,7 @@ export const createUserProfileDocument = async (userAuth, additionalData) => {
 };
 
 
-export const createRestaurantProfileDocument = async (photos, additionalData) => {
+export const createRestaurantProfile = async (photos, additionalData) => {
   const id = uuid.v4()
 
   const userRef = firestore.doc(`restaurants/${id}`)
@@ -73,6 +73,36 @@ export const createRestaurantProfileDocument = async (photos, additionalData) =>
  
   return userRef
 }
+
+
+
+export const createCategory = async (additionalData) => {
+  const id = uuid.v4()
+
+  const userRef = firestore.doc(`categories/${id}`)
+
+  const snapShot = await userRef.get()
+
+  if (!snapShot.exists) {
+    
+   
+    const createdAt = new Date()
+   
+  
+    try {
+      await userRef.set({
+        id,
+        createdAt,
+        ...additionalData
+      });
+    } catch (error) {
+      console.log('error creating restaurant form', error.message)
+    }
+  }
+ 
+  return userRef
+}
+
 
 export const auth = firebase.auth()
 export const firestore = firebase.firestore()

@@ -3,7 +3,7 @@ import {
   Route,
 } from "react-router-dom"
 import AdminAccess from './AdminAccess'
-import { auth, createUserProfileDocument} from '../firebase/firebase.utils'
+import { auth, createUserProfile} from '../firebase/firebase.utils'
 
 
 
@@ -21,7 +21,7 @@ class PrivateRoute extends React.Component {
   componentDidMount () {
     this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
       if (userAuth) {
-        const userRef = await createUserProfileDocument(userAuth)
+        const userRef = await createUserProfile(userAuth)
   
         userRef.onSnapshot(snapShot => {
           this.setState({

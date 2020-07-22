@@ -2,7 +2,7 @@ import React, {Component}  from 'react'
 import FormInput from './form-input/form-input.component'
 import CustomButton from './custom-button/custom-button.component'
 import SignInComp from './sign-in/sign-in.component'
-import { auth, createUserProfileDocument} from '../firebase/firebase.utils'
+import { auth, createUserProfile} from '../firebase/firebase.utils'
 
 
 
@@ -19,7 +19,7 @@ class AdminAccess extends Component {
     componentDidMount () {
       this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
         if (userAuth) {
-          const userRef = await createUserProfileDocument(userAuth);
+          const userRef = await createUserProfile(userAuth)
     
           userRef.onSnapshot(snapShot => {
             this.setState({
