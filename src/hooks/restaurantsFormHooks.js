@@ -132,7 +132,7 @@ const handleCategories = (item) => {
       } 
       return null
   })
-  //console.log(categories)
+  console.log(categories)
 }
 
 const handleDeleteCategory = (item) => {

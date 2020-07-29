@@ -6,7 +6,7 @@ import AdminSignOut from './adminSignOut'
 export default function AdminHome () {
     return (
         <div className="container">
-            <AdminSignOut/>
+            <AdminSignOut />
             <div className="content__admin">
             <NavLink to="/categoryform" >
                 <CustomButton style={{marginTop:'25%', width:300}}>Add New Category</CustomButton>
