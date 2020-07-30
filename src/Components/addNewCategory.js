@@ -16,6 +16,8 @@ export default function AddNewCategory () {
     const [imgName, setImgName] = useState(null)
     const [show, setShow] = useState(false)
 
+    const [doneBttn, setDoneBttn] = useState(null)
+
     const [ url, setUrl, resizedIMG, setResizedIMG,
             imgChanged, setImgChanged, image, setImage,
             selectedIMG, setSelectedIMG
@@ -41,6 +43,7 @@ export default function AddNewCategory () {
         const photoData = {photoName, photoURL:downloadURL }
         categoryPhotos.push(photoData)
         
+        setDoneBttn(true)
         setUrl(downloadURL)
         setImgName(photoName)
         setImgChanged(null)
@@ -120,8 +123,7 @@ export default function AddNewCategory () {
         <div>     
             <div style={{textAlign:"right", margin:10}} >
             <AdminSignOut />
-            </div>
-                       
+            </div>        
             <div className='content' style={{overflowY:'scroll'}}>
                 <div className='formSignUp'>
                     <div style={{width:'25vw'}}>
@@ -159,9 +161,11 @@ export default function AddNewCategory () {
                         }
                     </div>
                 ))}
-                        {name &&
-                            <CustomButton onClick={handleSubmit}>ADD</CustomButton>    
-                        }
+
+                    {doneBttn &&
+                        <CustomButton onClick={handleSubmit}>DONE</CustomButton>    
+                    }
+            
                     </div>
                 </div>
             </div>       
