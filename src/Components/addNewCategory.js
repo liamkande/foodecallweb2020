@@ -114,6 +114,7 @@ export default function AddNewCategory () {
             console.error(error)
           }
           setName('')
+          setDoneBttn(null)
           setCategoryPhotos([])
           alert('Category successfully Added!')  
       }
