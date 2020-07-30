@@ -40,6 +40,7 @@ export default function ResultsDetail ({result, id}) {
             handlePhotoUpload, handleStepOne, handleStepTwo,
             handleStepThree, handleDelete, handleCategories, handleDeleteCategory,
             handleDeliveryOption, handleDeleteDelivery, selectMainPhoto,
+            show, setShow, selfAccept, setSelfAccept
             
             
 
@@ -130,7 +131,9 @@ export default function ResultsDetail ({result, id}) {
                  categories,
                  deliveries,
                  coordinates,
-                 placeId
+                 placeId,
+                 show,
+                 selfAccept 
                  })
     
           } catch (error) {

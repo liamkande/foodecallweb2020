@@ -52,6 +52,8 @@ export default () => {
   const [url, setUrl] = useState('')
   const [mainPhotoURL,setMainPhotoURL] = useState(null)
   const [categoriesListNames, setCategoriesListNames] = useState([])
+  const [show, setShow] = useState(false)
+  const [selfAccept, setSelfAccept] = useState(false)
   
  
   //Diplay Control
@@ -132,7 +134,7 @@ const handleCategories = (item) => {
       } 
       return null
   })
-  console.log(categories)
+  //console.log(categories)
 }
 
 const handleDeleteCategory = (item) => {
@@ -220,6 +222,7 @@ const handleStepThree = () => {
             handlePhotoUpload, handleStepOne, handleStepTwo,
             handleStepThree, handleDelete, handleCategories, handleDeleteCategory,
             handleDeliveryOption, handleDeleteDelivery, selectMainPhoto,
+            show, setShow, selfAccept, setSelfAccept
            
 
             
