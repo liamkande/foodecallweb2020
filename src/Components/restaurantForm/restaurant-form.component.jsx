@@ -11,8 +11,8 @@ export default function RestaurantForm () {
 
 
     return (
-      <div className='container'>
-        <div className='content__center'>
+      <div className='container' style={{overflowY:'scroll'}}>
+        <div className='content__center'  >
 
           <AdminSignOut />
           <h2>Restaurant Form</h2>
