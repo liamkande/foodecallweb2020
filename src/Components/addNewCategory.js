@@ -71,6 +71,7 @@ export default function AddNewCategory () {
     categoryPhotos.splice(categoryPhotos.indexOf(selectedIMG), 1)
     storage.ref(`categoriesPhotos`).child(selectedIMG.photoName).delete()
     setSelectedIMG(null)
+    setDoneBttn(null)
     alert('Successfully deleted photo!')
     //console.log(categoryPhotos)
     }
