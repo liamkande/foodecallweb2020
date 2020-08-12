@@ -10,7 +10,7 @@ import MenuIcon from '@material-ui/icons/Menu'
 import MenuList from '@material-ui/core/MenuList'
 import { NavLink } from 'react-router-dom'
 import { auth } from '../firebase/firebase.utils'
-import logo from '../logo.svg'
+import logoCircle from '../logoCircle.svg'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 
 
@@ -137,7 +137,7 @@ class Nav extends React.Component {
           <Toolbar className='nav' style={{paddingTop:'3%', paddingLeft:'2%', paddingRight:'5%'}}>
           { !adminNav && 
             <NavLink exact to="/" className='nav__logo'>
-              <img src={logo} alt='logo' className='logoImg' style={{marginTop:'35px'}} />
+              <img src={logoCircle} alt='Food-E-Call' className='logoImg' style={{marginTop:'35px'}} />
             </NavLink>          
           }
             <div className='nav__tabs' style={adminNav ? {marginTop:'0px'} : {marginTop:'-4%'} }/>
