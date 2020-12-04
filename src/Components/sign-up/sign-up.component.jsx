@@ -15,14 +15,13 @@ import './sign-up.styles.scss'
 import {NavLink} from 'react-router-dom'
 
 
-const validationCode = '0000/84-4150894'
+const validationCode = '1111'
 
 class SignUp extends React.Component {
   
    state = {
       firstName: '',
       lastName: '',
-      oAuthCode: '',
       email: '',
       password: '',
       confirmPassword: '',
@@ -71,7 +70,7 @@ class SignUp extends React.Component {
   handleSubmit = async event => {
     event.preventDefault()
 
-    const {firstName, lastName, oAuthCode, email, password, confirmPassword, dob, ssn, confirmSSN, admin } = this.state
+    const {firstName, lastName, email, password, confirmPassword, dob, ssn, confirmSSN, admin } = this.state
     const displayName = `${firstName} ${lastName}`
 
     if (password !== confirmPassword) {
@@ -88,10 +87,7 @@ class SignUp extends React.Component {
       return
     }
 
-    if (oAuthCode !== 'liamkande8057' ) {
-      alert("Unvalide Permission Code")
-      return
-    }
+ 
 
     try {
       const { user } = await auth.createUserWithEmailAndPassword(
@@ -99,12 +95,11 @@ class SignUp extends React.Component {
         password
       )
 
-      await createUserProfile(user, { firstName,lastName, oAuthCode, dob, ssn, admin, displayName})
+      await createUserProfile(user, { firstName,lastName, dob, ssn, admin, displayName})
 
       this.setState({
         firstName: '',
         lastName: '',
-        oAuthCode: '',
         email: '',
         password: '',
         confirmPassword: '',
@@ -139,7 +134,7 @@ class SignUp extends React.Component {
 }
     
   render() {
-    const {firstName, lastName, oAuthCode, email, password, confirmPassword, dob, ssn, confirmSSN, accessGranted, accessCode, existingUser } = this.state
+    const {firstName, lastName, email, password, confirmPassword, dob, ssn, confirmSSN, accessGranted, accessCode, existingUser } = this.state
     return (
       <div className="container">
         {existingUser && 
@@ -195,14 +190,7 @@ class SignUp extends React.Component {
                     />
                 
             </MuiPickersUtilsProvider>
-            <FormInput
-                type='password'
-                name='oAuthCode'
-                value={oAuthCode.trim()}
-                onChange={this.handleChange}
-                label='Permission Code'
-                required
-            />  
+
             <FormInput
               type='text'
               name='firstName'
