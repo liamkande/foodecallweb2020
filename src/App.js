@@ -66,13 +66,13 @@ componentWillUnmount() {
           <Route exact path="/about" render={() => <AboutUsPage bgImg={bgImg}/>}/>
           <Route exact path="/sign-up" render={() => <SignUpPage dialogBgImg={bgImg}/>}/>
           <Route exact path="/adminsignup" render={() => <SignUpComp />  }/>
-          <PrivateRoute exact path="/admin" admin={adminUser} signIn={!currentUser} adminCode='1111/84-4150894'>
+          <PrivateRoute exact path="/admin" admin={adminUser} signIn={!currentUser} adminCode='1111'>
             <AdminHome /> 
           </PrivateRoute>
-          <PrivateRoute exact path="/restaurantform" admin={adminUser} signIn={!currentUser} adminCode='1111/84-4150894'>
+          <PrivateRoute exact path="/restaurantform" admin={adminUser} signIn={!currentUser} adminCode='1111'>
             <AdminPage />
           </PrivateRoute>
-          <PrivateRoute exact path="/categoryform" admin={adminUser} signIn={!currentUser} adminCode='1111/84-4150894'>
+          <PrivateRoute exact path="/categoryform" admin={adminUser} signIn={!currentUser} adminCode='1111'>
             <AddNewCategory />
           </PrivateRoute>
           </Switch>
