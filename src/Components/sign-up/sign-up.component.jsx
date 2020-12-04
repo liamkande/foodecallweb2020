@@ -26,10 +26,7 @@ class SignUp extends React.Component {
       password: '',
       confirmPassword: '',
       dob: new Date().toDateString(),
-      ssn:'',
-      confirmSSN:'',
       admin:true,
-    
       accessCode:'',
       accessGranted:null,
       currentUser: null,
@@ -70,7 +67,7 @@ class SignUp extends React.Component {
   handleSubmit = async event => {
     event.preventDefault()
 
-    const {firstName, lastName, email, password, confirmPassword, dob, ssn, confirmSSN, admin } = this.state
+    const {firstName, lastName, email, password, confirmPassword, dob, admin } = this.state
     const displayName = `${firstName} ${lastName}`
 
     if (password !== confirmPassword) {
@@ -78,14 +75,14 @@ class SignUp extends React.Component {
       return
     }
 
-    if (ssn.length !== 9) {
-      alert("Unvalide Social Security Number")
-      return
-    }
-    if (ssn !== confirmSSN) {
-      alert("Social Security Number don't match")
-      return
-    }
+    // if (ssn.length !== 9) {
+    //   alert("Unvalide Social Security Number")
+    //   return
+    // }
+    // if (ssn !== confirmSSN) {
+    //   alert("Social Security Number don't match")
+    //   return
+    // }
 
  
 
@@ -95,7 +92,7 @@ class SignUp extends React.Component {
         password
       )
 
-      await createUserProfile(user, { firstName,lastName, dob, ssn, admin, displayName})
+      await createUserProfile(user, { firstName,lastName, dob, admin, displayName})
 
       this.setState({
         firstName: '',
@@ -104,8 +101,7 @@ class SignUp extends React.Component {
         password: '',
         confirmPassword: '',
         dob:'',
-        ssn:'',
-        admin:null,
+        admin:true,
        
       })
     } catch (error) {
@@ -208,7 +204,7 @@ class SignUp extends React.Component {
               label='Last Name'
               required
             />  
-            <FormInput
+            {/* <FormInput
               type='password'
               name='ssn'
               value={ssn.trim()}
@@ -223,7 +219,7 @@ class SignUp extends React.Component {
               onChange={this.handleChange}
               label='Confirm SSN'
               required
-             />  
+             />   */}
             <FormInput
               type='email'
               name='email'
