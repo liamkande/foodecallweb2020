@@ -3,7 +3,7 @@ import { auth, createUserProfile} from '../firebase/firebase.utils'
 import RestaurantForm from '../Components/restaurantForm/restaurant-form.component'
 
 
-const currentCode = '1111/84-4150894'
+const currentCode = '1111'
 
 class AdminSignUp extends Component {
   constructor(props) {
