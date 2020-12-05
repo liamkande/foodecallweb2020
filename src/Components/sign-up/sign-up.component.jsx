@@ -148,6 +148,7 @@ class SignUp extends React.Component {
         <div className="content__center">
             <h2>Please Enter Access Code to Continue:</h2>
             <form className='sign-up-form' onSubmit={this.handleAccessSubmit }>
+            <p style={{color:'red'}}>Enter Code 1111 to try!</p>
                 <FormInput
                 type='password'
                 name='accessCode'
