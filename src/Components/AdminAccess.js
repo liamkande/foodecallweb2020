@@ -72,6 +72,7 @@ class AdminAccess extends Component {
                 { !accessGranted && 
                     <div className="content__center">
                         <h2>Please Enter Access Code to Continue:</h2>
+                        <p>Enter Code 1111 to try!</p>
                         <form className='sign-up-form' onSubmit={this.handleSubmit}>
                             <FormInput
                             type='password'
